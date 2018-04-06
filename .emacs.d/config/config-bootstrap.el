@@ -10,13 +10,13 @@
   (when (file-exists-p dir) (add-to-load-path dir)))
 
 (add-to-load-path
- (expand-file-name (concat user-emacs-directory "config/")))
+(expand-file-name (concat user-emacs-directory "config/")))
 
 ;; hide these before anything else.
-(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
-(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
-(unless (display-graphic-p)
-  (if (fboundp 'menu-bar-mode) (menu-bar-mode -1)))
+;; (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+;; (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+;; (unless (display-graphic-p)
+;;   (if (fboundp 'menu-bar-mode) (menu-bar-mode -1)))
 
 ;; better performance?
 (setq gc-cons-threshold (* 100 1024 1024 1024))

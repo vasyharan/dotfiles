@@ -46,3 +46,4 @@
 (add-hook 'rjsx-mode-hook 'config-js-mode)
 
 (provide 'config-lang-js)
+;;; config-lang-js.el ends here

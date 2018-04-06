@@ -10,7 +10,6 @@
   (evil-leader/set-leader "<SPC>")
   (evil-leader/set-key
     "<SPC>"	'execute-extended-command
-    ";"		'toggle-comment-region-or-line
     ":"		'eval-expression
     "="		'align-regexp))
 
@@ -31,20 +30,13 @@
     (kbd "M-]") 'xref-find-definitions-other-window
     (kbd "C-T") 'pop-tag-mark)
 
-  (defun global-unset-keys (key &rest keys)
-    "See `global-unset-key` for KEY; KEYS are more keys."
-    (declare (indent defun))
-    (while key
-      (global-unset-key key)
-      (setq key (pop keys))))
-
   ;; unbind C-w
   (define-key evil-motion-state-map (kbd "C-w") 'ace-window)
   (global-set-key (kbd "C-w") 'ace-window)
   (global-unset-keys (kbd "C-j")
 		     (kbd "C-k"))
 
-  ;; term kets
+  ;; term keys
   (evil-define-key 'normal term-raw-map
     (kbd "p") 'term-paste
     (kbd "C-k") 'term-send-up

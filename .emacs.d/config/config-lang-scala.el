@@ -5,7 +5,7 @@
   :mode "\\.scala\\'")
 
 (defun config-scala-mode ()
-  (setq prettify-symbols-alist scala-prettify-symbols-alist)
+  (setq-local prettify-symbols-alist scala-prettify-symbols-alist)
   (prettify-symbols-mode))
 
 (add-hook 'scala-mode-hook 'config-scala-mode)

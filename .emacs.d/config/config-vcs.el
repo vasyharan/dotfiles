@@ -54,6 +54,13 @@
   (evil-leader/set-key
     "gt" 'hydra-git-timemachine/body))
 
+(defun shorten-vc-mode-line (string)
+  "Shortens mode-line STRING for command `vc-mode'."
+  (cond
+   ((string-prefix-p "Git-" string) (concat "g/" (substring string 4)))
+   ((string-prefix-p "Git:" string) (concat "g:" (substring string 4)))
+   (t string)))
+(advice-add 'vc-git-mode-line-string :filter-return 'shorten-vc-mode-line)
 
 (provide 'config-vcs)
 ;;; config-vcs.el ends here

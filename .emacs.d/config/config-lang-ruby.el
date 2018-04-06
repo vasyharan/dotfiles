@@ -14,10 +14,12 @@
 
 (use-package ruby-tools
   :ensure t
+  :delight
   :commands (ruby-tools-mode))
 
 (use-package rbenv
   :ensure t
+  :commands (rbenv-use-corresponding)
   :config
   (setq rbenv-show-active-ruby-in-modeline nil
 	ruby-insert-encoding-magic-comment nil))
@@ -32,21 +34,24 @@
 	evil-shift-width 2
 	indent-tabs-mode nil
 	ruby-electric-expand-delimiters-list nil)
-  (setq-local fci-rule-column 80)
+  ;; (setq-local fci-rule-column 80)
   (setq-local flycheck-check-syntax-automatically '(idle-change save))
   (setq-local flycheck-idle-change-delay 3)
+  (setq-local prettify-symbols-alist '(("lambda"	. ?λ)
+				       (">="		. ?≥)
+				       ("<="		. ?≤)))
 
-  (evil-define-key 'motion ruby-mode-map
-    (kbd "C-]") 'counsel-etags-find-tag-at-point
-    (kbd "M-]") 'counsel-etags-find-tag)
+  ;; (evil-define-key 'motion ruby-mode-map
+  ;;   (kbd "C-]") 'counsel-etags-find-tag-at-point
+  ;;   (kbd "M-]") 'counsel-etags-find-tag)
 
   (ruby-tools-mode +1)
-  ;; (subword-mode +1)
   (superword-mode +1)
+  ;; (subword-mode +1)
   (modify-syntax-entry ?_ "w")
   (electric-pair-mode +1)
   ;; (electric-indent-mode +1)
-  (prettify-symbols-mode)
+  ;; (prettify-symbols-mode)
 
   (global-rbenv-mode)
   (rbenv-use-corresponding))
