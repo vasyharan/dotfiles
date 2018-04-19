@@ -12,6 +12,9 @@
   :ensure t
   :mode "\\.yaml\\'")
 
+(use-package web-mode :ensure t
+  :mode "\\.erb\\'")
+
 (use-package ruby-tools
   :ensure t
   :delight
@@ -38,6 +41,7 @@
   (setq-local flycheck-check-syntax-automatically '(idle-change save))
   (setq-local flycheck-idle-change-delay 3)
   (setq-local prettify-symbols-alist '(("lambda"	. ?λ)
+				       ("->"            . ?λ)
 				       (">="		. ?≥)
 				       ("<="		. ?≤)))
 
@@ -45,16 +49,18 @@
   ;;   (kbd "C-]") 'counsel-etags-find-tag-at-point
   ;;   (kbd "M-]") 'counsel-etags-find-tag)
 
+  (global-rbenv-mode)
+  (rbenv-use-corresponding)
+
   (ruby-tools-mode +1)
   (superword-mode +1)
-  ;; (subword-mode +1)
+  (inf-ruby-minor-mode)
   (modify-syntax-entry ?_ "w")
-  (electric-pair-mode +1)
-  ;; (electric-indent-mode +1)
-  ;; (prettify-symbols-mode)
 
-  (global-rbenv-mode)
-  (rbenv-use-corresponding))
+  ;; (lsp-ruby-enable)
+
+  ;; (electric-indent-mode +1)
+  (electric-pair-mode +1))
 
 (add-hook 'ruby-mode-hook 'config-ruby-mode)
 

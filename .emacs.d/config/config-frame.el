@@ -32,13 +32,6 @@
       (set-frame-parameter nil 'fullscreen nil))))
 
 
-(defun tty-frame-hook ()
-  (set-frame-parameter nil 'menu-bar-lines 0))
-
-(defun gui-frame-hook ()
-  (set-frame-parameter nil 'menu-bar-lines 1)
-  (adjust-frame-size))
-
 (defun adjust-frame-size ()
   "Adjust frame size on creation based on display."
   (cond ((> (display-pixel-width) 1440) (frame-magnet 0.66 1 'left))
@@ -49,12 +42,6 @@
   (adjust-frame-size))
 
 (if (display-graphic-p) (gui-frame-init))
-
-(use-package after-frame-hooks
-  :load-path "lisp/after-frame-hooks"
-  :config
-  (add-hook 'after-make-tty-frame-hook 'tty-frame-hook)
-  (add-hook 'after-make-gui-frame-hook 'gui-frame-hook))
 
 (global-set-keys
  (kbd "H-C-h") (lambda () (interactive) (frame-magnet 0.66 1 'left))

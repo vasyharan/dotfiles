@@ -4,6 +4,7 @@
 
 (use-package evil-leader
   :ensure t
+  :after (evil)
   :config
   (setq evil-leader/no-prefix-mode-rx '())
 
@@ -17,6 +18,7 @@
   :ensure t
   :config
   (global-evil-leader-mode)
+  ;; (evil-select-search-module 'evil-search-module 'evil-search)
 
   ;; center after search
   (advice-add 'evil-search-next :after
@@ -31,8 +33,10 @@
     (kbd "C-T") 'pop-tag-mark)
 
   ;; unbind C-w
-  (define-key evil-motion-state-map (kbd "C-w") 'ace-window)
-  (global-set-key (kbd "C-w") 'ace-window)
+  ;; (define-key evil-motion-state-map (kbd "C-w") 'ace-window)
+  ;; (global-set-key (kbd "C-w") 'ace-window)
+  (evil-global-set-key 'motion (kbd "C-w") 'ace-window)
+  (evil-global-set-key 'insert (kbd "C-w") 'ace-window)
   (global-unset-keys (kbd "C-j")
 		     (kbd "C-k"))
 

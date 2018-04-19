@@ -8,7 +8,7 @@
 ;; avoid flickering?
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
-;; (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+(unless (display-graphic-p) (if (fboundp 'menu-bar-mode) (menu-bar-mode -1)))
 
 ;; (defun add-to-load-path (dir)
 ;;   "Add DIR to `load-path'."
@@ -32,6 +32,7 @@
 				   ("melpa-stable" . 1)))
 
 (package-initialize)
+(setq use-package-verbose t)
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
@@ -99,23 +100,49 @@
       `((".*" ,user-auto-save-directory t)))
 
 ;; save history
-(setq savehist-file (expand-file-name "savehist" user-cache-directory)
-      history-length t
-      history-delete-duplicates t
-      savehist-save-minibuffer-history t
-      savehist-additional-variables
-      '(kill-ring
-        search-ring
-        regexp-search-ring))
-(savehist-mode)
+(use-package savehist
+  :commands (savehist-mode)
+  :init
+  (setq savehist-file (expand-file-name "savehist" user-cache-directory)
+	history-length t
+	history-delete-duplicates t
+	savehist-save-minibuffer-history t
+	savehist-additional-variables
+	'(kill-ring
+	  search-ring
+	  regexp-search-ring))
+  (savehist-mode))
 
 ;; recent files.
-(setq recentf-save-file
-      (expand-file-name "recentf" user-cache-directory))
+(use-package recentf
+  :init
+  (setq recentf-save-file
+	(expand-file-name "recentf" user-cache-directory)))
 
 (use-package after
   :load-path "lisp/after"
   :commands (after))
+
+(use-package pay-server
+  :load-path "lisp/pay-server"
+  :init
+  (add-hook 'ruby-mode 'pay-enable-appropriate-mode)
+  :config
+  (after 'evil-leader
+    (evil-leader/set-key
+      "cc"	'pay-test-reverify
+      "cf"	'pay-test-verify-current-buffer
+      "cl"	'pay-test-verify-current-line
+      "cn"	'pay-test-verify-current-test
+      "cy"	'pay-test-kill-last
+      "cb"	'pay-test-break-current-line
+      "ca"      'pay-test-mark-current-test
+      "cm"	'pay-test-verify-marked
+      "cM"      'pay-test-clear-marks)
+    (evil-leader/set-key-for-mode 'pay-compilation-mode
+      "d" 'inf-ruby-switch-from-compilation)
+    (evil-leader/set-key-for-mode 'inf-ruby-mode
+      "d" 'inf-ruby-maybe-switch-to-compilation)))
 
 (use-package utils
   :load-path "lisp"
@@ -155,15 +182,19 @@
 (use-package which-key
   :ensure t
   :delight
-  :commands (which-key-mode))
+  :commands (which-key-mode)
+  :init
+  (which-key-mode))
+
+(use-package flyspell
+  :ensure t
+  :delight
+  :commands (flyspell-prog-mode flyspell-mode))
 
 (use-package hydra
   :ensure t
   :defer t
   :custom-face
-  ;; (hydra-face-red ((t (:foreground "#ff5555"))))
-  ;; (hydra-face-blue ((t (:foreground "#8be9fd"))))
-  ;; (hydra-face-pink ((t (:foreground "#ff79c6"))))
   :config
   (setq hydra-lv t
 	lv-use-separator nil))

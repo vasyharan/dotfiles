@@ -6,8 +6,7 @@
   :ensure t
   :commands (flycheck-mode)
   :delight
-  :init
-  (add-hook 'prog-mode-hook 'flycheck-mode)
+  :hook (prog-mode . flycheck-mode)
   :config
   (add-hook 'flycheck-error-list-mode-hook (lambda () (setq mode-line-format nil))))
 
