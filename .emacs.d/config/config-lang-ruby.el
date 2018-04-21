@@ -62,7 +62,14 @@
   ;; (electric-indent-mode +1)
   (electric-pair-mode +1))
 
+(defun config-web-mode ()
+  "Custom settings for Ruby."
+  (setq tab-width 2
+	evil-shift-width 2
+	indent-tabs-mode nil))
+
 (add-hook 'ruby-mode-hook 'config-ruby-mode)
+(add-hook 'web-mode-hook 'config-web-mode)
 
 (provide 'config-lang-ruby)
 ;;; config-lang-ruby.el ends here

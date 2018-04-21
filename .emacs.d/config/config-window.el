@@ -33,9 +33,9 @@
 	  (?m aw-swap-window			"Swap window")
 	  (?M aw-move-window			"Move window")
 	  (?n aw-flip-window			"Flip window")
-	  (?_ evil-window-split			"Split window")
+	  (?_ evil-window-split			"Split Vertically")
 	  (?| evil-window-vsplit		"Split Horizontally")
-	  (?s aw-split-window-fair		"Split Vertically")
+	  (?s split-window-sensibly		"Split")
 	  (?o delete-other-windows)
 	  (?O delete-other-windows		"Maximize window")
 	  (?= balance-windows)
@@ -90,7 +90,8 @@ to split horizontally before vertically."
 	       (when (window-splittable-p window)
 		 (with-selected-window window
 		   (split-window-below))))))))
-(setq split-window-preferred-function 'split-window-sensibly-prefer-horizontal)
+(setq split-width-threshold 160
+      split-window-preferred-function 'split-window-sensibly-prefer-horizontal)
 
 
 (provide 'config-window)

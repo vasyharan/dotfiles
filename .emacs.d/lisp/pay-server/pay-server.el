@@ -29,18 +29,20 @@
             #b00000000
             #b00000000
             #b00000000
-            #b00011000
-            #b00001100
-            #b00000110
-            #b00000011
-            #b00000110
-            #b00001100
-            #b00011000
+            #b01011000
+            #b01101100
+            #b01110110
+            #b01111011
+            #b01110110
+            #b01101100
+            #b01011000
             #b00000000
             #b00000000
             #b00000000
             #b00000000
-            #b00000000)))
+            #b00000000))
+  ;; (destroy-fringe-bitmap 'pay-test-fringe-bitmap-arrow)
+  )
 
 (define-derived-mode pay-compilation-mode compilation-mode "pay-test"
   (add-hook 'compilation-filter-hook 'pay-transform-traces)
