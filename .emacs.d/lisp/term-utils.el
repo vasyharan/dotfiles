@@ -1,4 +1,4 @@
-;; term.el -- Term utilities.
+;; term-utils.el -- Term utilities.
 ;;; Commentary:
 ;;; Code:
 
@@ -23,5 +23,5 @@
   "Send left arrow in term mode."
   (interactive) (term-send-raw-string "\eOD"))
 
-(provide 'term)
-;;; term.el ends here
+(provide 'term-utils)
+;;; term-utils.el ends here

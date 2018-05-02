@@ -4,7 +4,7 @@
 
 (use-package magit
   :ensure t
-  :after evil-leader
+  :after (evil-leader ivy)
   :commands (magit-status magit-blame)
   :init
   (evil-leader/set-key
@@ -12,6 +12,8 @@
     "gg" 'magit-status)
   :config
   (setq magit-refresh-status-buffer nil
+	magit-completing-read-function 'ivy-completing-read
+	magit-repository-directories '(("~/stripe" . 1))
 	vc-handled-backends (delq 'Git vc-handled-backends)))
 
 (use-package evil-magit

@@ -68,7 +68,7 @@
 (golden-ratio-mode)
 
 ;; prefer horizontal splits.
-(defun split-window-sensibly-prefer-horizontal (&optional window)
+(defun split-window-sensibly (&optional window)
   "Split WINDOW in a way suitable for `display-buffer'.
 This does the same thing as `split-window-sensibly', only trying
 to split horizontally before vertically."
@@ -90,8 +90,8 @@ to split horizontally before vertically."
 	       (when (window-splittable-p window)
 		 (with-selected-window window
 		   (split-window-below))))))))
-(setq split-width-threshold 160
-      split-window-preferred-function 'split-window-sensibly-prefer-horizontal)
+;; (setq split-width-threshold 160
+;;       split-window-preferred-function 'split-window-sensibly)
 
 
 (provide 'config-window)

@@ -111,8 +111,7 @@
   "Make mode-line aware of window change."
   (mode-line-set-selected-window))
 
-(use-package flycheck
-  :config
+(after 'flycheck
   (defun flycheck-mode-line-status-text (&optional status)
     "Get a text describing STATUS for use in the mode line.
 
