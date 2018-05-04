@@ -65,8 +65,8 @@
   "Guess a nice default font height."
   (interactive)
   (let* ((display-width (display-pixel-width))
-	 (face-height (cond ((> display-width 1440) 150)
-			    (t 140))))
+	 (face-height (cond ((> display-width 1440) 140)
+			    (t 130))))
     (set-face-attribute 'default (selected-frame)
 			:height face-height)))
 

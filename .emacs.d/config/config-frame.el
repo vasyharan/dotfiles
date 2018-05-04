@@ -13,21 +13,27 @@
 (setq default-frame-alist (copy-alist initial-frame-alist))
 
 (defun frame-magnet (width-ratio height-ratio &optional pin-x pin-y)
+  "Resize frame to WIDTH-RATIO and HEIGHT-RATIO of display.
+Optionally pin the frame to the display by setting:
+PIN-X to one of 'left or 'left, and
+PIN-Y to one of 'top or 'bottom"
   (let* ((frame-width (floor (* (display-pixel-width) width-ratio)))
 	 (frame-height (floor (* (display-pixel-height) height-ratio)))
 	 (frame-x (cond
 		   ((eq pin-x 'left) 0)
 		   ((eq pin-x 'right) -1)
-		   (t 0)))
+		   (t nil)))
 	 (frame-y (cond
 		   ((eq pin-x 'top) 0)
 		   ((eq pin-x 'bottom) -1)
-		   (t 0)))
+		   (t nil)))
 	 (fullscreen (frame-parameter nil 'fullscreen)))
 
     (set-frame-size nil frame-width frame-height t)
-    (set-frame-parameter nil 'left frame-x)
-    (set-frame-parameter nil 'top frame-y)
+    (if (numberp frame-x)
+	(set-frame-parameter nil 'left frame-x))
+    (if (numberp frame-y)
+	(set-frame-parameter nil 'top frame-y))
     (if fullscreen
       (set-frame-parameter nil 'fullscreen nil))))
 

@@ -88,16 +88,19 @@
 		   (--remove (eq nil it) (list pay-command pay-test-subcommand args))) " ")))
    tests "; "))
 
+(defun pay-test--save-buffers ()
+  (save-some-buffers
+   (not compilation-ask-about-save)
+   (lambda ()
+     (string-prefix-p (file-truename pay-root) (file-truename (buffer-file-name))))))
+
 (defun pay-test--run (tests &optional fail-fast verbose)
   "Test specified TESTS, optionally FAIL-FAST and / or be VERBOSE."
   (let* ((pay-root (pay-project-root))
 	 (default-directory pay-root)
 	 (compilation-scroll-output t))
     (setq pay-test--last-command (list tests fail-fast verbose))
-    (save-some-buffers
-     (not compilation-ask-about-save)
-     (lambda ()
-       (string-prefix-p (file-truename pay-root) (file-truename (buffer-file-name)))))
+    (pay-test--save-buffers)
     ;; (message (pay-test--command tests fail-fast verbose))
     (compilation-start (pay-test--command tests fail-fast verbose) 'pay-compilation-mode)))
 
@@ -287,10 +290,7 @@
 (defun pay-test-verify-marked ()
   "Verifies marked test."
   (interactive)
-  (save-some-buffers
-   (not compilation-ask-about-save)
-   (lambda ()
-     (string-prefix-p (file-truename (pay-project-root)) (file-truename (buffer-file-name)))))
+  (pay-test--save-buffers)
   (let* ((markers-per-test-filename
 	 (seq-group-by #'car pay-test--test-markers))
 	 (tests

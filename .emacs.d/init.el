@@ -213,6 +213,7 @@
 (load-config-file "config-code-completion.el")
 (load-config-file "config-syntax-checking.el")
 
+(load-config-file "config-org.el")
 (load-config-file "config-lang-ruby.el")
 (load-config-file "config-lang-js.el")
 

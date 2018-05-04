@@ -15,9 +15,8 @@ setopt share_history
 alias ll='ls -l'
 alias vim=nvim
 alias g=git
-# alias emacs='/usr/local/bin/emacs -nw'
-alias ec='emacsclient -t --alternate-editor=""'
-alias dotfiles="git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
+alias ec='emacsclient -nw'
+alias dot="git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 
 bindkey -e
 autoload -U select-word-style
