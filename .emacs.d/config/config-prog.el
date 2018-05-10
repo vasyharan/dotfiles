@@ -4,7 +4,8 @@
 
 (setq prettify-symbols-unprettify-at-point 'right-edge)
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
-;; (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+(add-hook 'prog-mode-hook 'hl-line-mode)
+(add-hook 'prog-mode-hook 'flyspell-prog-mode)
 ;; (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (use-package lsp-mode

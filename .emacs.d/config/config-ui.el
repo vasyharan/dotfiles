@@ -49,7 +49,6 @@
 
 (show-paren-mode)
 (column-number-mode)
-(global-hl-line-mode)
 
 (setq display-time-default-load-average nil
       display-time-24hr-format t)
