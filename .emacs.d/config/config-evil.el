@@ -16,6 +16,8 @@
 
 (use-package evil
   :ensure t
+  :init
+  (setq evil-toggle-key "C-`")
   :config
   (global-evil-leader-mode)
   ;; (evil-select-search-module 'evil-search-module 'evil-search)

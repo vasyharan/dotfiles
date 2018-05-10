@@ -1,3 +1,6 @@
+[ -f ~/.zshenv ] && source ~/.zshenv
+export EDITOR='emacsclient -nw'
+
 # history
 HISTFILE=~/.history
 HISTSIZE=10000
@@ -15,19 +18,26 @@ setopt share_history
 alias ll='ls -l'
 alias vim=nvim
 alias g=git
-alias ec='emacsclient -nw'
+alias et='emacsclient -nw'
+alias ec='emacsclient -nc'
 alias dot="git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 
 bindkey -e
 autoload -U select-word-style
 select-word-style bash
 
-[ -f ~/.zshenv ] && source ~/.zshenv
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
 [ -f ~/stripe/space-commander/bin/sc-aliases ] && \
     source ~/stripe/space-commander/bin/sc-aliases
 
+# envs
+which rbenv 2>&1 >/dev/null && eval "$(rbenv init -)"
+
+export PYENV_ROOT="/Users/haran/.pyenv"
+if command -v pyenv 2>&1 >/dev/null; then
+  eval "$(pyenv init -)"
+  eval "$(pyenv virtualenv-init -)"
+fi
 
 # zplug
 source ~/.zplug/init.zsh
@@ -35,14 +45,12 @@ source ~/.zplug/init.zsh
 zplug "zplug/zplug", hook-build:'zplug --self-manage'
 
 zplug "dracula/zsh", as:theme
-
 zplug "mafredri/zsh-async", from:github
 
 PURE_GIT_PULL=0
 zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
 
 zplug "rupa/z", use:z.sh
-# zplug "aperezdc/zsh-fzy
 
 zplug "zsh-users/zsh-autosuggestions"
 zplug "zsh-users/zsh-history-substring-search"

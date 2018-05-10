@@ -49,6 +49,7 @@
 
 (show-paren-mode)
 (column-number-mode)
+(global-hl-line-mode)
 
 (setq display-time-default-load-average nil
       display-time-24hr-format t)
@@ -65,8 +66,8 @@
   "Guess a nice default font height."
   (interactive)
   (let* ((display-width (display-pixel-width))
-	 (face-height (cond ((> display-width 1440) 140)
-			    (t 130))))
+	 (face-height (cond ((> display-width 1440) 130)
+			    (t 120))))
     (set-face-attribute 'default (selected-frame)
 			:height face-height)))
 

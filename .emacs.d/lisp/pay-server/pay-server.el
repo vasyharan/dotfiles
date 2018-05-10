@@ -67,7 +67,7 @@
 (defvar pay-test--last-command nil
   "Variable to store the last test command.")
 
-(defvar pay-test--test-markers (list)
+(defvar pay-test--test-markers nil
   "Variable to store list of marked tests.")
 
 (defun pay-test--command (tests &optional fail-fast verbose)
@@ -89,10 +89,11 @@
    tests "; "))
 
 (defun pay-test--save-buffers ()
-  (save-some-buffers
-   (not compilation-ask-about-save)
-   (lambda ()
-     (string-prefix-p (file-truename pay-root) (file-truename (buffer-file-name))))))
+  (let ((pay-root (pay-project-root)))
+    (save-some-buffers
+     (not compilation-ask-about-save)
+     (lambda ()
+       (string-prefix-p (file-truename pay-root) (file-truename (buffer-file-name)))))))
 
 (defun pay-test--run (tests &optional fail-fast verbose)
   "Test specified TESTS, optionally FAIL-FAST and / or be VERBOSE."
@@ -194,7 +195,7 @@
 	  (overlay (nth 3 test-marker)))
       (if overlay (delete-overlay overlay))
       (if marker (set-marker marker nil))))
-  (setq pay-test--test-markers (list)))
+  (setq pay-test--test-markers nil))
 
 (defun pay-test--update-marker (marker)
   (seq-let [test-filename test-line marker overlay] marker

@@ -22,6 +22,34 @@
 	ivy-re-builders-alist '((t   . ivy--regex-ignore-order)))
   (ivy-mode))
 
+(use-package ivy-xref
+  :ensure t
+  :after (ivy)
+  :commands (ivy-xref-show-xrefs)
+  :init (setq xref-show-xrefs-function #'ivy-xref-show-xrefs)
+  :config
+  (defun ivy-xref-make-collection (xrefs)
+    (let ((collection nil)
+	  (root (locate-dominating-file default-directory ".git")))
+      (dolist (xref xrefs)
+	(with-slots (summary location) xref
+	  (let* ((line (xref-location-line location))
+		 (file (xref-location-group location))
+		 (file-rel)
+		 (candidate nil))
+	    (setq candidate (concat
+			     ;; (car (reverse (split-string file "\\/")))
+			     (if root
+				 (file-relative-name file root)
+			       (shorten-directory file 35))
+			     (when (string= "integer" (type-of line))
+			       (concat ":" (int-to-string line)))
+			     ":\t"
+			     (string-trim-left summary)))
+	    (push `(,candidate . ,location) collection))))
+      (nreverse collection))))
+
+(add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
 (use-package counsel
   :ensure t
   :commands (counsel-find-file
@@ -44,10 +72,10 @@
       "ps" 'counsel-rg
       "pr" 'counsel-recentf)))
 
-(use-package counsel-etags
-  :ensure t
-  :commands (counsel-etags-find-tag-at-point
-	     counsel-etags-find-tag))
+;; (use-package counsel-etags
+;;   :ensure t
+;;   :commands (counsel-etags-find-tag-at-point
+;; 	     counsel-etags-find-tag))
 
 (provide 'config-completion)
 ;;; config-completion.el ends here
