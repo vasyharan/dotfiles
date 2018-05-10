@@ -1,3 +1,4 @@
+# path
 path=(~/go/bin
       ~/.fzf/bin
       ~/.cargo/bin
