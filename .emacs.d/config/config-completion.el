@@ -49,7 +49,6 @@
 	    (push `(,candidate . ,location) collection))))
       (nreverse collection))))
 
-(add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
 (use-package counsel
   :ensure t
   :commands (counsel-find-file
@@ -62,8 +61,7 @@
   (after 'evil-leader
     (evil-leader/set-key
       "<SPC>" 'counsel-M-x
-      "f" 'counsel-git-or-find-file
-      "F" 'counsel-find-file
+      "f" 'counsel-find-file
       "b" 'ivy-switch-buffer
       "k" 'kill-this-buffer
       "w" 'save-buffer
