@@ -34,6 +34,7 @@ select-word-style bash
 which rbenv 2>&1 >/dev/null && eval "$(rbenv init -)"
 
 export PYENV_ROOT="/Users/haran/.pyenv"
+export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 if command -v pyenv 2>&1 >/dev/null; then
   eval "$(pyenv init -)"
   eval "$(pyenv virtualenv-init -)"
@@ -48,6 +49,7 @@ zplug "dracula/zsh", as:theme
 zplug "mafredri/zsh-async", from:github
 
 PURE_GIT_PULL=0
+VIRTUAL_ENV_DISABLE_PROMPT=1
 zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
 
 zplug "rupa/z", use:z.sh

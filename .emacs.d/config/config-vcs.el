@@ -13,6 +13,7 @@
   :config
   (setq magit-refresh-status-buffer nil
 	magit-completing-read-function 'ivy-completing-read
+	magit-commit-squash-confirm nil
 	magit-repository-directories '(("~/stripe" . 1))
 	vc-handled-backends (delq 'Git vc-handled-backends)))
 

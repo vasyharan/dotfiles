@@ -24,7 +24,7 @@
 	org-default-notes-file "~/.notes.org"
 	org-agenda-files `("~/org/inbox.org"
 			   "~/org/gtd.org")
-	org-refile-targets '(("~/org/gtd.org" :maxlevel . 2)
+	org-refile-targets '(("~/org/gtd.org" :maxlevel . 1)
 			     ("~/org/someday.org" :level . 1))
 	org-todo-keywords '((sequence "TODO(t)"
 				      "STARTED(s!)"
@@ -47,8 +47,7 @@
     "Switch entry to DONE when all subentries are done, to TODO otherwise."
     (let (org-log-done org-log-states)   ; turn off logging
       (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
-
-  ;; (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
+  (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
 
   ;; calendar keys
   (defmacro define-org-calendar-keys (key def &rest bindings)
@@ -87,8 +86,8 @@
 	   (file+headline "~/org/inbox.org" "Unfiled")
 	   "* TODO %i%?")
 	  ("j" "Jira" entry
-	   (file+headline "~/org/gtd.org" "Projects")
-	   "* TODO %?\n  :PROPERTIES:\n  :ISSUE(s): [[https://jira.corp.stripe.com/browse/%^{project|COMPLENG}-%^{item}][%\\1-%\\2]]\n  :END:\n  %u")))
+	   (file+headline "~/org/inbox.org" "Unfiled")
+	   "* TODO %?\n  :PROPERTIES:\n  :ISSUE(s): [[https://jira.corp.stripe.com/browse/COMPLENG-%^{item}][COMPLENG-%\\1]]\n  :END:\n  %u")))
   (add-hook 'org-capture-mode-hook 'evil-insert-state))
 
 (use-package org-agenda
