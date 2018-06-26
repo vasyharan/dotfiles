@@ -33,9 +33,9 @@
 	evil-shift-width 2
 	js-indent-level 2
 	indent-tabs-mode nil
-	company-backends '(company-flow)
 	js2-mode-show-parse-errors nil
 	js2-mode-show-strict-warnings nil)
+  (set (make-local-variable 'company-backends) '(company-flow))
   (setq-default flycheck-disabled-checkers
 		(append flycheck-disabled-checkers '(javascript-jshint javascript-flow)))
 

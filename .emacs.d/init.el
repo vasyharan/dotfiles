@@ -3,23 +3,12 @@
 ;;; Code:
 
 ;; better performance?
-(setq gc-cons-threshold (* 100 1024 1024 1024))
+(setq gc-cons-threshold (* 512 1024 1024))
 
 ;; avoid flickering?
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 (unless (display-graphic-p) (if (fboundp 'menu-bar-mode) (menu-bar-mode -1)))
-
-;; (defun add-to-load-path (dir)
-;;   "Add DIR to `load-path'."
-;;   (add-to-list 'load-path dir))
-
-;; (defun add-to-load-path-if-exists (dir)
-;;   "Add DIR to `load-path' if it exists."
-;;   (when (file-exists-p dir) (add-to-load-path dir)))
-
-;; (add-to-load-path
-;;  (expand-file-name (concat user-emacs-directory "config/")))
 
 ;; setup packages.
 (require 'package)
@@ -199,6 +188,11 @@
   :config
   (setq hydra-lv t
 	lv-use-separator nil))
+
+(use-package xclip
+  :ensure t
+  :init
+  (xclip-mode))
 
 (load-config-file "config-evil.el")
 (load-config-file "config-completion.el")

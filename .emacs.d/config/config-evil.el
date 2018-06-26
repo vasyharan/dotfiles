@@ -2,22 +2,11 @@
 ;;; Commentary:
 ;;; Code:
 
-(use-package evil-leader
-  :ensure t
-  :after (evil)
-  :config
-  (setq evil-leader/no-prefix-mode-rx '())
-
-  (evil-leader/set-leader "<SPC>")
-  (evil-leader/set-key
-    "<SPC>"	'execute-extended-command
-    ":"		'eval-expression
-    "="		'align-regexp))
-
 (use-package evil
   :ensure t
   :init
   (setq evil-toggle-key "C-`")
+  (setq evil-want-integration nil)
   :config
   (global-evil-leader-mode)
   ;; (evil-select-search-module 'evil-search-module 'evil-search)
@@ -68,6 +57,24 @@
     (kbd "RET") 'xref-goto-xref)
 
   (evil-mode 1))
+
+(use-package evil-leader
+  :ensure t
+  :after (evil)
+  :config
+  (setq evil-leader/no-prefix-mode-rx '())
+
+  (evil-leader/set-leader "<SPC>")
+  (evil-leader/set-key
+    "<SPC>"	'execute-extended-command
+    ":"		'eval-expression
+    "="		'align-regexp))
+
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :config
+  (evil-collection-init))
 
 (provide 'config-evil)
 ;;; config-evil.el ends here
