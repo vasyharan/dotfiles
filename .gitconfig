@@ -1,0 +1,62 @@
+# Please indent options with one tab when editing defaults in
+# https://github.com/stripe-internal/marionette-puppet-config/blob/master/modules/git/templates/gitconfig.erb
+# That matches how "git config --global" edits the file.
+
+[user]
+	name = Thirukumaran Vaseeharan
+	email = haran@stripe.com
+
+# "push.default = simple" is the default in git 2.0, but OS X still ships git
+# 1.9.3 ("push.default = matching") as of 10.10.2, so... we explicitly specify
+# the modern default to try and keep things sane if you accidentally use the
+# OS-provided git instead of the modern one from our package manager. When a
+# majority of Macs here are running OS X that ships git >= 2.0, we can likely
+# remove this.
+[push]
+	default = current
+
+# http://stackoverflow.com/questions/18257622/why-is-git-core-preloadindex-default-value-false
+[core]
+	preloadindex = true
+	excludesfile = /Users/haran/.gitignore.global
+	autocrlf = input
+	editor = emacsclient -nw
+	pager = diff-so-fancy | less --tabs=4 -RFX
+
+[log]
+	decorate = true
+[credential]
+	helper = osxkeychain
+[alias]
+	d = "!f() { git difftool --no-prompt --extcmd \"icdiff --no-bold\" $@ | more -R; }; f"
+	l = log --pretty=format:%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn] --decorate
+	s = status --short
+	st = status --short
+	co = checkout
+	cb = checkout -b
+	lc = log ORIG_HEAD.. --stat --no-merges
+	ll = log --decorate
+	gr = log --graph --all --pretty=format:%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn] --decorate
+	graph = log --graph --all --decorate
+	la = !git config -l | grep alias | cut -c 7-
+	rc = "!f() { git reset $* && git co $*; }; f"
+[color]
+	ui = true
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+[color "diff"]
+	meta = yellow
+	frag = magenta bold
+	commit = yellow bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+[transfer]
+	fsckobjects = true
+[fetch]
+	fsckobjects = true
+[receive]
+	fsckobjects = true
