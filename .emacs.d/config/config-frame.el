@@ -5,12 +5,6 @@
 (setq frame-resize-pixelwise t
       initial-frame-alist '((horizontal-scroll-bars . nil)
 			    (vertical-scroll-bars . nil)))
-;; no menu bar for tty
-(if (display-graphic-p)
-    (add-to-list 'initial-frame-alist '(menu-bar-lines . 1))
-  (add-to-list 'initial-frame-alist '(menu-bar-lines . 0)))
-
-(setq default-frame-alist (copy-alist initial-frame-alist))
 
 (defun frame-magnet (width-ratio height-ratio &optional pin-x pin-y)
   "Resize frame to WIDTH-RATIO and HEIGHT-RATIO of display.

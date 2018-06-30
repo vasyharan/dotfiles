@@ -58,17 +58,31 @@
 		      :weight 'normal
 		      :width 'normal)
 
-;; (setq ns-use-srgb-colorspace t)
-;; (setq powerline-image-apple-rgb t)
-
-(defun adjust-face-height ()
-  "Guess a nice default font height."
+(defun adjust-face-height (&optional frame)
+  "Guess a font height for FRAME, which defaults to selected FRAME."
   (interactive)
-  (let* ((display-width (display-pixel-width))
-	 (face-height (cond ((> display-width 1440) 130)
-			    (t 120))))
-    (set-face-attribute 'default (selected-frame)
+  (or frame (setq frame (selected-frame)))
+  (let* ((monitor-attributes (frame-monitor-attributes frame))
+	 (pixel-height (nth 4 (assq 'geometry monitor-attributes)))
+	 (mm-height (nth 2 (assq 'mm-size monitor-attributes)))
+	 (face-height (* 10 (ceiling (/ (float pixel-height) mm-height)))))
+    (set-face-attribute 'default frame
 			:height face-height)))
+;; (defun adjust-face-height ()
+;;   "Guess a nice default font height."
+;;   (interactive)
+;;   (let* ((display-width (display-pixel-width))
+;; 	 (face-height (cond ((> display-width 1440) 90)
+;; 			    (t 120))))
+;;     (set-face-attribute 'default (selected-frame)
+;; 			:height face-height)))
+
+;; no menu bar for tty or linux
+(if (and (display-graphic-p) (eq system-type "darwin"))
+    (add-to-list 'initial-frame-alist '(menu-bar-lines . 1))
+  (add-to-list 'initial-frame-alist '(menu-bar-lines . 0)))
+
+(setq default-frame-alist (copy-alist initial-frame-alist))
 
 (defun tty-ui-frame-hook ()
   "UI adjustments hook for TTY frame."
@@ -76,7 +90,8 @@
 
 (defun gui-ui-frame-hook ()
   "UI adjustments hook for GUI frame."
-  (set-frame-parameter (selected-frame) 'menu-bar-lines 1)
+  (if (eq system-type "darwin")
+      (set-frame-parameter (selected-frame) 'menu-bar-lines 1))
   (adjust-face-height)
   (adjust-frame-size))
 

@@ -50,12 +50,13 @@ zplug "dracula/zsh", as:theme
 PURE_GIT_PULL=0
 VIRTUAL_ENV_DISABLE_PROMPT=1
 zplug "mafredri/zsh-async", from:github
-zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
-# zplug "dfurnes/purer", use:pure.zsh, from:github, as:theme
+# zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
+zplug "dfurnes/purer", use:pure.zsh, from:github, as:theme
 
 zplug "rupa/z", use:z.sh
 
 zplug "zsh-users/zsh-autosuggestions"
 zplug "zsh-users/zsh-history-substring-search"
+zplug "junegunn/fzf", use:"shell/*.zsh"
 
 zplug load # --verbose

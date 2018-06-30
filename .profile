@@ -1,3 +1,5 @@
+[ -f /usr/share/defaults/etc/profile ] && source /usr/share/defaults/etc/profile
+
 # path
 path=(~/go/bin
       ~/.fzf/bin
