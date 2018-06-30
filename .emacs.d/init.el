@@ -3,7 +3,19 @@
 ;;; Code:
 
 ;; better performance?
-(setq gc-cons-threshold (* 512 1024 1024))
+(setq-default garbage-collection-messages t)
+
+(defun set-standard-gc-cons-threshold ()
+  "Reset `gc-cons-threshold' to the standard value."
+  (setq gc-cons-threshold (car (get 'gc-cons-threshold 'standard-value))))
+
+(defun set-high-gc-cons-threshold ()
+  "Set `gc-cons-threshold' to 1GB."
+  (setq gc-cons-threshold (* 1024 1024 1024)))
+
+(unless after-init-time
+  (set-high-gc-cons-threshold)
+  (add-hook 'emacs-startup-hook #'set-standard-gc-cons-threshold t))
 
 ;; avoid flickering?
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
@@ -53,8 +65,9 @@
 (load custom-file t)
 
 ;; make command/options keys behave normally.
-(setq mac-option-modifier 'meta
-      mac-command-modifier 'hyper)
+(if (eq system-type "darwin")
+    (setq mac-option-modifier 'meta
+	  mac-command-modifier 'hyper))
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 (setq inhibit-splash-screen t		;; empty screen on start
@@ -211,23 +224,18 @@
 (load-config-file "config-lang-ruby.el")
 (load-config-file "config-lang-js.el")
 
-;; (load-file "config/config-base.el")
-;; (load-file "config/config-ui.el")
-;; (load-file "config/config-vcs.el")
-;; (load-file "config/config-org.el")
-;; (load-file "config/config-completion.el")
-;; (load-file "config/config-code-completion.el")
-;; (load-file "config/config-syntax-checking.el")
+(defun minibuffer-setup ()
+  "Minibuffer setup hook."
+  (setq inhibit-message t)
+  (set-high-gc-cons-threshold))
 
-;; (load-file "config/config-lang-go.el")
-;; (load-file "config/config-lang-js.el")
-;; (load-file "config/config-lang-python.el")
-;; (load-file "config/config-lang-ruby.el")
-;; (load-file "config/config-lang-rust.el")
-;; (load-file "config/config-lang-scala.el")
-;; (load-file "config/config-lang-thrift.el")
+(defun minibuffer-exit ()
+  "Minibuffer exit hook."
+  (setq inhibit-message nil)
+  (set-standard-gc-cons-threshold))
 
-;; (require 'pay-mode)
+(add-hook 'minibuffer-setup-hook #'minibuffer-setup)
+(add-hook 'minibuffer-exit-hook #'minibuffer-exit)
 
 (provide 'init)
 ;;; init.el ends here
