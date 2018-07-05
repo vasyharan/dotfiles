@@ -9,6 +9,10 @@
   :ensure t
   :mode "\\.js\\'")
 
+(use-package json-mode
+  :ensure t
+  :mode "\\.json\\'")
+
 (use-package company-flow
   :commands (company-flow)
   :ensure t)
@@ -26,9 +30,13 @@
 
 (use-package lsp-javascript-flow
   :load-path "lisp/lsp-javascript"
-  :commands (lsp-javascript-flow-enable))
+  :commands (lsp-javascript-flow-enable)
+  :init
+  (setq lsp-javascript-flow-server-args '("--no-auto-download"
+					  "--try-flow-bin")))
 
 (defun config-js-mode()
+  "Configure Javascript mode."
   (setq tab-width 2
 	evil-shift-width 2
 	js-indent-level 2
@@ -37,15 +45,24 @@
 	js2-mode-show-strict-warnings nil)
   (set (make-local-variable 'company-backends) '(company-flow))
   (setq-default flycheck-disabled-checkers
-		(append flycheck-disabled-checkers '(javascript-jshint javascript-flow)))
+		(append flycheck-disabled-checkers '(javascript-jshint)))
 
-  (add-node-modules-path)
+  ;; (add-node-modules-path)
   (prettier-js-mode)
 
-  (flycheck-add-mode 'javascript-eslint 'rjsx-mode))
+  (flycheck-add-mode 'javascript-eslint 'rjsx-mode)
+  (flycheck-add-mode 'javascript-flow 'rjsx-mode)
+  (flycheck-add-next-checker 'javascript-flow 'javascript-eslint)
+  (flycheck-add-next-checker 'lsp-ui 'javascript-eslint)
+  ;; (eglot-ensure)
+  (lsp-javascript-flow-enable))
 
+(defun config-json-mode()
+  "Configure JSON mode."
+  (prettier-js-mode))
+
+(add-hook 'json-mode-hook 'config-json-mode)
 (add-hook 'rjsx-mode-hook 'config-js-mode)
-(add-hook 'rjsx-mode #'lsp-javascript-flow-enable)
 
 (provide 'config-lang-js)
 ;;; config-lang-js.el ends here

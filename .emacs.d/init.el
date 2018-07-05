@@ -82,6 +82,7 @@
 		  "~/.rbenv/shims"
 		  "~/.pyenv/shims/"
 		  "~/.cargo/bin"
+		  "./node_modules/.bin"
 		  "/usr/local/bin"
 		  "/usr/bin"
 		  "/bin"
@@ -156,11 +157,12 @@
 	      toggle-comment-region-or-line
 	      load-config-file)
   :config
-  (global-set-keys
-   [(hyper v)] 'yank
-   [(hyper c)] 'kill-ring-save
-   [(hyper s)] 'save-buffer
-   [(hyper q)] 'save-buffers-kill-emacs)
+  (if (eq system-type "darwin")
+      (global-set-keys
+       [(hyper v)] 'yank
+       [(hyper c)] 'kill-ring-save
+       [(hyper s)] 'save-buffer
+       [(hyper q)] 'save-buffers-kill-emacs))
 
   (after 'evil-leader
     (evil-leader/set-key

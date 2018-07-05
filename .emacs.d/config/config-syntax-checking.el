@@ -28,7 +28,8 @@
   ("G"  (progn (goto-char (point-max)) (flycheck-previous-error)) "last")
   ("q"  nil                                                       "quit" :color blue))
 
-(after 'evil-leader (evil-leader/set-key "e" 'hydra-flycheck/body))
+;; (after 'evil-leader (evil-leader/set-key "e" 'hydra-flycheck/body))
+(after 'evil-leader (evil-leader/set-key "e" 'flycheck-list-errors))
 
 (provide 'config-syntax-checking)
 ;;; config-syntax-checking.el ends here
