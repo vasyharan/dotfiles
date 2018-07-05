@@ -58,14 +58,17 @@
 		      :weight 'normal
 		      :width 'normal)
 
+(defvar face-height-factor 24
+  "Factor for calculating face height.")
+
 (defun adjust-face-height (&optional frame)
   "Guess a font height for FRAME, which defaults to selected FRAME."
   (interactive)
   (or frame (setq frame (selected-frame)))
-  (let* ((monitor-attributes (frame-monitor-attributes frame))
+  (let* ((monitor-attributes (frame-monitor-attributes (selected-frame)))
 	 (pixel-height (nth 4 (assq 'geometry monitor-attributes)))
 	 (mm-height (nth 2 (assq 'mm-size monitor-attributes)))
-	 (face-height (* 10 (ceiling (/ (float pixel-height) mm-height)))))
+	 (face-height (* face-height-factor (ceiling (/ (float pixel-height) mm-height)))))
     (set-face-attribute 'default frame
 			:height face-height)))
 ;; (defun adjust-face-height ()
