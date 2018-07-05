@@ -87,7 +87,7 @@
 	   "* TODO %i%?")
 	  ("j" "Jira" entry
 	   (file+headline "~/org/inbox.org" "Unfiled")
-	   "* TODO %?\n  :PROPERTIES:\n  :ISSUE(s): [[https://jira.corp.stripe.com/browse/COMPLENG-%^{item}][COMPLENG-%\\1]]\n  :END:\n  %u")))
+	   "* TODO %?\n  :PROPERTIES:\n  :ISSUE(s): [[https://jira.corp.stripe.com/browse/VERPLAT-%^{item}][VERPLAT-%\\1]]\n  :END:\n  %u")))
   (add-hook 'org-capture-mode-hook 'evil-insert-state))
 
 (use-package org-agenda
