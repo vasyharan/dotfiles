@@ -321,7 +321,8 @@
         ;;     (yas--load-pending-jits)))
 	(when (boundp 'inf-ruby-minor-mode)
 	  (add-to-list 'inf-ruby-implementations '("pay" . "pay console"))
-	  (setq inf-ruby-default-implementation "pay")))))
+	  (setq inf-ruby-default-implementation "pay")
+	  (setq-local flycheck-ruby-rubocop-executable (concat (pay-project-root) "scripts/bin/rubocop"))))))
 
 (define-minor-mode pay-test-mode
   "Minor mode for pay test files"

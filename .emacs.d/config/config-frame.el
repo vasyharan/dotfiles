@@ -44,8 +44,8 @@ PIN-Y to one of 'top or 'bottom"
 (if (display-graphic-p) (gui-frame-init))
 
 (global-set-keys
- (kbd "H-C-h") (lambda () (interactive) (frame-magnet 0.66 1 'left))
- (kbd "H-C-l") (lambda () (interactive) (frame-magnet 0.66 1 'right))
+ (kbd "s-C-h") (lambda () (interactive) (frame-magnet 0.66 1 'left))
+ (kbd "s-C-l") (lambda () (interactive) (frame-magnet 0.66 1 'right))
  (kbd "H-<return>") 'toggle-frame-maximized)
 
 (provide 'config-frame)

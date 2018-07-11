@@ -1,5 +1,6 @@
 [ -f ~/.zshenv ] && source ~/.zshenv
 export EDITOR='emacsclient -nw'
+export TERM=xterm-24bits
 
 # history
 HISTFILE=~/.history
@@ -60,3 +61,6 @@ zplug "zsh-users/zsh-history-substring-search"
 zplug "junegunn/fzf", use:"shell/*.zsh"
 
 zplug load # --verbose
+
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=10"
+export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc

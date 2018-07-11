@@ -39,13 +39,20 @@
   :commands (rainbow-mode)
   :hook (prog-mode . rainbow-mode))
 
-(add-to-list 'custom-theme-load-path "~/.emacs.d/lisp/dracula-theme")
-(load-theme 'dracula)
+(use-package solarized-theme
+  :ensure t
+  :init
+  (setq solarized-distinct-fringe-background nil
+	solarized-high-contrast-mode-line nil
+	solarized-use-less-bold t
+	solarized-use-more-italic t
+	solarized-emphasize-indicators nil
+	solarized-use-variable-pitch nil)
+  (load-theme 'solarized-dark))
 
-;; (use-package dracula-theme
-;;   :load-path "lisp/dracula-theme/"
-;;   :init
-;;   (load-theme 'dracula))
+
+;; (add-to-list 'custom-theme-load-path "~/.emacs.d/lisp/dracula-theme")
+;; (load-theme 'dracula)
 
 (show-paren-mode)
 (column-number-mode)
@@ -58,14 +65,14 @@
 		      :weight 'normal
 		      :width 'normal)
 
-(defvar face-height-factor 24
+(defvar face-height-factor 26
   "Factor for calculating face height.")
 
 (defun adjust-face-height (&optional frame)
   "Guess a font height for FRAME, which defaults to selected FRAME."
   (interactive)
   (or frame (setq frame (selected-frame)))
-  (let* ((monitor-attributes (frame-monitor-attributes (selected-frame)))
+  (let* ((monitor-attributes (frame-monitor-attributes frame))
 	 (pixel-height (nth 4 (assq 'geometry monitor-attributes)))
 	 (mm-height (nth 2 (assq 'mm-size monitor-attributes)))
 	 (face-height (* face-height-factor (ceiling (/ (float pixel-height) mm-height)))))

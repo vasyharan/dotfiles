@@ -75,13 +75,13 @@
 
 (use-package evil
   :init
-  (setq evil-normal-state-tag	(propertize "No " 'face '((:weight bold :foreground "#50fa7b")))
-	evil-emacs-state-tag	(propertize "Em " 'face '((:weight bold :foreground "#f1fa8c")))
-	evil-insert-state-tag	(propertize "In " 'face '((:weight bold :foreground "#8be9fd")))
-	evil-motion-state-tag	(propertize "Mo " 'face '((:weight bold :foreground "#bd93f9")))
-	evil-visual-state-tag	(propertize "Vi " 'face '((:weight bold :foreground "#ffb86c")))
-	evil-operator-state-tag	(propertize "Op " 'face '((:weight bold :foreground "#ff79c6")))
-	evil-replace-state-tag	(propertize "Re " 'face '((:weight bold :foreground "#ff5555")))
+  (setq evil-normal-state-tag	(propertize "no " 'face '((:weight normal :foreground "#50fa7b")))
+	evil-emacs-state-tag	(propertize "em " 'face '((:weight normal :foreground "#f1fa8c")))
+	evil-insert-state-tag	(propertize "in " 'face '((:weight normal :foreground "#8be9fd")))
+	evil-motion-state-tag	(propertize "mo " 'face '((:weight normal :foreground "#bd93f9")))
+	evil-visual-state-tag	(propertize "vi " 'face '((:weight normal :foreground "#ffb86c")))
+	evil-operator-state-tag	(propertize "op " 'face '((:weight normal :foreground "#ff79c6")))
+	evil-replace-state-tag	(propertize "re " 'face '((:weight normal :foreground "#ff5555")))
 	evil-mode-line-format '(after . mode-line-front-space)))
 
 (setq mode-line-front-space '(:eval (if (display-graphic-p) " " "")))
