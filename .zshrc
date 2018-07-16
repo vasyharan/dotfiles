@@ -58,7 +58,6 @@ zplug "rupa/z", use:z.sh
 
 zplug "zsh-users/zsh-autosuggestions"
 zplug "zsh-users/zsh-history-substring-search"
-zplug "junegunn/fzf", use:"shell/*.zsh"
 
 zplug load # --verbose
 

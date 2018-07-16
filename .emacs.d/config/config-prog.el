@@ -4,19 +4,21 @@
 
 (setq prettify-symbols-unprettify-at-point 'right-edge)
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
-(add-hook 'prog-mode-hook 'hl-line-mode)
-(add-hook 'prog-mode-hook 'flyspell-prog-mode)
-;; (add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+(use-package hl-line
+  :commands (hl-line-mode)
+  :hook (prog-mode . hl-line-mode)
+  :config
+  (setq hl-line-sticky-flag nil))
+
+(use-package flyspell
+  :commands (flyspell-prog-mode)
+  :hook (prog-mode . flyspell-prog-mode))
 
 (use-package eglot
   :ensure t
   :commands (eglot)
   :init
-  ;; (setq eglot-server-programs
-  ;; 	'(rxjs-mode . ("flow-language-server"
-  ;; 		       "--stdio"
-  ;; 		       "--no-auto-download"
-  ;; 		       "--try-flow-bin")))
   (setq eglot-server-programs '((rust-mode . (eglot-rls "rls"))
 				(python-mode . ("pyls"))
 				((js-mode js2-mode rjsx-mode) . ("flow-language-server" "--stdio" "--no-auto-download" "--try-flow-bin"))
@@ -36,7 +38,7 @@
 
 (defun default-prog-hook()
   "Default `prog-mode' hook."
-  (setq-local show-trailing-whitespace t))
+  (setq-default show-trailing-whitespace t))
 
 (add-hook 'prog-mode-hook 'default-prog-hook)
 

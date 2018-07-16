@@ -8,12 +8,15 @@
   :commands (company-mode)
   :hook (prog-mode . company-mode)
   :config
-  (setq company-idle-delay 0.5
+  (setq company-idle-delay nil ;; 0.5
 	company-selection-wrap-around t)
+  (evil-define-key 'insert 'global (kbd "C-n") 'company-search-candidates)
+  (evil-define-key 'insert 'global (kbd "C-p") 'company-search-candidates)
   (define-key company-active-map [tab] 'company-complete)
   (define-key company-active-map (kbd "C-n") 'company-select-next)
   (define-key company-active-map (kbd "C-p") 'company-select-previous)
   (define-key company-active-map (kbd "C-f") 'company-complete)
+  (define-key company-active-map (kbd "C-r") 'company-filter-candidates)
 
   ;; (defun on-off-fci-before-company(command)
   ;;   (when (string= "show" command)
@@ -29,13 +32,15 @@
   :commands (yas-minor-mode)
   :hook (prog-mode . yas-minor-mode)
   :config
-  (use-package yasnippet-snippets :ensure t)
-  (yas-reload-all))
+  (use-package yasnippet-snippets
+    :ensure t)
+  (yas-reload-all)
+  (evil-define-key 'insert 'global (kbd "C-f") 'yas-expand))
 
-(setq tags-revert-without-query t
-      large-file-warning-threshold nil)
-(add-to-list 'safe-local-variable-values
-	     '(counsel-etags-tags-program . "ctags --languages=ruby -e -L"))
+(use-package etags
+  :config
+  (setq tags-revert-without-query t
+	large-file-warning-threshold nil))
 
 (provide 'config-code-completion)
 ;; config-code-completion.el ends here

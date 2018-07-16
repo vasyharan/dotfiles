@@ -5,7 +5,7 @@
 ;; Code licensed under the MIT license
 
 ;; Author: film42
-;; Version: 1.3.2
+;; Version: 1.5.0
 ;; Package-Requires: ((emacs "24"))
 ;; URL: https://github.com/dracula/emacs
 
@@ -14,18 +14,19 @@
 ;; A dark color theme available for a number of editors.
 
 ;;; Code:
-
+(require 'cl-lib)
 (deftheme dracula)
 
-(let ((colors '((fg1          "#f8f8f2" "color-231")      ; Assigment form: VARIABLE COLOR [TTY-COLOR]
-                (fg2          "#e2e2dc" "color-255")
-                (fg3          "#ccccc7" "color-251")
-                (fg4          "#b6b6b2" "color-249")
-                (bg1          "#282a36" "color-000") ;;; 236
-                (bg2          "#373844" "color-237")
-                (bg3          "#464752" "color-238")
-                (bg4          "#565761" "color-240")
-                (bg5          "#44475a" "color-238")
+(let ((colors '((fg1          "#f8f8f2")      ; Assigment form: VARIABLE COLOR [TTY-COLOR]
+                (fg2          "#e2e2dc")
+                (fg3          "#ccccc7")
+                (fg4          "#b6b6b2")
+                (bg1          "#282a36" "#000000")
+                (bg2          "#373844")
+                (bg3          "#464752")
+                (bg4          "#565761")
+                (bg5          "#44475a")
+                (bg6          "#b45bcf")
                 (key2         "#0189cc")
                 (key3         "#ff79c6")
                 (builtin      "#ffb86c")
@@ -46,6 +47,7 @@
                 (rainbow-7    "#f1fa8c")
                 (rainbow-8    "#0189cc")
                 (rainbow-9    "#ff5555")
+                (rainbow-10   "#a0522d")
                 (eph-verbatim "#f1fa8c")
                 (eph-code     "#ff79c6")))
       (faces '(;; default
@@ -68,6 +70,7 @@
                (vertical-border :foreground ,bg2)
                (warning :foreground ,warning)
                (whitespace-trailing :inherit trailing-whitespace)
+               (header-line :background ,bg1)
                ;; syntax
                (font-lock-builtin-face :foreground ,builtin)
                (font-lock-comment-face :foreground ,comment)
@@ -221,8 +224,8 @@
                (magit-section-heading :foreground ,keyword :weight bold)
                (magit-section-highlight :background ,bg2)
                ;; mode-line
-               (mode-line :foreground nil :background ,bg1 :box ,bg1)
-               (mode-line-inactive :foreground ,bg4 :background ,bg1 :box ,bg1)
+               (mode-line :foreground nil :background ,bg5 :box ,bg5)
+               (mode-line-inactive :foreground ,fg1 :background ,bg2 :box ,bg2)
                ;; mu4e
                (mu4e-cited-1-face :foreground ,fg2)
                (mu4e-cited-7-face :foreground ,fg3)
@@ -274,10 +277,6 @@
                (outline-4 :foreground ,rainbow-5)
                (outline-5 :foreground ,rainbow-5)
                (outline-6 :foreground ,rainbow-8)
-	       ;; hydra
-	       (hydra-face-red :foreground ,rainbow-9)
-	       (hydra-face-blue :foreground ,rainbow-2)
-	       (hydra-face-pink :foreground ,rainbow-4)
                ;; powerline
                (powerline-evil-base-face :foreground ,bg2)
                (powerline-evil-emacs-face :inherit powerline-evil-base-face :background ,rainbow-7)
@@ -285,8 +284,12 @@
                (powerline-evil-motion-face :inherit powerline-evil-base-face :background ,rainbow-3)
                (powerline-evil-normal-face :inherit powerline-evil-base-face :background ,rainbow-6)
                (powerline-evil-operator-face :inherit powerline-evil-base-face :background ,rainbow-4)
-               (powerline-evil-replace-face :inherit powerline-evil-base-face :background "#ff5555")
+               (powerline-evil-replace-face :inherit powerline-evil-base-face :background ,rainbow-9)
                (powerline-evil-visual-face :inherit powerline-evil-base-face :background ,rainbow-5)
+               (powerline-active1 :background ,bg6 :foreground ,fg1)
+               (powerline-active2 :background ,bg6 :foreground ,fg1)
+               (powerline-inactive2 :background ,bg3 :foreground ,fg1)
+               (powerline-inactive2 :background ,bg3 :foreground ,fg1)
                ;; rainbow-delimiters
                (rainbow-delimiters-depth-1-face :foreground ,rainbow-1)
                (rainbow-delimiters-depth-2-face :foreground ,rainbow-2)
@@ -306,7 +309,7 @@
                (rpm-spec-package-face :foreground ,rainbow-3)
                (rpm-spec-section-face :foreground ,rainbow-7)
                (rpm-spec-tag-face :foreground ,rainbow-2)
-               (rpm-spec-var-face :foreground "#a0522d")
+               (rpm-spec-var-face :foreground ,rainbow-10)
                ;; slime
                (slime-repl-inputed-output-face :foreground ,type)
                ;; spam
@@ -425,10 +428,10 @@
                                                    (eval `(backquote ,spec)))))
              (cl-loop for (face . spec) in faces
                       collect `(,face
-                                ((((type tty))
-                                  ,(expand-for-tty spec))
-                                 (((type graphic))
-                                  ,(expand-for-graphic spec)))))))))
+                                ((((min-colors 16777216))
+                                  ,(expand-for-graphic spec))
+                                 (t
+                                  ,(expand-for-tty spec)))))))))
 
 ;;;###autoload
 (when load-file-name

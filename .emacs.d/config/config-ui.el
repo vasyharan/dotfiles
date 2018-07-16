@@ -40,21 +40,28 @@
   :hook (prog-mode . rainbow-mode))
 
 (use-package solarized-theme
+  :load-path "lisp/solarized-emacs"
   :ensure t
   :init
   (setq solarized-distinct-fringe-background nil
 	solarized-high-contrast-mode-line nil
 	solarized-use-less-bold t
 	solarized-use-more-italic t
-	solarized-emphasize-indicators nil
+	solarized-emphasize-indicators t
 	solarized-use-variable-pitch nil)
-  (load-theme 'solarized-dark))
+  (setq x-underline-at-descent-line t)
+  :config
+  (load-theme 'solarized-dark)
+  )
 
-
-;; (add-to-list 'custom-theme-load-path "~/.emacs.d/lisp/dracula-theme")
-;; (load-theme 'dracula)
+(use-package dracula-theme
+  :ensure t
+  ;; :config
+  ;; (load-theme 'dracula)
+  )
 
 (show-paren-mode)
+(size-indication-mode)
 (column-number-mode)
 
 (setq display-time-default-load-average nil
@@ -65,27 +72,18 @@
 		      :weight 'normal
 		      :width 'normal)
 
-(defvar face-height-factor 26
+(defvar face-height-factor 24
   "Factor for calculating face height.")
 
 (defun adjust-face-height (&optional frame)
   "Guess a font height for FRAME, which defaults to selected FRAME."
   (interactive)
   (or frame (setq frame (selected-frame)))
-  (let* ((monitor-attributes (frame-monitor-attributes frame))
+  (let* ((monitor-attributes (frame-monitor-attributes (selected-frame)))
 	 (pixel-height (nth 4 (assq 'geometry monitor-attributes)))
 	 (mm-height (nth 2 (assq 'mm-size monitor-attributes)))
 	 (face-height (* face-height-factor (ceiling (/ (float pixel-height) mm-height)))))
-    (set-face-attribute 'default frame
-			:height face-height)))
-;; (defun adjust-face-height ()
-;;   "Guess a nice default font height."
-;;   (interactive)
-;;   (let* ((display-width (display-pixel-width))
-;; 	 (face-height (cond ((> display-width 1440) 90)
-;; 			    (t 120))))
-;;     (set-face-attribute 'default (selected-frame)
-;; 			:height face-height)))
+    (set-face-attribute 'default frame :height face-height)))
 
 ;; no menu bar for tty or linux
 (if (and (display-graphic-p) (eq system-type "darwin"))
@@ -102,8 +100,7 @@
   "UI adjustments hook for GUI frame."
   (if (eq system-type "darwin")
       (set-frame-parameter (selected-frame) 'menu-bar-lines 1))
-  (adjust-face-height)
-  (adjust-frame-size))
+  (adjust-face-height))
 
 (defun gui-ui-init ()
   "Initialize GUI frame UI settings."

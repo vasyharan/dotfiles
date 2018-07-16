@@ -37,17 +37,10 @@
 	evil-shift-width 2
 	indent-tabs-mode nil
 	ruby-electric-expand-delimiters-list nil)
-  ;; (setq-local fci-rule-column 80)
-  (setq-local flycheck-check-syntax-automatically '(idle-change save))
-  (setq-local flycheck-idle-change-delay 3)
   (setq-local prettify-symbols-alist '(("lambda"	. ?λ)
 				       ("->"            . ?λ)
 				       (">="		. ?≥)
 				       ("<="		. ?≤)))
-
-  ;; (evil-define-key 'motion ruby-mode-map
-  ;;   (kbd "C-]") 'counsel-etags-find-tag-at-point
-  ;;   (kbd "M-]") 'counsel-etags-find-tag)
 
   (global-rbenv-mode)
   (rbenv-use-corresponding)
@@ -56,10 +49,6 @@
   (superword-mode +1)
   (inf-ruby-minor-mode)
   (modify-syntax-entry ?_ "w")
-
-  ;; (lsp-ruby-enable)
-
-  ;; (electric-indent-mode +1)
   (electric-pair-mode +1))
 
 (defun config-web-mode ()

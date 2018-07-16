@@ -46,7 +46,7 @@ PIN-Y to one of 'top or 'bottom"
 (global-set-keys
  (kbd "s-C-h") (lambda () (interactive) (frame-magnet 0.66 1 'left))
  (kbd "s-C-l") (lambda () (interactive) (frame-magnet 0.66 1 'right))
- (kbd "H-<return>") 'toggle-frame-maximized)
+ (kbd "s-<return>") 'toggle-frame-maximized)
 
 (provide 'config-frame)
 ;;; config-frame.el ends here

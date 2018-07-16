@@ -3,29 +3,65 @@
 ;;; Code:
 
 (defface mode-line-directory
-  '((t :foreground "#565761"))
+  '((t :foreground "#586e75"))
   "Face used for buffer identification parts of the mode line."
   :group 'mode-line-faces
   :group 'basic-faces)
 
 (defface mode-line-flycheck-separator
-  '((t :foreground "#565761"))
-  "Face used for buffer identification parts of the mode line."
+  '((t :foreground "#586e75"))
+  "Face used for flycheck separators."
   :group 'mode-line-faces
   :group 'basic-faces)
 (defface mode-line-flycheck-error
-  '((t :foreground "#ff5555"))
-  "Face used for buffer identification parts of the mode line."
+  '((t :foreground "#ff6e64"))
+  "Face used for number of flycheck errors."
   :group 'mode-line-faces
   :group 'basic-faces)
 (defface mode-line-flycheck-warning
-  '((t :foreground "#ffb86c"))
-  "Face used for buffer identification parts of the mode line."
+  '((t :foreground "#f2804f"))
+  "Face used for number of flycheck warnings."
   :group 'mode-line-faces
   :group 'basic-faces)
 (defface mode-line-flycheck-info
-  '((t :foreground "#8be9fd"))
-  "Face used for buffer identification parts of the mode line."
+  '((t :foreground "#69b7f0"))
+  "Face used for number of flycheck infos."
+  :group 'mode-line-faces
+  :group 'basic-faces)
+
+(defface mode-line-evil-normal
+  '((t :foreground "#b4c342"))
+  "Face used for evil normal state."
+  :group 'mode-line-faces
+  :group 'basic-faces)
+(defface mode-line-evil-emacs
+  '((t :foreground "#deb542"))
+  "Face used for evil emacs state."
+  :group 'mode-line-faces
+  :group 'basic-faces)
+(defface mode-line-evil-insert
+  '((t :foreground "#69cabf"))
+  "Face used for evil emacs state."
+  :group 'mode-line-faces
+  :group 'basic-faces)
+(defface mode-line-evil-motion
+  '((t :foreground "#9ea0e5"))
+  "Face used for evil emacs state."
+  :group 'mode-line-faces
+  :group 'basic-faces)
+(defface mode-line-evil-visual
+  '((t :foreground "#f2804f"))
+  "Face used for evil emacs state."
+  :group 'mode-line-faces
+  :group 'basic-faces)
+(defface mode-line-evil-operator
+  '((t :foreground "#f771ac"))
+  "Face used for evil emacs state."
+  :group 'mode-line-faces
+  :group 'basic-faces)
+(defface mode-line-evil-replace
+  '((t :foreground "#ff6e64"))
+  "Face used for evil emacs state."
   :group 'mode-line-faces
   :group 'basic-faces)
 
@@ -43,45 +79,45 @@
        output))
 
 (defvar mode-line-directory
-  '(:propertize
-    (:eval (if (buffer-file-name) (shorten-directory default-directory 20)))
-                face mode-line-directory)
-  "Formats the current directory.")
+  '(" "
+    (:propertize
+     (:eval (if (buffer-file-name) (shorten-directory default-directory 20)))
+     face mode-line-directory))
+  "Mode line construct for displaying the current directory.")
 (put 'mode-line-directory 'risky-local-variable t)
 
 (setq-default mode-line-buffer-identification
   (propertized-buffer-identification "%b"))
 
 (setq-default mode-line-modified
-  (list (propertize
-	 "%1+"
-	 'help-echo 'mode-line-modified-help-echo
-	 'local-map (purecopy (make-mode-line-mouse-map
-			       'mouse-1 #'mode-line-toggle-modified))
-	 'mouse-face 'mode-line-highlight)
-	" "))
+	      '((:propertize
+		 "%1+"
+		 help-echo mode-line-modified-help-echo
+		 local-map (purecopy (make-mode-line-mouse-map
+				      'mouse-1 #'mode-line-toggle-modified))
+		 mouse-face mode-line-highlight)))
 
 (defvar mode-line-editable
-  (list
-   '(:propertize
+  '(" "
+    (:propertize
      (:eval (if buffer-read-only "ro" ""))
      help-echo mode-line-read-only-help-echo
      local-map (purecopy (make-mode-line-mouse-map
 			  'mouse-1 #'mode-line-toggle-read-only))
-     mouse-face mode-line-highlight)
-   " ")
-    "Mode line construct for displaying whether current buffer is editable.")
+     mouse-face mode-line-highlight))
+  "Mode line construct for displaying whether current buffer is editable.")
 (put 'mode-line-editable 'risky-local-variable t)
 
 (use-package evil
   :init
-  (setq evil-normal-state-tag	(propertize "no " 'face '((:weight normal :foreground "#50fa7b")))
-	evil-emacs-state-tag	(propertize "em " 'face '((:weight normal :foreground "#f1fa8c")))
-	evil-insert-state-tag	(propertize "in " 'face '((:weight normal :foreground "#8be9fd")))
-	evil-motion-state-tag	(propertize "mo " 'face '((:weight normal :foreground "#bd93f9")))
-	evil-visual-state-tag	(propertize "vi " 'face '((:weight normal :foreground "#ffb86c")))
-	evil-operator-state-tag	(propertize "op " 'face '((:weight normal :foreground "#ff79c6")))
-	evil-replace-state-tag	(propertize "re " 'face '((:weight normal :foreground "#ff5555")))
+
+  (setq evil-normal-state-tag	(propertize "No" 'face 'mode-line-evil-normal)
+	evil-emacs-state-tag	(propertize "Em" 'face 'mode-line-evil-emacs)
+	evil-insert-state-tag	(propertize "In" 'face 'mode-line-evil-insert)
+	evil-motion-state-tag	(propertize "Mo" 'face 'mode-line-evil-motion)
+	evil-visual-state-tag	(propertize "Vi" 'face 'mode-line-evil-visual)
+	evil-operator-state-tag	(propertize "Op" 'face 'mode-line-evil-operator)
+	evil-replace-state-tag	(propertize "Re" 'face 'mode-line-evil-replace)
 	evil-mode-line-format '(after . mode-line-front-space)))
 
 (setq mode-line-front-space '(:eval (if (display-graphic-p) " " "")))
@@ -119,7 +155,7 @@
     nil."
     (let ((status-text
 	   (pcase (or status flycheck-last-status-change)
-	     (`not-checked "")
+	     (`not-checked "-")
 	     (`no-checker "-")
 	     (`running "*")
 	     (`errored "!")
@@ -127,6 +163,7 @@
 	      (let-alist (flycheck-count-errors flycheck-current-errors)
 		(if (or .error .warning .info)
 		    (concat
+		     (propertize ":" 'face 'mode-line-flycheck-separator)
 		     (propertize (format "%s" (or .error 0)) 'face 'mode-line-flycheck-error)
 		     (propertize "/" 'face 'mode-line-flycheck-separator)
 		     (propertize (format "%s" (or .warning 0)) 'face 'mode-line-flycheck-warning)
@@ -135,62 +172,15 @@
 		  "")))
 	     (`interrupted ".")
 	     (`suspicious "?"))))
-      (if (string= status-text "") "" (concat status-text " ")))))
+      (concat flycheck-mode-line-prefix status-text))))
 
 (setq mode-line-position
-      '((line-number-mode ("%l" (column-number-mode ":%c")))
+      '(
 	(-4 " %p")
-	(size-indication-mode ("/" (-4 "%I")))))
+	(size-indication-mode ("/" (-4 "%I")))
+	(line-number-mode (" %l" (column-number-mode ":%c")))
+	))
 
-(defun mode-line-render (left right)
-  "Return a string of `window-width' length containing LEFT, and RIGHT
- aligned respectively."
-  (let* ((available-width (- (window-width) (length left) 2)))
-    (format (format " %%s %%%ds " available-width) left right)))
-
-(defun mode-line-format (values)
-  "Render a list of mode line VALUES."
-  ;; (mapconcat 'format-mode-line values "")
-  (concat values)
-  )
-
-(defun mode-line-active-text ()
-  "Text to render as the mode-line for the selected window."
-  (let ((lhs (list 'mode-line-front-space
-		   'evil-mode-line-tag
-		   'mode-line-modified
-		   " "
-		   'mode-line-directory
-		   'mode-line-buffer-identification
-		   ;; 'mode-line-position
-		   " "
-		   '(flycheck-mode flycheck-mode-line)
-		   " "
-		   'mode-line-modes
-		   'mode-line-misc-info))
-	(rhs (list
-	      'mode-line-position
-	      " "
-		   )))
-    (mode-line-render (mode-line-format lhs) (mode-line-format rhs))))
-
-(defun mode-line-inactive-text ()
-  "Text to render as the mode-line for the selected window."
-  (let ((lhs (list 'mode-line-front-space
-		   'evil-mode-line-tag
-		   'mode-line-modified
-		   " "
-		   'mode-line-directory))
-	(rhs (list)))
-    (concat (mapconcat 'format-mode-line lhs ""))))
-
-(defun mode-line-text ()
-  "Text to render as the mode-line."
-  (if (mode-line-selected-window-active) (mode-line-active-text)
-    (mode-line-inactive-text)))
-
-;; (setq-default mode-line-format
-;; 	      '(:eval (mode-line-text)))
 (setq-default mode-line-format
 	      '(:eval
 		(let* ((active (mode-line-selected-window-active)))
@@ -198,10 +188,11 @@
 		      (list "%e"
 			    'mode-line-front-space
 			    'evil-mode-line-tag
-			    'mode-line-editable
+			    ;; 'mode-line-editable
 			    'mode-line-directory
 			    'mode-line-buffer-identification
 			    'mode-line-modified
+			    " "
 			    'mode-line-modes
 			    '(flycheck-mode flycheck-mode-line)
 			    'mode-line-position

@@ -82,7 +82,6 @@
 		  "~/.rbenv/shims"
 		  "~/.pyenv/shims/"
 		  "~/.cargo/bin"
-		  "./node_modules/.bin"
 		  "/usr/local/bin"
 		  "/usr/bin"
 		  "/bin"
@@ -130,6 +129,7 @@
   :load-path "lisp/pay-server"
   :init
   (add-hook 'ruby-mode 'pay-enable-appropriate-mode)
+  :delight pay-mode pay-test-mode
   :config
   (after 'evil-leader
     (evil-leader/set-key
@@ -171,6 +171,9 @@
 (use-package delight
   :ensure t
   :commands delight)
+
+(use-package subword
+  :delight superword-mode)
 
 (use-package autorevert
   :delight auto-revert-mode
