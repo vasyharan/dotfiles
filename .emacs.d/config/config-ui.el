@@ -40,25 +40,24 @@
   :hook (prog-mode . rainbow-mode))
 
 (use-package solarized-theme
-  :load-path "lisp/solarized-emacs"
-  :ensure t
+  :ensure t)
+
+(use-package my-solarized-theme
+  :after (solarized-theme)
+  :load-path "lisp/my-solarized"
   :init
   (setq solarized-distinct-fringe-background nil
 	solarized-high-contrast-mode-line nil
 	solarized-use-less-bold t
 	solarized-use-more-italic t
-	solarized-emphasize-indicators t
-	solarized-use-variable-pitch nil)
-  (setq x-underline-at-descent-line t)
+	solarized-emphasize-indicators nil
+	solarized-use-variable-pitch nil
+	x-underline-at-descent-line t)
   :config
-  (load-theme 'solarized-dark)
-  )
+  (load-theme 'my-solarized-dark))
 
-(use-package dracula-theme
-  :ensure t
-  ;; :config
-  ;; (load-theme 'dracula)
-  )
+;; (use-package dracula-theme
+;;   :ensure t)
 
 (show-paren-mode)
 (size-indication-mode)
