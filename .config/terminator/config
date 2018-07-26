@@ -1,0 +1,36 @@
+[global_config]
+  tab_position = hidden
+  title_hide_sizetext = True
+  title_inactive_bg_color = "#282a36"
+  title_inactive_fg_color = "#f8f8f2"
+  title_receive_bg_color = "#282a36"
+  title_receive_fg_color = "#8be9fd"
+  title_transmit_bg_color = "#282a36"
+  title_transmit_fg_color = "#bd93f9"
+  window_state = maximise
+[keybindings]
+  split_horiz = <Shift><Alt>d
+  split_vert = <Alt>d
+[layouts]
+  [[default]]
+    [[[child1]]]
+      parent = window0
+      profile = dracula
+      type = Terminal
+    [[[window0]]]
+      parent = ""
+      type = Window
+[plugins]
+[profiles]
+  [[default]]
+    allow_bold = False
+    copy_on_selection = True
+    cursor_color = "#f8f8f2"
+    font = Hack 9
+    palette = "#fbf1c7:#cc241d:#98971a:#d79921:#458588:#b16286:#689d6a:#7c6f64:#928374:#9d0006:#79740e:#b57614:#076678:#8f3f71:#427b58:#3c3836"
+    scrollback_infinite = True
+    scrollbar_position = hidden
+    show_titlebar = False
+    use_system_font = False
+    use_theme_colors = True
+    visible_bell = True
