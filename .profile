@@ -7,6 +7,7 @@ path=(~/go/bin
       ~/.pyenv/bin
       /usr/local/bin
       /usr/local/sbin
+      /usr/local/opt/bison/bin
       $path)
 export PATH
 export GOPATH="$HOME/go"

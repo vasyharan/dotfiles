@@ -5,7 +5,7 @@
 
 (use-package ruby-mode
   :ensure t
-  :mode "\\.rb\\'"
+  :mode "\\(?:\\.rb\\|ru\\|rake\\|thor\\|jbuilder\\|gemspec\\|podspec\\|/\\(?:Gem\\|Rake\\|Cap\\|Thor\\|Vagrant\\|Guard\\|Pod\\)file\\)\\'"
   :interpreter "ruby")
 
 (use-package yaml-mode
@@ -58,6 +58,7 @@
 	indent-tabs-mode nil))
 
 (add-hook 'ruby-mode-hook 'config-ruby-mode)
+(add-hook 'enh-ruby-mode-hook 'config-ruby-mode)
 (add-hook 'web-mode-hook 'config-web-mode)
 
 (provide 'config-lang-ruby)

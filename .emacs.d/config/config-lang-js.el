@@ -28,13 +28,6 @@
   :commands (prettier-js prettier-js-mode)
   :ensure t)
 
-(use-package lsp-javascript-flow
-  :load-path "lisp/lsp-javascript"
-  :commands (lsp-javascript-flow-enable)
-  :init
-  (setq lsp-javascript-flow-server-args '("--no-auto-download"
-					  "--try-flow-bin")))
-
 (defun config-js-mode()
   "Configure Javascript mode."
   (setq tab-width 2

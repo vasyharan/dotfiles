@@ -18,18 +18,36 @@
 (use-package eglot
   :ensure t
   :commands (eglot)
-  :init
-  (setq eglot-server-programs '((rust-mode . (eglot-rls "rls"))
-				(python-mode . ("pyls"))
-				((js-mode js2-mode rjsx-mode) . ("flow-language-server" "--stdio" "--no-auto-download" "--try-flow-bin"))
-				(sh-mode . ("bash-language-server" "start"))
-				((c++-mode c-mode) . (eglot-cquery "cquery"))
-				(ruby-mode . ("solargraph" "socket" "--port" :autoport))
-				(php-mode . ("php" "vendor/felixfbecker/language-server/bin/php-language-server.php")))))
+  :config
+  (add-to-list 'eglot-server-programs `(ruby-mode . ("pay" "exec" "scripts/bin/typecheck" "--lsp")))
+  (add-to-list 'eglot-server-programs `((js-mode js2-mode rjsx-mode) . ("flow-language-server" "--stdio" "--no-auto-download" "--try-flow-bin"))))
 
 (use-package lsp-mode
   :ensure t
-  :commands (lsp-ruby-enable))
+  :commands (lsp-ruby-enable)
+  :config
+  (defconst lsp-ruby--get-root
+    (lsp-make-traverser
+     #'(lambda (dir)
+	 (directory-files dir nil "\\(Rakefile\\|Gemfile\\)"))))
+  (lsp-define-stdio-client
+   lsp-ruby "ruby"
+   lsp-ruby--get-root
+   '("pay" "exec" "scripts/bin/typecheck" "--lsp")))
+
+(use-package lsp-javascript-flow
+  :ensure t
+  :commands (lsp-javascript-flow-enable)
+  :config
+  (setq lsp-javascript-flow-server-args '("--no-auto-download"
+					  "--try-flow-bin")))
+(use-package lsp-javascript-typescript
+  :ensure t
+  :commands (lsp-javascript-typescript-enable))
+
+(use-package lsp-typescript
+  :ensure t
+  :commands (lsp-typescript-enable))
 
 (use-package lsp-ui
   :ensure t
@@ -38,7 +56,7 @@
 
 (defun default-prog-hook()
   "Default `prog-mode' hook."
-  (setq-default show-trailing-whitespace t))
+  (setq show-trailing-whitespace t))
 
 (add-hook 'prog-mode-hook 'default-prog-hook)
 

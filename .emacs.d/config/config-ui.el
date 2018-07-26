@@ -52,6 +52,7 @@
 	solarized-use-more-italic t
 	solarized-emphasize-indicators nil
 	solarized-use-variable-pitch nil
+	solarized-scale-org-headlines nil
 	x-underline-at-descent-line t)
   :config
   (load-theme 'my-solarized-dark))

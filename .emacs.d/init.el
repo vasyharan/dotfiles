@@ -129,7 +129,7 @@
   :load-path "lisp/pay-server"
   :init
   (add-hook 'ruby-mode 'pay-enable-appropriate-mode)
-  :delight pay-mode pay-test-mode
+  ;; :delight pay-mode pay-test-mode
   :config
   (after 'evil-leader
     (evil-leader/set-key
@@ -207,10 +207,10 @@
   (setq hydra-lv t
 	lv-use-separator nil))
 
-(use-package xclip
-  :ensure t
-  :init
-  (xclip-mode))
+;; (use-package xclip
+;;   :ensure t
+;;   :init
+;;   (xclip-mode))
 
 (load-config-file "config-evil.el")
 (load-config-file "config-completion.el")

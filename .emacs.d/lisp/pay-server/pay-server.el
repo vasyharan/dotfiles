@@ -311,22 +311,23 @@
   :lighter " pay"
   :group 'pay-server
   (when pay-mode
+    (setq-local exec-path (append `(,(concat (pay-project-root) "scripts/bin")) exec-path))
     (when (boundp 'yas-extra-modes)
-	(if (fboundp 'yas-activate-extra-mode)
-	    ;; Yasnippet 0.8.1+
-	    (yas-activate-extra-mode 'pay-mode)
-	(make-local-variable 'yas-extra-modes)
-	(add-to-list 'yas-extra-modes 'pay-mode)
-	(yas--load-pending-jits)))
+    	(if (fboundp 'yas-activate-extra-mode)
+    	    ;; Yasnippet 0.8.1+
+    	    (yas-activate-extra-mode 'pay-mode)
+    	(make-local-variable 'yas-extra-modes)
+    	(add-to-list 'yas-extra-modes 'pay-mode)
+    	(yas--load-pending-jits)))
     (when (boundp 'inf-ruby-minor-mode)
 	(add-to-list 'inf-ruby-implementations '("pay" . "pay console"))
-	(setq-local inf-ruby-default-implementation "pay")
-	(setq-local flymake-no-changes-timeout 3)
-	(setq-local exec-path (append `(,(concat (pay-project-root) "scripts/bin")) exec-path)))))
+	(setq-local inf-ruby-default-implementation "pay"))
+    (when (boundp 'flycheck-mode)
+      (setq-local flymake-no-changes-timeout 3))))
 
 (define-minor-mode pay-test-mode
   "Minor mode for pay test files"
-  :lighter " pay"
+  :lighter ""
   :group 'pay-server
   (pay-mode)
   (when pay-test-mode

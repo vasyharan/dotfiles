@@ -6,7 +6,7 @@
   :ensure t
   :commands (ace-window)
   :custom-face
-  (aw-leading-char-face ((t (:foreground "aquamarine1" :weight bold))))
+  ;; (aw-leading-char-face ((t (:foreground "aquamarine1" :weight bold))))
   ;; (aw-mode-line-face ((t (:foreground "SlateGray3"))))
   :init
   (defhydra hydra-window-size (:color red)
@@ -72,10 +72,24 @@
 	  windmove-left
 	  windmove-right
 	  windmove-down
-	  windmove-up)))
+	  windmove-up)
+	golden-ratio-exclude-modes
+	'(flycheck-error-list-mode)
+	golden-ratio-exclude-buffer-names
+	'(" *Org tags*" " *Org todo*" "*Flycheck Errors*")
+	golden-ratio-exclude-buffer-regexp
+	'("\\`\\*Flycheck errors\\*\\'")))
 
 (winner-mode)
 (golden-ratio-mode)
+
+(use-package shackle
+  :ensure t
+  :init
+  (shackle-mode)
+  :config
+  (setq shackle-rules
+	'(("\\`\\*Flycheck errors\\*\\'" :regexp t :align 'below :size 0.1))))
 
 ;; prefer horizontal splits.
 (defun split-window-sensibly (&optional window)

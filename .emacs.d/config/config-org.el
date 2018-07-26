@@ -8,23 +8,25 @@
   :after (evil-leader)
   :init
   (evil-leader/set-key
-    "of" 'gtd
-    "oo" 'org-agenda
-    "ok" 'org-capture)
+    "I" 'gtd-inbox
+    "G" 'gtd
+    "o" 'org-agenda
+    "K" 'org-capture)
   :commands (gtd)
   :config
   (add-hook 'org-mode-hook 'flyspell-mode)
 
   (setq org-enforce-todo-dependencies t
-	org-log-into-drawer t
+	org-log-into-drawer nil
 	org-log-done (quote time)
 	org-log-redeadline (quote time)
 	org-log-reschedule (quote time)
 	org-src-fontify-natively t
 	org-default-notes-file "~/.notes.org"
-	org-agenda-files `("~/org/inbox.org"
-			   "~/org/gtd.org")
-	org-refile-targets '(("~/org/gtd.org" :maxlevel . 1)
+	org-agenda-files `("~/org/gtd.org"
+			   "~/org/inbox.org")
+	org-refile-targets '(("~/org/gtd.org" :level . 1)
+			     ("~/org/inbox.org" :level . 1)
 			     ("~/org/someday.org" :level . 1))
 	org-todo-keywords '((sequence "TODO(t)"
 				      "STARTED(s!)"
@@ -34,6 +36,9 @@
 				      "DONE(d!)"
 				      "CANCELED(c@)")))
 
+  (defun gtd-inbox()
+      (interactive)
+      (find-file "~/org/inbox.org"))
   (defun gtd()
       (interactive)
       (find-file "~/org/gtd.org"))
@@ -87,7 +92,7 @@
 	   "* TODO %i%?")
 	  ("j" "Jira" entry
 	   (file+headline "~/org/inbox.org" "Unfiled")
-	   "* TODO %?\n  :PROPERTIES:\n  :ISSUE(s): [[https://jira.corp.stripe.com/browse/VERPLAT-%^{item}][VERPLAT-%\\1]]\n  :END:\n  %u")))
+	   "* TODO %?\n  :ISSUE(s): [[https://jira.corp.stripe.com/browse/VERPLAT-%^{item}][VERPLAT-%\\1]]\n  %u")))
   (add-hook 'org-capture-mode-hook 'evil-insert-state))
 
 (use-package org-agenda
@@ -96,9 +101,9 @@
   :config
   ;; (add-to-list 'evil-leader/no-prefix-mode-rx "org-agenda-mode")
   (setq org-agenda-custom-commands
-	'(("i" "Inbox" todo)
+	'(("i" "Inbox" todo "TODO")
 	  ("o" "Today"
-	   ((agenda "" ((org-agenda-span 1)
+	   ((agenda "" ((org-agenda-span 2)
 			(org-agenda-sorting-strategy
 			 (quote ((agenda time-up priority-down tag-up) )))
 			(org-deadline-warning-days 0)))))))
