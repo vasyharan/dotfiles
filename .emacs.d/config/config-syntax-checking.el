@@ -28,7 +28,7 @@
     (interactive)
     (let* ((flycheck-buffer (get-buffer flycheck-error-list-buffer))
 	   (flycheck-window (get-buffer-window flycheck-buffer)))
-      (if flycheck-window
+      (if (and flycheck-window flycheck-buffer)
 	  (delete-window flycheck-window) (flycheck-list-errors))))
   (after 'evil-leader (evil-leader/set-key "e" 'flycheck-list-errors-toggle)))
 

@@ -1,6 +1,4 @@
 [ -f ~/.zshenv ] && source ~/.zshenv
-export EDITOR='emacsclient -nw'
-export TERM=xterm-24bits
 
 # history
 HISTFILE=~/.history
@@ -16,12 +14,17 @@ setopt inc_append_history
 setopt share_history
 
 # aliases
+alias emacs='TERM=xterm-24bits emacs'
+alias emacsclient='TERM=xterm-24bits emacsclient'
 alias ll='ls -l'
 alias vim=nvim
 alias g=git
 alias et='emacsclient -nw'
 alias ec='emacsclient -nc'
 alias dot="git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
+
+# export TERM=xterm-24bits
+export EDITOR='emacsclient -nw'
 
 bindkey -e
 autoload -U select-word-style

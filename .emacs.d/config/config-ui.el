@@ -57,9 +57,6 @@
   :config
   (load-theme 'my-solarized-dark))
 
-;; (use-package dracula-theme
-;;   :ensure t)
-
 (show-paren-mode)
 (size-indication-mode)
 (column-number-mode)
@@ -72,7 +69,7 @@
 		      :weight 'normal
 		      :width 'normal)
 
-(defvar face-height-factor 24
+(defvar face-height-factor 22
   "Factor for calculating face height.")
 
 (defun adjust-face-height (&optional frame)

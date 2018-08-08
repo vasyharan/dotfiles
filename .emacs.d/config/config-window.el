@@ -50,6 +50,7 @@
 	  (?O delete-other-windows)
 	  (?= balance-windows			"Balance")
 	  (?w hydra-window-size/body)
+	  (? evil-window-mru)
 	  (?  hydra-window-scroll/body)
 	  (?b aw-switch-buffer-in-window	"Select buffer")
 	  (?u hydra-window-winner/winner-undo)
@@ -89,7 +90,7 @@
   (shackle-mode)
   :config
   (setq shackle-rules
-	'(("\\`\\*Flycheck errors\\*\\'" :regexp t :align 'below :size 0.1))))
+	'(("\\`\\*Flycheck errors\\*\\'" :regexp t :align 'below :size 0.3))))
 
 ;; prefer horizontal splits.
 (defun split-window-sensibly (&optional window)

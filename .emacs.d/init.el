@@ -125,29 +125,6 @@
   :load-path "lisp/after"
   :commands (after))
 
-(use-package pay-server
-  :load-path "lisp/pay-server"
-  :init
-  (add-hook 'ruby-mode 'pay-enable-appropriate-mode)
-  ;; :delight pay-mode pay-test-mode
-  :config
-  (after 'evil-leader
-    (evil-leader/set-key
-      "cc"	'pay-test-reverify
-      "cf"	'pay-test-verify-current-buffer
-      "cl"	'pay-test-verify-current-line
-      "cn"	'pay-test-verify-current-test
-      "cy"	'pay-test-kill-last
-      "cb"	'pay-test-break-current-line
-      "ca"      'pay-test-mark-current-test
-      "cA"      'pay-test-unmark-current-test
-      "cm"	'pay-test-verify-marked
-      "cM"      'pay-test-clear-marks)
-    (evil-leader/set-key-for-mode 'pay-compilation-mode
-      "d" 'inf-ruby-switch-from-compilation)
-    (evil-leader/set-key-for-mode 'inf-ruby-mode
-      "d" 'inf-ruby-maybe-switch-to-compilation)))
-
 (use-package utils
   :load-path "lisp"
   :demand t
@@ -224,6 +201,7 @@
 (load-config-file "config-prog.el")
 (load-config-file "config-code-completion.el")
 (load-config-file "config-syntax-checking.el")
+(load-config-file "config-pay-mode.el")
 
 (load-config-file "config-org.el")
 (load-config-file "config-lang-ruby.el")

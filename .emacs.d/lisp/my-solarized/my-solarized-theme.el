@@ -1,7 +1,7 @@
 ;;; my-solarized-theme.el --- My Solarized for Emacs.
 ;;; Commentary:
 ;;; Code:
-(defun my-solarized-theme (theme-name)
+(defun my-solarized-theme ()
   "My solarized child theme."
   (custom-theme-set-faces
    theme-name

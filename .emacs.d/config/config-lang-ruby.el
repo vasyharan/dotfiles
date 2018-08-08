@@ -49,7 +49,13 @@
   (superword-mode +1)
   (inf-ruby-minor-mode)
   (modify-syntax-entry ?_ "w")
-  (electric-pair-mode +1))
+  (electric-pair-mode +1)
+  (add-to-list 'hs-special-modes-alist
+		`(ruby-mode
+		  ,(rx (or "def" "class" "module" "do" "{" "["))	; Block start
+		  ,(rx (or "}" "]" "end"))				; Block end
+		  ,(rx (or "#" "=begin"))				; Comment start
+		  ruby-forward-sexp nil)))
 
 (defun config-web-mode ()
   "Custom settings for Ruby."

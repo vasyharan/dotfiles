@@ -19,7 +19,8 @@
   :ensure t
   :commands (eglot)
   :config
-  (add-to-list 'eglot-server-programs `(ruby-mode . ("pay" "exec" "scripts/bin/typecheck" "--lsp")))
+  ;; (add-to-list 'eglot-server-programs `(ruby-mode . ("pay" "exec" "scripts/bin/typecheck" "--lsp" "--debug-log-file=/tmp/rtdbg")))
+  (add-to-list 'eglot-server-programs `(ruby-mode . ("/Users/haran/stripe/ruby-typer/bazel-bin/main/sorbet" "--lsp" "--debug-log-file=/tmp/rtdbg")))
   (add-to-list 'eglot-server-programs `((js-mode js2-mode rjsx-mode) . ("flow-language-server" "--stdio" "--no-auto-download" "--try-flow-bin"))))
 
 (use-package lsp-mode
@@ -33,7 +34,9 @@
   (lsp-define-stdio-client
    lsp-ruby "ruby"
    lsp-ruby--get-root
-   '("pay" "exec" "scripts/bin/typecheck" "--lsp")))
+   ;; '("pay" "exec" "scripts/bin/typecheck" "--lsp")
+   '("/Users/haran/stripe/ruby-typer/bazel-bin/main/sorbet" "--lsp" "--debug-log-file=/tmp/rtdbg")
+   ))
 
 (use-package lsp-javascript-flow
   :ensure t

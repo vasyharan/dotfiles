@@ -148,7 +148,7 @@
       (apply 'pay-test--run pay-test--last-command)
     (error "No previous test run")))
 
-(defun pay-test-kill-last ()
+(defun pay-test-kill-reverify ()
   "Kill last verify command."
   (interactive)
   (if pay-test--last-command
@@ -162,11 +162,29 @@
   (interactive)
   (pay-test--run (list (list (file-relative-name (buffer-file-name) (pay-project-root))))))
 
+(defun pay-test-kill-verify-current-buffer ()
+  "Kill last verify command."
+  (interactive)
+  (let ((command (pay-test--command
+		  (list (list (file-relative-name (buffer-file-name) (pay-project-root)))))))
+    (kill-new command)
+    (message (format "Copied `%s'!" command))))
+
 (defun pay-test-verify-current-line ()
   "Verify at current point."
   (interactive)
   (pay-test--run (list (list (file-relative-name (buffer-file-name) (pay-project-root))
 			     (cons 'lines (list (line-number-at-pos)))))))
+
+(defun pay-test-kill-verify-current-line ()
+  "Kill last verify command."
+  (interactive)
+  (let ((command (pay-test--command
+		  (list (list
+			 (file-relative-name (buffer-file-name) (pay-project-root))
+			 (cons 'lines (list (line-number-at-pos))))))))
+    (kill-new command)
+    (message (format "Copied `%s'!" command))))
 
 (defun pay-test-verify-current-test ()
   "Verify at current point."
@@ -178,14 +196,20 @@
 	  (pay-test--run (list (list (file-relative-name test-filename (pay-project-root))
 				     (cons 'names (list test-name)))))))))
 
-(defun pay-test-break-current-line ()
-  "Copy command to break at current line."
+(defun pay-test-kill-verify-current-test ()
+  "Kill last verify command."
   (interactive)
-  (let* ((file-name (file-relative-name (buffer-file-name) (pay-project-root)))
-	 (line-no (line-number-at-pos))
-	 (break-command (format "break %s:%d" file-name line-no)))
-    (kill-new break-command)
-    (message (format "Copied `%s'!" break-command))))
+  (let ((current-test (pay-test--current-test)))
+    (if current-test
+	(let* ((test-filename (nth 1 current-test))
+	       (test-name (nth 2 current-test))
+	       (command (pay-test--command
+			(list (list
+			       (file-relative-name test-filename (pay-project-root))
+			       (cons 'names (list test-name)))))))
+	  (kill-new command)
+	  (message (format "Copied `%s'!" command)))
+	(error "No test near here"))))
 
 (defun pay-test-clear-marks()
   "Remove all marked test."
@@ -303,6 +327,15 @@
 				(mapcar (lambda (m) (nth 1 m)) test-markers)))))
 	   markers-per-test-filename)))
     (pay-test--run tests)))
+
+(defun pay-kill-break-current-line ()
+  "Copy command to break at current line."
+  (interactive)
+  (let* ((file-name (file-relative-name (buffer-file-name) (pay-project-root)))
+	 (line-no (line-number-at-pos))
+	 (break-command (format "break %s:%d" file-name line-no)))
+    (kill-new break-command)
+    (message (format "Copied `%s'!" break-command))))
 
 
 ;;;###autoload

@@ -17,7 +17,7 @@
   (add-hook 'org-mode-hook 'flyspell-mode)
 
   (setq org-enforce-todo-dependencies t
-	org-log-into-drawer nil
+	org-log-into-drawer t
 	org-log-done (quote time)
 	org-log-redeadline (quote time)
 	org-log-reschedule (quote time)
