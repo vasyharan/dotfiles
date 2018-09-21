@@ -153,7 +153,7 @@
   :delight superword-mode)
 
 (use-package autorevert
-  :delight auto-revert-mode
+  ;; :delight auto-revert-mode
   :commands (auto-revert-mode))
 
 (use-package undo-tree
@@ -173,7 +173,7 @@
 
 (use-package flyspell
   :ensure t
-  :delight
+  ;; :delight
   :commands (flyspell-prog-mode flyspell-mode))
 
 (use-package hydra

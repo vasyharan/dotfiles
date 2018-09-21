@@ -9,7 +9,7 @@
   ;; :delight pay-mode pay-test-mode
   :config
   (after 'evil-leader
-    (evil-leader/set-key-for-mode 'pay-mode
+    (evil-leader/set-key-for-mode 'ruby-mode
       "cc"	'pay-test-reverify
       "cf"	'pay-test-verify-current-buffer
       "cl"	'pay-test-verify-current-line
@@ -18,7 +18,7 @@
       "cyn"	'pay-test-kill-verify-current-test
       "cyl"	'pay-test-kill-verify-current-line
       "cyf"	'pay-test-kill-verify-current-buffer
-      "cb"	'pay-test-break-current-line
+      "cb"	'pay-kill-break-current-line
       "ca"      'pay-test-mark-current-test
       "cA"      'pay-test-unmark-current-test
       "cm"	'pay-test-verify-marked

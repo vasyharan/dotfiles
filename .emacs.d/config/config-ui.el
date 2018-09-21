@@ -57,7 +57,44 @@
   :config
   (load-theme 'my-solarized-dark))
 
-(show-paren-mode)
+(use-package paren
+  :init
+  (show-paren-mode)
+  :config
+  (setq show-paren-style 'parenthesis
+	show-paren-when-point-inside-paren t
+	show-paren-when-point-in-periphery t
+	show-paren-highlight-openparen nil)
+  (defun show-paren--locate-near-paren ()
+    "Locate an unescaped paren \"near\" point to show.
+If one is found, return the cons (DIR . OUTSIDE), where DIR is 1
+for an open paren, -1 for a close paren, and OUTSIDE is the buffer
+position of the outside of the paren.  Otherwise return nil."
+    (let* ((ind-pos (save-excursion (back-to-indentation) (point)))
+	   (eol-pos
+	    (save-excursion
+	      (end-of-line) (skip-chars-backward " \t" ind-pos) (point)))
+	   (before (show-paren--categorize-paren (1- (point))))
+	   (after (show-paren--categorize-paren (point))))
+      ;; (message "%s %s" before after)
+      (cond
+       ;; Point is immediately outside a paren.
+       ((eq (car after) -1) after)
+       ((eq (car before) -1) before)
+       ((eq (car after) 1) after)
+       ;; Point is immediately inside a paren.
+       ((and show-paren-when-point-inside-paren before))
+       ((and show-paren-when-point-inside-paren after))
+       ;; Point is in the whitespace before the code.
+       ((and show-paren-when-point-in-periphery
+	     (<= (point) ind-pos))
+	(or (show-paren--categorize-paren ind-pos)
+	    (show-paren--categorize-paren (1- eol-pos))))
+       ;; Point is in the whitespace after the code.
+       ((and show-paren-when-point-in-periphery
+	     (>= (point) eol-pos))
+	(show-paren--categorize-paren (1- eol-pos)))))))
+
 (size-indication-mode)
 (column-number-mode)
 

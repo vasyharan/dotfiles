@@ -6,6 +6,7 @@
   :ensure t
   :init
   (setq evil-toggle-key "C-`")
+  (setq evil-want-keybinding nil)
   (setq evil-want-integration nil)
   :config
   (global-evil-leader-mode)

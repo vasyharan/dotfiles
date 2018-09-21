@@ -78,7 +78,8 @@
 	    (test-names (alist-get 'names (cdr test)))
 	    (test-lines (alist-get 'lines (cdr test)))
 	    (args (list
-		   (if fail-fast "-f")
+		   ;; (if fail-fast "-f")
+		   "-f"
 		   (if verbose "-v")
 		   test-filename
 		   (cond (test-names (mapcar (lambda (name) (list "-n" name)) test-names))

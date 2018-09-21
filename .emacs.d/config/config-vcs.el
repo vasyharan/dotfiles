@@ -11,11 +11,37 @@
     "gb" 'magit-blame
     "gg" 'magit-status)
   :config
+  ;; (magit-auto-revert-mode -1)
   (setq magit-refresh-status-buffer nil
 	magit-completing-read-function 'ivy-completing-read
 	magit-commit-squash-confirm nil
 	magit-repository-directories '(("~/stripe" . 1))
 	vc-handled-backends (delq 'Git vc-handled-backends)))
+
+(use-package smerge-mode
+  :init
+  (setq smerge-auto-leave t)
+  (defhydra hydra-smerge
+    (:foreign-keys run
+		   :pre (smerge-start-session)
+		   :post (when (bound-and-true-p smerge-mode)
+			   (smerge-mode -1)))
+    "smerge"
+    ("n" smerge-next "next")
+    ("p" smerge-prev "prev")
+    ("j" evil-next-line)
+    ("k" evil-previous-line)
+    ("a" smerge-keep-all "all")
+    ("b" smerge-keep-base "base")
+    ("m" smerge-keep-mine "mine")
+    ("o" smerge-keep-other "other")
+    ("c" smerge-keep-current "current")
+    ("C" smerge-combine-with-next "combine")
+    ("R" smerge-refine "refine")
+    ("u" undo-tree-undo)
+    ("U" undo-tree-redo)
+    ("q" nil :exit t))
+  (evil-leader/set-key "gm" 'hydra-smerge/body))
 
 (use-package evil-magit
   :ensure t

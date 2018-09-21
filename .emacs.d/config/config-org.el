@@ -130,7 +130,8 @@
   :config
   (org-clock-persistence-insinuate)
   (setq org-clock-persist-file (concat user-cache-directory "org-clock-save.el")
-	org-clock-persist t))
+	org-clock-persist t
+	org-clock-idle-time 10))
 
 (use-package org-bullets
   :ensure t
