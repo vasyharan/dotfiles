@@ -9,6 +9,15 @@
       (counsel-git)
     (counsel-find-file)))
 
+(defun counsel-find-file-at-root ()
+  "Invoke `counsel-find-file' at the root of the repo."
+  (interactive)
+  (let ((root-directory (locate-dominating-file default-directory ".git")))
+    (if root-directory
+	(let ((default-directory root-directory))
+	  (counsel-find-file))
+      (counsel-find-file))))
+
 (use-package ivy
   :ensure t
   :delight
@@ -54,6 +63,7 @@
   :commands (counsel-find-file
 	     counsel-M-x
 	     counsel-git
+	     counsel-git-grep
 	     counsel-rg
 	     counsel-recentf
 	     locate-dominating-file)
@@ -61,14 +71,17 @@
   (after 'evil-leader
     (evil-leader/set-key
       "<SPC>" 'counsel-M-x
-      "f" 'counsel-find-file
+      "ff" 'counsel-find-file-at-root
+      "f." 'counsel-find-file
+      "fp" 'counsel-git-or-find-file
+      "fs" 'counsel-rg
+      "fg" 'counsel-git-grep
+      "fr" 'counsel-recentf
+      "fo" 'counsel-pay-find-other
       "b" 'ivy-switch-buffer
       "k" 'kill-this-buffer
       "w" 'save-buffer
-      "W" 'save-some-buffers
-      "pp" 'counsel-git
-      "ps" 'counsel-rg
-      "pr" 'counsel-recentf)))
+      "W" 'save-some-buffers)))
 
 ;; (use-package counsel-etags
 ;;   :ensure t

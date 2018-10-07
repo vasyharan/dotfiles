@@ -19,9 +19,8 @@
   :ensure t
   :commands (eglot eglot-ensure)
   :config
-  (add-to-list 'eglot-server-programs `(ruby-mode . ("pay" "exec" "scripts/bin/typecheck" "--lsp" "--debug-log-file=/tmp/rtdbg")))
-  ;; (add-to-list 'eglot-server-programs `(ruby-mode . ("pay" "exec" "scripts/bin/typecheck" "--lsp" "-v" "--debug-log-file=/tmp/rtdbg")))
-  ;; (add-to-list 'eglot-server-programs `(ruby-mode . ("/Users/haran/stripe/ruby-typer/bazel-bin/main/sorbet" "--lsp" "--debug-log-file=/tmp/rtdbg")))
+  (add-to-list 'eglot-server-programs `(ruby-mode . ("pay" "exec" "scripts/bin/typecheck" "--lsp")))
+						     ;; "--debug-log-file=/tmp/rtdbg")))
   (add-to-list 'eglot-server-programs `((js-mode js2-mode rjsx-mode) . ("flow-language-server" "--stdio" "--no-auto-download" "--try-flow-bin"))))
 
 (use-package lsp-mode
@@ -35,8 +34,8 @@
   (lsp-define-stdio-client
    lsp-ruby "ruby"
    lsp-ruby--get-root
-   '("pay" "exec" "scripts/bin/typecheck" "--lsp" "--debug-log-file=/tmp/rtdbg")
-   ;; '("/Users/haran/stripe/ruby-typer/bazel-bin/main/sorbet" "--lsp" "--debug-log-file=/tmp/rtdbg")
+   '("pay" "exec" "scripts/bin/typecheck" "--lsp")
+     ;; "--debug-log-file=/tmp/rtdbg")
    ))
 
 (use-package lsp-javascript-flow
@@ -60,7 +59,10 @@
 (use-package lsp-ui
   :ensure t
   :hook (lsp-mode . lsp-ui-mode)
-  :commands (lsp-ui-mode))
+  :commands (lsp-ui-mode)
+  :config
+  (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
+  (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references))
 
 (defun default-prog-hook()
   "Default `prog-mode' hook."

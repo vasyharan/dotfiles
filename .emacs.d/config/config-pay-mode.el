@@ -5,7 +5,7 @@
 (use-package pay-server
   :load-path "lisp/pay-server"
   :init
-  (add-hook 'ruby-mode 'pay-enable-appropriate-mode)
+  (add-hook 'ruby-mode-hook 'pay-enable-appropriate-mode)
   ;; :delight pay-mode pay-test-mode
   :config
   (after 'evil-leader

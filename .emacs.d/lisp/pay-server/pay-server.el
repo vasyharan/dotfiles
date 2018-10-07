@@ -43,8 +43,36 @@
             #b00000000)))
 
 (define-derived-mode pay-compilation-mode compilation-mode "pay-test"
-  (add-hook 'compilation-filter-hook 'pay-transform-traces)
-  (add-hook 'compilation-filter-hook 'colorize-compilation-buffer))
+  (add-hook 'compilation-filter-hook 'pay-transform-traces nil t)
+  (add-hook 'compilation-filter-hook 'colorize-compilation-buffer nil t)
+  (add-hook 'compilation-filter-hook 'pay-inf-ruby-auto-enter nil t))
+
+(defvar pay-inf-ruby-breakpoint-pattern "\\(\\[1\\] pry(\\)\\|\\((rdb:1)\\)\\|\\((byebug)\\)"
+  "Pattern found when a breakpoint is triggered in a compilation session.
+This checks if the current line is a pry or ruby-debug prompt.")
+
+(defvar pay-inf-ruby-finished-pattern "Finished in"
+  "Pattern found when `inf-ruby-mode' finishes.")
+(setq pay-inf-ruby-finished-pattern "Finished in")
+
+(defun pay-inf-ruby-auto-enter ()
+  "Switch to `inf-ruby-mode' if the breakpoint pattern matches the current line."
+  (when (and (eq major-mode 'pay-compilation-mode)
+             (save-excursion
+               (beginning-of-line)
+               (re-search-forward pay-inf-ruby-breakpoint-pattern nil t)))
+    ;; Exiting excursion before this call to get the prompt fontified.
+    (inf-ruby-switch-from-compilation)
+    (add-hook 'comint-input-filter-functions 'inf-ruby-auto-exit nil t)
+    (add-hook 'comint-output-filter-functions 'pay-inf-ruby-auto-exit nil t)))
+
+(defun pay-inf-ruby-auto-exit (text)
+  "Exit `inf-ruby-mode' if the finished pattern matches the current line."
+  (when (and (eq major-mode 'inf-ruby-mode)
+	     (string-match pay-inf-ruby-finished-pattern text))
+    ;; Exiting excursion before this call to get the prompt fontified.
+    (inf-ruby-maybe-switch-to-compilation)
+    (remove-hook 'comint-output-filter-functions 'pay-inf-ruby-auto-exit t)))
 
 (defun pay-transform-traces ()
   "Transform traces from pay commands."
@@ -380,6 +408,28 @@
   (if (boundp 'inf-ruby-minor-mode)
       (inf-ruby "pay")
     (error "Inf ruby is required for pay console")))
+
+(defun pay-impl-name (file)
+  "FILE."
+  (let ((relative-name (file-relative-name (buffer-file-name) (pay-project-root))))
+    (cond ((numberp (string-match "^test\\/" relative-name))
+	   (replace-regexp-in-string "test\\/[a-z]+\\/" "" relative-name))
+	  (t (replace-regexp-in-string "test\\/" "" relative-name)))))
+
+(defun pay-test-name (file)
+  "FILE."
+  (let ((relative-name (file-relative-name (buffer-file-name) (pay-project-root))))
+    (format "test %s" (replace-regexp-in-string "\\/" " " relative-name))))
+
+(defun counsel-pay-find-other ()
+  "Find other pay file."
+  (interactive)
+  (if (boundp 'counsel-mode)
+      (if (and (buffer-file-name)
+	       (pay-test-file-p (buffer-file-name)))
+	  (counsel-git (pay-impl-name (buffer-file-name)))
+	(counsel-git (pay-test-name (buffer-file-name))))
+    (error "Counsel is required for pay find other")))
 
 (defun pay-test-install-snippets ()
   "Add `pay-test-snippets-dir' to `yas-snippet-dirs' and load\
