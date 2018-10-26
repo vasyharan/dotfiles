@@ -30,7 +30,10 @@ bindkey -e
 autoload -U select-word-style
 select-word-style bash
 
+export FZF_CTRL_T_COMMAND="rg --files"
+export FZF_DEFAULT_COMMAND="rg --files"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
 [ -f ~/stripe/space-commander/bin/sc-aliases ] && \
     source ~/stripe/space-commander/bin/sc-aliases
 
@@ -49,7 +52,7 @@ source ~/.zplug/init.zsh
 
 zplug "zplug/zplug", hook-build:'zplug --self-manage'
 
-zplug "dracula/zsh", as:theme
+# zplug "dracula/zsh", as:theme
 
 PURE_GIT_PULL=0
 VIRTUAL_ENV_DISABLE_PROMPT=1

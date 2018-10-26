@@ -194,8 +194,8 @@
 
 (load-config-file "config-frame.el")
 (load-config-file "config-window.el")
-(load-config-file "config-ui.el")
 (load-config-file "config-mode-line.el")
+(load-config-file "config-ui.el")
 
 (load-config-file "config-vcs.el")
 (load-config-file "config-prog.el")
@@ -206,6 +206,7 @@
 (load-config-file "config-org.el")
 (load-config-file "config-lang-ruby.el")
 (load-config-file "config-lang-js.el")
+(load-config-file "config-lang-haskell.el")
 
 (defun minibuffer-setup ()
   "Minibuffer setup hook."

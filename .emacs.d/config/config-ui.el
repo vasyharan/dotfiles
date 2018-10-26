@@ -55,7 +55,25 @@
 	solarized-scale-org-headlines nil
 	x-underline-at-descent-line t)
   :config
-  (load-theme 'my-solarized-dark))
+  ;; (load-theme 'my-solarized-dark)
+  )
+
+(use-package gruvbox-theme
+  :ensure t
+  :config
+  (load-theme 'gruvbox-dark-hard)
+  (set-face-attribute 'mode-line-directory nil :foreground "#a89984")
+  (set-face-attribute 'mode-line-flycheck-separator nil :foreground "#d5c4a1")
+  (set-face-attribute 'mode-line-flycheck-error nil :foreground "#fb4933")
+  (set-face-attribute 'mode-line-flycheck-warning nil :foreground "#fe8019")
+  (set-face-attribute 'mode-line-flycheck-info nil :foreground "#8ec07c")
+  (set-face-attribute 'mode-line-evil-normal nil :background "#665c54" :foreground "#d5c4a1")
+  (set-face-attribute 'mode-line-evil-motion nil :background "#665c54" :foreground "#d5c4a1")
+  (set-face-attribute 'mode-line-evil-insert nil :background "#458588" :foreground "#d5c4a1")
+  (set-face-attribute 'mode-line-evil-emacs nil :background "#d3869b" :foreground "#d5c4a1")
+  (set-face-attribute 'mode-line-evil-visual nil :background "#fe8019" :foreground "#d5c4a1")
+  (set-face-attribute 'mode-line-evil-operator nil :background "#fb4934" :foreground "#d5c4a1")
+  (set-face-attribute 'mode-line-evil-replace nil :background "#fb4934" :foreground "#d5c4a1"))
 
 (use-package paren
   :init
@@ -102,9 +120,9 @@ position of the outside of the paren.  Otherwise return nil."
       display-time-24hr-format t)
 
 (set-face-attribute 'default nil
-		      :family "Source Code Pro"
-		      :weight 'normal
-		      :width 'normal)
+		    :family "Source Code Pro"
+		    :weight 'normal
+		    :width 'normal)
 
 (defvar face-height-factor 22
   "Factor for calculating face height.")

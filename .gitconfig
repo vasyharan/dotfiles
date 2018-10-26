@@ -40,6 +40,7 @@
 	graph = log --graph --all --decorate
 	la = !git config -l | grep alias | cut -c 7-
 	rc = "!f() { git reset $* && git co $*; }; f"
+	ctags = !.git/hooks/ctags
 [color]
 	ui = true
 [color "diff-highlight"]

@@ -2,12 +2,37 @@
 ;;; Commentary:
 ;;; Code:
 
+(defun tmux-windmove (windmove-func tmux-direction)
+  (interactive)
+  (condition-case nil
+      (funcall windmove-func)
+    (error (shell-command-to-string
+	    (concat "tmux select-pane " tmux-direction " -t " (getenv "TMUX_PANE"))))))
+
+(defun tmux-windmove-left ()
+  (interactive)
+  (tmux-windmove 'windmove-left "-L"))
+(defun tmux-windmove-down ()
+  (interactive)
+  (tmux-windmove 'windmove-down "-D"))
+(defun tmux-windmove-up ()
+  (interactive)
+  (tmux-windmove 'windmove-up "-U"))
+(defun tmux-windmove-right ()
+  (interactive)
+  (tmux-windmove 'windmove-right "-R"))
+
+(after 'evil
+  (evil-define-key '(motion insert) 'global
+    (kbd "M-h") 'tmux-windmove-left
+    (kbd "M-j") 'tmux-windmove-down
+    (kbd "M-k") 'tmux-windmove-up
+    (kbd "M-l") 'tmux-windmove-right))
+
 (use-package ace-window
   :ensure t
   :commands (ace-window)
   :custom-face
-  ;; (aw-leading-char-face ((t (:foreground "aquamarine1" :weight bold))))
-  ;; (aw-mode-line-face ((t (:foreground "SlateGray3"))))
   :init
   (defhydra hydra-window-size (:color red)
     "Windows size"
@@ -26,18 +51,13 @@
     ("u" winner-undo "undo")
     ("U" winner-redo "redo"))
 
-  (defun evil-window-left-1	() (evil-window-left 1))
-  (defun evil-window-down-1	() (evil-window-down 1))
-  (defun evil-window-up-1	() (evil-window-up 1))
-  (defun evil-window-right-1	() (evil-window-right 1))
-
   (setq aw-keys   '(?H ?J ?K ?L)
 	aw-dispatch-always t
 	aw-dispatch-alist
-	'((?h evil-window-left-1)
-	  (?j evil-window-down-1)
-	  (?k evil-window-up-1)
-	  (?l evil-window-right-1)
+	'((?h windmove-left)
+	  (?j windmove-down)
+	  (?k windmove-up)
+	  (?l windmove-right)
 	  (?c evil-window-delete)
 	  (?C aw-delete-window			"Delete window")
 	  (?m aw-swap-window			"Swap window")
@@ -73,7 +93,11 @@
 	  windmove-left
 	  windmove-right
 	  windmove-down
-	  windmove-up)
+	  windmove-up
+	  tmux-windmove-left
+	  tmux-windmove-right
+	  tmux-windmove-down
+	  tmux-windmove-up)
 	golden-ratio-exclude-modes
 	'(flycheck-error-list-mode)
 	golden-ratio-exclude-buffer-names

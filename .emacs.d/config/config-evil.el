@@ -27,8 +27,8 @@
   ;; unbind C-w
   ;; (define-key evil-motion-state-map (kbd "C-w") 'ace-window)
   ;; (global-set-key (kbd "C-w") 'ace-window)
-  (evil-global-set-key 'motion (kbd "C-w") 'ace-window)
-  (evil-global-set-key 'insert (kbd "C-w") 'ace-window)
+  (evil-define-key '(motion insert) 'global
+    (kbd "C-w") 'ace-window)
   (global-unset-keys (kbd "C-j")
 		     (kbd "C-k"))
 
@@ -43,7 +43,8 @@
     (kbd "C-c C-z") 'term-stop-subjob
     (kbd "<tab>") 'term-send-tab
     (kbd "C-k") 't
-    (kbd "C-j") 'term-send-down)
+    (kbd "C-j") 'term-send-down
+    (kbd "C-k") 'term-send-up)
 
   ;; better key bindings for xref buffer
   (evil-define-key 'normal xref--xref-buffer-mode-map

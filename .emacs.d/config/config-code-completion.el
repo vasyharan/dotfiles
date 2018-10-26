@@ -10,9 +10,8 @@
   :config
   (setq company-idle-delay nil ;; 0.5
 	company-selection-wrap-around t)
-  (evil-define-key 'insert 'global (kbd "C-n") 'company-search-candidates)
-  (evil-define-key 'insert 'global (kbd "C-p") 'company-search-candidates)
-  (define-key company-active-map [tab] 'company-complete)
+  (evil-define-key 'insert 'global (kbd "C-n") 'company-complete)
+  (evil-define-key 'insert 'global (kbd "C-p") 'company-complete)
   (define-key company-active-map (kbd "C-n") 'company-select-next)
   (define-key company-active-map (kbd "C-p") 'company-select-previous)
   (define-key company-active-map (kbd "C-f") 'company-complete)

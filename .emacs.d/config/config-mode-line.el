@@ -111,13 +111,13 @@
 (use-package evil
   :init
 
-  (setq evil-normal-state-tag	(propertize "No" 'face 'mode-line-evil-normal)
-	evil-emacs-state-tag	(propertize "Em" 'face 'mode-line-evil-emacs)
-	evil-insert-state-tag	(propertize "In" 'face 'mode-line-evil-insert)
-	evil-motion-state-tag	(propertize "Mo" 'face 'mode-line-evil-motion)
-	evil-visual-state-tag	(propertize "Vi" 'face 'mode-line-evil-visual)
-	evil-operator-state-tag	(propertize "Op" 'face 'mode-line-evil-operator)
-	evil-replace-state-tag	(propertize "Re" 'face 'mode-line-evil-replace)
+  (setq evil-normal-state-tag	(propertize " No " 'face 'mode-line-evil-normal)
+	evil-emacs-state-tag	(propertize " Em " 'face 'mode-line-evil-emacs)
+	evil-insert-state-tag	(propertize " In " 'face 'mode-line-evil-insert)
+	evil-motion-state-tag	(propertize " Mo " 'face 'mode-line-evil-motion)
+	evil-visual-state-tag	(propertize " Vi " 'face 'mode-line-evil-visual)
+	evil-operator-state-tag	(propertize " Op " 'face 'mode-line-evil-operator)
+	evil-replace-state-tag	(propertize " Re " 'face 'mode-line-evil-replace)
 	evil-mode-line-format '(after . mode-line-front-space)))
 
 (setq mode-line-front-space '(:eval (if (display-graphic-p) " " "")))

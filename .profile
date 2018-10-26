@@ -11,6 +11,7 @@ path=(~/go/bin
       $path)
 export PATH
 export GOPATH="$HOME/go"
+export OPT_IN_TO_ZEBAL=1
 
 # BEGIN STRIPE NODE CONFIG
 #      To undo the following behavior, comment it out, dont delete it;
