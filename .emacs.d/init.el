@@ -32,6 +32,7 @@
       package-archive-priorities '(("melpa" . 10)
 				   ("melpa-stable" . 1)))
 
+(setenv "RIPGREP_CONFIG_PATH" (expand-file-name "$HOME/.ripgreprc"))
 (package-initialize)
 (setq use-package-verbose t)
 (unless (package-installed-p 'use-package)

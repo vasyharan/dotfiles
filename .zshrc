@@ -14,19 +14,33 @@ setopt inc_append_history
 setopt share_history
 
 # aliases
-alias emacs='TERM=xterm-24bits emacs'
-alias emacsclient='TERM=xterm-24bits emacsclient'
-alias ll='ls -l'
+alias dot="git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 alias vim=nvim
 alias g=git
-alias et='emacsclient -nw'
-alias ec='emacsclient -nc'
-alias dot="git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
+alias ll='ls -l'
+
+alias emacs='TERM=xterm-24bits emacs'
+alias emacsclient='TERM=xterm-24bits emacsclient'
+function eg() {
+  if [[ $PWD == "/Users/haran/stripe/pay-server" ]]; then
+    emacsclient -nc -s pay-server $*
+  else
+    emacsclient -nc $*
+  fi
+}
+function et() {
+  if [[ $PWD == "/Users/haran/stripe/pay-server" ]]; then
+    emacsclient -nw -s pay-server $*
+  else
+    emacsclient -nw $*
+  fi
+}
 
 # export TERM=xterm-24bits
 export EDITOR='emacsclient -nw'
 
 bindkey -e
+bindkey '^[H' run-help
 autoload -U select-word-style
 select-word-style bash
 
@@ -67,5 +81,5 @@ zplug "zsh-users/zsh-history-substring-search"
 
 zplug load # --verbose
 
-export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=10"
+# export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=10"
 export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
