@@ -6,8 +6,10 @@
   (interactive)
   (condition-case nil
       (funcall windmove-func)
-    (error (shell-command-to-string
-	    (concat "tmux select-pane " tmux-direction)))))
+    (error
+     (evil-force-normal-state)
+     (shell-command-to-string
+      (concat "tmux select-pane " tmux-direction)))))
 
 (defun tmux-windmove-left ()
   (interactive)

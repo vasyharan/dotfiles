@@ -4,6 +4,7 @@
 
 (setq prettify-symbols-unprettify-at-point 'right-edge)
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
+(add-hook 'prog-mode-hook 'show-paren-mode)
 
 (use-package hl-line
   :commands (hl-line-mode)

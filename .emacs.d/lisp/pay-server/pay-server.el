@@ -14,7 +14,12 @@
 
 (defface pay-test-fringe-face
   '((t :inherit success :foreground "#bd93f9"))
-  "Flycheck face for fringe error indicators."
+  "Face for fringe test indicators."
+  :group 'pay-server-faces)
+
+(defface pay-test-marked-highlight
+  '((t :underline t))
+  "Face to highlight tests."
   :group 'pay-server-faces)
 
 (defun pay-project-root ()
@@ -135,15 +140,19 @@ This checks if the current line is a pry or ruby-debug prompt.")
     (compilation-start (pay-test--command tests fail-fast verbose) 'pay-compilation-mode)))
 
 (defun pay-test--make-overlay (beg)
-  (let* ((end (save-excursion (end-of-line) (point)))
-	 (overlay (make-overlay beg end)))
-    (overlay-put overlay 'pay-test-overlay t)
-    (overlay-put overlay 'before-string
-		 (propertize "!" 'display
-			     (list 'left-fringe
-				   'pay-test-fringe-bitmap-arrow
-				   'pay-test-fringe-face)))
-    overlay))
+  (save-excursion
+    (goto-char beg)
+    (let* ((end (save-excursion (end-of-line) (- (point) 3)))
+	   (overlay (make-overlay beg end)))
+      (message "%s %s" beg end)
+      (overlay-put overlay 'pay-test-overlay t)
+      (overlay-put overlay 'face 'pay-test-marked-highlight)
+      (overlay-put overlay 'before-string
+		   (propertize "!" 'display
+			       (list 'left-fringe
+				     'pay-test-fringe-bitmap-arrow
+				     'pay-test-fringe-face)))
+      overlay)))
 
 (defun pay-test--current-test (&optional pos)
   "Find the closest test to POS or (current point)."

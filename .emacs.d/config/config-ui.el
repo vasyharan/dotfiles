@@ -76,8 +76,6 @@
   (set-face-attribute 'mode-line-evil-replace nil :background "#fb4934" :foreground "#d5c4a1"))
 
 (use-package paren
-  :init
-  (show-paren-mode)
   :config
   (setq show-paren-style 'parenthesis
 	show-paren-when-point-inside-paren t
@@ -146,7 +144,8 @@ position of the outside of the paren.  Otherwise return nil."
 
 (defun tty-ui-frame-hook ()
   "UI adjustments hook for TTY frame."
-  (set-frame-parameter (selected-frame) 'menu-bar-lines 0))
+  (set-frame-parameter (selected-frame) 'menu-bar-lines 0)
+  (evil-terminal-cursor-changer-activate))
 
 (defun gui-ui-frame-hook ()
   "UI adjustments hook for GUI frame."
@@ -159,6 +158,8 @@ position of the outside of the paren.  Otherwise return nil."
   (adjust-face-height))
 
 (if (display-graphic-p) (gui-ui-init))
+
+(add-hook 'tty-setup-hook 'tty-ui-frame-hook)
 
 (use-package after-frame-hooks
   :load-path "lisp/after-frame-hooks"

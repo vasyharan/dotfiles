@@ -60,6 +60,17 @@
 
   (evil-mode 1))
 
+(use-package evil-terminal-cursor-changer
+  :ensure t
+  :after (evil)
+  :config
+  (setq evil-motion-state-cursor 'box)  ; █
+  (setq evil-visual-state-cursor 'box)  ; █
+  (setq evil-normal-state-cursor 'box)  ; █
+  (setq evil-insert-state-cursor 'bar)  ; ⎸
+  (setq evil-emacs-state-cursor  'hbar) ; _
+  )
+
 (use-package evil-leader
   :ensure t
   :after (evil)
