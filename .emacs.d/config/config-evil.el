@@ -35,16 +35,16 @@
   ;; term keys
   (evil-define-key 'normal term-raw-map
     (kbd "p") 'term-paste
-    (kbd "C-k") 'term-send-up
-    (kbd "C-j") 'term-send-down)
+    (kbd "C-p") 'term-send-up
+    (kbd "C-n") 'term-send-down)
 
   (evil-define-key 'insert term-raw-map
     (kbd "C-c C-d") 'term-send-eof
     (kbd "C-c C-z") 'term-stop-subjob
     (kbd "<tab>") 'term-send-tab
     (kbd "C-k") 't
-    (kbd "C-j") 'term-send-down
-    (kbd "C-k") 'term-send-up)
+    (kbd "C-n") 'term-send-down
+    (kbd "C-p") 'term-send-up)
 
   ;; better key bindings for xref buffer
   (evil-define-key 'normal xref--xref-buffer-mode-map
@@ -52,8 +52,8 @@
     (kbd "k") 'xref-prev-line
     (kbd "J") 'evil-next-line
     (kbd "K") 'evil-prev-line
-    (kbd "C-j") 'evil-next-line
-    (kbd "C-k") 'evil-prev-line
+    (kbd "C-n") 'evil-next-line
+    (kbd "C-p") 'evil-prev-line
     (kbd "o") 'xref-show-location-at-point
     (kbd "q") 'quit-window
     (kbd "RET") 'xref-goto-xref)
@@ -86,7 +86,8 @@
 (use-package evil-collection
   :after evil
   :ensure t
-  :config
+  :init
+  (setq evil-collection-key-blacklist '("C-j" "C-k"))
   (evil-collection-init))
 
 (provide 'config-evil)

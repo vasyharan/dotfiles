@@ -53,6 +53,7 @@ export FZF_DEFAULT_COMMAND="rg --files"
 
 # envs
 which rbenv 2>&1 >/dev/null && eval "$(rbenv init -)"
+which nodenv 2>&1 >/dev/null && eval "$(nodenv init -)"
 
 export PYENV_ROOT="/Users/haran/.pyenv"
 export PYENV_VIRTUALENV_DISABLE_PROMPT=1

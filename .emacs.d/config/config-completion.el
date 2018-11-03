@@ -5,18 +5,24 @@
 (defun counsel-git-or-find-file ()
   "Invoke counsel-git if in a repo otherwise counsel-find-file."
   (interactive)
-  (if (locate-dominating-file default-directory ".git")
-      (counsel-git)
-    (counsel-find-file)))
+  (condition-case nil
+      (progn
+	(counsel-locate-git-root)
+	(counsel-git))
+    (error (counsel-find-file))))
 
 (defun counsel-find-file-at-root ()
   "Invoke `counsel-find-file' at the root of the repo."
   (interactive)
-  (let ((root-directory (locate-dominating-file default-directory ".git")))
-    (if root-directory
-	(let ((default-directory root-directory))
-	  (counsel-find-file))
-      (counsel-find-file))))
+  (condition-case nil
+      (let* ((default-directory (expand-file-name (counsel-locate-git-root))))
+	(counsel-find-file))
+    (error (counsel-find-file))))
+  ;; (let ((root-directory (locate-dominating-file default-directory ".git")))
+  ;;   (if root-directory
+  ;; 	(let ((default-directory root-directory))
+  ;; 	  (counsel-find-file))
+  ;;     (counsel-find-file))))
 
 (use-package ivy
   :ensure t
@@ -68,16 +74,22 @@
 	     counsel-recentf
 	     locate-dominating-file)
   :init
+  (setq counsel-git-cmd "rg --files --color never --")
+  (defun counsel-rg-word-at-point ()
+    (interactive)
+    (counsel-rg (evil-find-thing t 'evil-word)))
   (after 'evil-leader
     (evil-leader/set-key
       "<SPC>" 'counsel-M-x
       "ff" 'counsel-find-file-at-root
       "f." 'counsel-find-file
       "fp" 'counsel-git-or-find-file
-      "fs" 'counsel-rg
-      "fg" 'counsel-git-grep
+      "f/" 'counsel-rg
+      "f*" 'counsel-rg-word-at-point
+      "f#" 'counsel-rg-word-at-point
       "fr" 'counsel-recentf
       "fo" 'counsel-pay-find-other
+      "fb" 'ivy-switch-buffer
       "b" 'ivy-switch-buffer
       "k" 'kill-this-buffer
       "w" 'save-buffer

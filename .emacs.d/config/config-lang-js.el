@@ -28,6 +28,10 @@
   :commands (prettier-js prettier-js-mode)
   :ensure t)
 
+(use-package nodenv
+  :ensure t
+  :commands (nodenv-mode))
+
 (defun config-js-mode()
   "Configure Javascript mode."
   (setq tab-width 2

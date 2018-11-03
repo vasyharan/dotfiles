@@ -26,10 +26,20 @@
 
 (after 'evil
   (evil-define-key '(motion insert) 'global
-    (kbd "M-h") 'tmux-windmove-left
-    (kbd "M-j") 'tmux-windmove-down
-    (kbd "M-k") 'tmux-windmove-up
-    (kbd "M-l") 'tmux-windmove-right))
+    (kbd "C-h") 'tmux-windmove-left
+    (kbd "C-j") 'tmux-windmove-down
+    (kbd "C-k") 'tmux-windmove-up
+    (kbd "C-l") 'tmux-windmove-right))
+
+(global-set-keys
+  (kbd "C-h") 'tmux-windmove-left
+  (kbd "C-j") 'tmux-windmove-down
+  (kbd "C-k") 'tmux-windmove-up
+  (kbd "C-l") 'tmux-windmove-right
+  (kbd "C-\\") 'help-command)
+
+;; (define-keys global-map
+;;   (kbd "C-\\") 'help-command)
 
 (use-package ace-window
   :ensure t
@@ -99,7 +109,8 @@
 	  tmux-windmove-left
 	  tmux-windmove-right
 	  tmux-windmove-down
-	  tmux-windmove-up)
+	  tmux-windmove-up
+	  quit-window)
 	golden-ratio-exclude-modes
 	'(flycheck-error-list-mode)
 	golden-ratio-exclude-buffer-names

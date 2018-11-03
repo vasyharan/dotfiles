@@ -46,8 +46,13 @@
 (use-package evil-magit
   :ensure t
   :after magit
+  :init
+  (setq evil-magit-use-z-for-folds t
+	evil-magit-use-y-for-yank t)
   :config
-  (evil-magit-define-key evil-magit-state 'magit-mode-map "C-w" 'ace-window))
+  (evil-magit-define-key evil-magit-state 'magit-mode-map "C-w" 'ace-window)
+  (evil-magit-define-key evil-magit-state 'magit-mode-map "C-j" 'tmux-windmove-down)
+  (evil-magit-define-key evil-magit-state 'magit-mode-map "C-k" 'tmux-windmove-up))
 
 (use-package git-link
   :ensure t

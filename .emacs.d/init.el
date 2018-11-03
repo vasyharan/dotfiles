@@ -83,6 +83,7 @@
 (setq exec-path '("~/go/bin"
 		  "~/.rbenv/shims"
 		  "~/.pyenv/shims/"
+		  "~/.nodenv/shims/"
 		  "~/.cargo/bin"
 		  "/usr/local/bin"
 		  "/usr/bin"
@@ -186,10 +187,9 @@
   (setq hydra-lv t
 	lv-use-separator nil))
 
-;; (use-package xclip
-;;   :ensure t
-;;   :init
-;;   (xclip-mode))
+(use-package xclip
+  :ensure t
+  :commands (xclip-mode))
 
 (load-config-file "config-evil.el")
 (load-config-file "config-completion.el")
