@@ -1,9 +1,7 @@
-;;; config-vcs.el -- Emacs config for version control systems.
-;;; Commentary:
-;;; Code:
+(require 'use-package)
+(require 'load-relative)
 
 (use-package magit
-  :ensure t
   :after (evil-leader ivy)
   :commands (magit-status magit-blame)
   :init
@@ -19,8 +17,9 @@
 	vc-handled-backends (delq 'Git vc-handled-backends)))
 
 (use-package smerge-mode
+  :after (hydra evil-leader)
   :init
-  (setq smerge-auto-leave t)
+  (require 'hydra)
   (defhydra hydra-smerge
     (:foreign-keys run
 		   :pre (smerge-start-session)
@@ -33,18 +32,19 @@
     ("k" evil-previous-line)
     ("a" smerge-keep-all "all")
     ("b" smerge-keep-base "base")
-    ("m" smerge-keep-mine "mine")
-    ("o" smerge-keep-other "other")
+    ("m" smerge-keep-upper "uppper")
+    ("o" smerge-keep-lower "lower")
     ("c" smerge-keep-current "current")
     ("C" smerge-combine-with-next "combine")
     ("R" smerge-refine "refine")
     ("u" undo-tree-undo)
     ("U" undo-tree-redo)
     ("q" nil :exit t))
-  (evil-leader/set-key "gm" 'hydra-smerge/body))
+  (evil-leader/set-key "gm" 'hydra-smerge/body)
+  :config
+  (setq smerge-auto-leave t))
 
 (use-package evil-magit
-  :ensure t
   :after magit
   :init
   (setq evil-magit-use-z-for-folds t
@@ -55,7 +55,6 @@
   (evil-magit-define-key evil-magit-state 'magit-mode-map "C-k" 'tmux-windmove-up))
 
 (use-package git-link
-  :ensure t
   :commands (git-link)
   :init
   (evil-leader/set-key
@@ -67,7 +66,6 @@
       '("git\\.corp\\.stripe\\.com" git-link-github)))
 
 (use-package git-timemachine
-  :ensure t
   :commands (git-timemachine)
   :after hydra
   :init
@@ -96,5 +94,8 @@
    (t string)))
 (advice-add 'vc-git-mode-line-string :filter-return 'shorten-vc-mode-line)
 
-(provide 'config-vcs)
-;;; config-vcs.el ends here
+(provide-me "config-")
+
+;; Local Variables:
+;; flycheck-disabled-checkers: (emacs-lisp-checkdoc)
+;; End:

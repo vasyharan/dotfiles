@@ -1,6 +1,5 @@
-;;; pay-server.el --- An emacs mode for working in pay-server.
-;;; Commentary:
-;;; Code:
+(require 'use-package)
+(require 'load-relative)
 
 (defcustom pay-command '("pay")
   "Default command for pay-server."
@@ -111,9 +110,9 @@ This checks if the current line is a pry or ruby-debug prompt.")
 	    (test-names (alist-get 'names (cdr test)))
 	    (test-lines (alist-get 'lines (cdr test)))
 	    (args (list
-		   ;; (if fail-fast "-f")
-		   "-f"
-		   (if verbose "-v")
+		   (if fail-fast "-f")
+		   ;; "-f"
+		   (if verbose "--show-output")
 		   test-filename
 		   (cond (test-names (mapcar (lambda (name) (list "-n" name)) test-names))
 			 (test-lines (mapcar (lambda (line) (list "-l" (number-to-string line))) test-lines))))))
@@ -209,7 +208,7 @@ This checks if the current line is a pry or ruby-debug prompt.")
     (message (format "Copied `%s'!" command))))
 
 (defun pay-test-verify-current-line ()
-  "Verify at current point."
+  "Verify test at current line."
   (interactive)
   (pay-test--run (list (list (file-relative-name (buffer-file-name) (pay-project-root))
 			     (cons 'lines (list (line-number-at-pos)))))))
@@ -225,7 +224,7 @@ This checks if the current line is a pry or ruby-debug prompt.")
     (message (format "Copied `%s'!" command))))
 
 (defun pay-test-verify-current-test ()
-  "Verify at current point."
+  "Verify test at current point."
   (interactive)
   (let ((current-test (pay-test--current-test)))
     (if current-test
@@ -480,5 +479,8 @@ snippets from it."
 (dolist (hook '(ruby-mode-hook enh-ruby-mode-hook))
   (add-hook hook 'pay-enable-appropriate-mode))
 
-(provide 'pay-server)
-;;; pay-server.el ends here
+(provide-me)
+
+;; Local Variables:
+;; flycheck-disabled-checkers: (emacs-lisp-checkdoc)
+;; End:

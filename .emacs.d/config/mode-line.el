@@ -1,6 +1,4 @@
-;; config-mode-line.el -- Mode-line config.
-;;; Commentary:
-;;; Code:
+(require 'load-relative)
 
 (defface mode-line-directory
   '((t :foreground "#586e75"))
@@ -65,19 +63,6 @@
   :group 'mode-line-faces
   :group 'basic-faces)
 
-(defun shorten-directory (dir max-length)
-  "Show up to MAX-LENGTH characters of a directory name DIR."
-  (let ((path (reverse (split-string (abbreviate-file-name dir) "/")))
-               (output ""))
-       (when (and path (equal "" (car path)))
-         (setq path (cdr path)))
-       (while (and path (< (length output) (- max-length 4)))
-         (setq output (concat (car path) "/" output))
-         (setq path (cdr path)))
-       (when path
-         (setq output (concat ".../" output)))
-       output))
-
 (defvar mode-line-directory
   '(" "
     (:propertize
@@ -108,9 +93,7 @@
   "Mode line construct for displaying whether current buffer is editable.")
 (put 'mode-line-editable 'risky-local-variable t)
 
-(use-package evil
-  :init
-
+(after 'evil
   (setq evil-normal-state-tag	(propertize " No " 'face 'mode-line-evil-normal)
 	evil-emacs-state-tag	(propertize " Em " 'face 'mode-line-evil-emacs)
 	evil-insert-state-tag	(propertize " In " 'face 'mode-line-evil-insert)
@@ -121,31 +104,6 @@
 	evil-mode-line-format '(after . mode-line-front-space)))
 
 (setq mode-line-front-space '(:eval (if (display-graphic-p) " " "")))
-
-(defvar mode-line-selected-window (frame-selected-window)
-  "The selected window for setting mode-line.")
-(defun mode-line-set-selected-window ()
-  "Set the variable `mode-lien-selected-window` appropriately."
-  (when (not (minibuffer-window-active-p (frame-selected-window)))
-    (setq mode-line-selected-window (frame-selected-window))
-    (force-mode-line-update)))
-(defun mode-line-unset-selected-window ()
-  "Unset the variable `mode-line-selected-window` and update the mode-line."
-  (setq mode-line-selected-window nil)
-  (force-mode-line-update))
-(defun mode-line-selected-window-active ()
-  "Return whether the current window is active."
-  (eq mode-line-selected-window (selected-window)))
-(add-hook 'window-configuration-change-hook 'mode-line-set-selected-window)
-(add-hook 'focus-in-hook 'mode-line-set-selected-window)
-(add-hook 'focus-out-hook 'mode-line-unset-selected-window)
-(defadvice handle-switch-frame
-    (after mode-line-set-selected-window-after-switch-frame activate)
-  "Make mode-line aware of frame change."
-  (mode-line-set-selected-window))
-(defadvice select-window (after mode-line-select-window activate)
-  "Make mode-line aware of window change."
-  (mode-line-set-selected-window))
 
 (after 'flycheck
   (defun flycheck-mode-line-status-text (&optional status)
@@ -183,6 +141,37 @@
 	(line-number-mode (" %l" (column-number-mode ":%c")))
 	))
 
+(defvar mode-line-selected-window (frame-selected-window)
+  "The selected window for setting mode-line.")
+
+(defun mode-line-set-selected-window ()
+  "Set the variable `mode-lien-selected-window` appropriately."
+  (when (not (minibuffer-window-active-p (frame-selected-window)))
+    (setq mode-line-selected-window (frame-selected-window))
+    (force-mode-line-update)))
+
+(defun mode-line-unset-selected-window ()
+  "Unset the variable `mode-line-selected-window` and update the mode-line."
+  (setq mode-line-selected-window nil)
+  (force-mode-line-update))
+
+(defun mode-line-selected-window-active ()
+  "Return whether the current window is active."
+  (eq mode-line-selected-window (selected-window)))
+
+(add-hook 'window-configuration-change-hook 'mode-line-set-selected-window)
+(add-hook 'focus-in-hook 'mode-line-set-selected-window)
+(add-hook 'focus-out-hook 'mode-line-unset-selected-window)
+
+(defadvice handle-switch-frame
+    (after mode-line-set-selected-window-after-switch-frame activate)
+  "Make mode-line aware of frame change."
+  (mode-line-set-selected-window))
+
+(defadvice select-window (after mode-line-select-window activate)
+  "Make mode-line aware of window change."
+  (mode-line-set-selected-window))
+
 (setq-default mode-line-format
 	      '(:eval
 		(let* ((active (mode-line-selected-window-active)))
@@ -204,6 +193,8 @@
 			  'mode-line-buffer-identification
 			  'mode-line-modified)))))
 
+(provide-me "config-")
 
-(provide 'config-mode-line)
-;;; config-mode-line.el ends here
+;; Local Variables:
+;; flycheck-disabled-checkers: (emacs-lisp-checkdoc)
+;; End:

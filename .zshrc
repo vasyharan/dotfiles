@@ -21,23 +21,19 @@ alias ll='ls -l'
 
 alias emacs='TERM=xterm-24bits emacs'
 alias emacsclient='TERM=xterm-24bits emacsclient'
-function eg() {
+
+function ec() {
   if [[ $PWD == "/Users/haran/stripe/pay-server" ]]; then
-    emacsclient -nc -s pay-server $*
+    emacsclient -s pay-server $*
   else
-    emacsclient -nc $*
+    emacsclient $*
   fi
 }
-function et() {
-  if [[ $PWD == "/Users/haran/stripe/pay-server" ]]; then
-    emacsclient -nw -s pay-server $*
-  else
-    emacsclient -nw $*
-  fi
+function e() {
+    ec -nw $*
 }
 
-# export TERM=xterm-24bits
-export EDITOR='emacsclient -nw'
+export EDITOR='TERM=xterm-24bits emacsclient -nw'
 
 bindkey -e
 bindkey '^[H' run-help

@@ -1,19 +1,10 @@
-;;; config-org.el -- My Emcas org settings.
-;;; Commentary:
-;;; Code:
+(require 'use-package)
+(require 'load-relative)
 
 (use-package org
-  :ensure t
   :mode ("\\.org\\'" . org-mode)
   :after (evil-leader)
   :init
-  (defun gtd-inbox()
-      (interactive)
-      (find-file "~/org/inbox.org"))
-  (defun gtd()
-      (interactive)
-      (find-file "~/org/gtd.org"))
-
   (evil-leader/set-key
     "I" 'gtd-inbox
     "G" 'gtd
@@ -42,6 +33,13 @@
 				      "|"
 				      "DONE(d!)"
 				      "CANCELED(c@)")))
+
+  (defun gtd-inbox()
+      (interactive)
+      (find-file "~/org/inbox.org"))
+  (defun gtd()
+      (interactive)
+      (find-file "~/org/gtd.org"))
 
   (evil-define-key 'normal org-mode-map
     (kbd "C-w") 'ace-window)
@@ -77,6 +75,7 @@
     (kbd "M-J") '(calendar-forward-year 1)))
 
 (use-package org-capture
+  :ensure nil
   :after (org)
   :commands (org-capture)
   :config
@@ -96,6 +95,7 @@
   (add-hook 'org-capture-mode-hook 'evil-insert-state))
 
 (use-package org-agenda
+  :ensure nil
   :after (org evil-leader)
   :commands (org-agenda)
   :config
@@ -126,7 +126,9 @@
     (kbd "U")	'org-agenda-redo))
 
 (use-package org-clock
+  :ensure nil
   :after (org)
+  :defines user-cache-directory
   :config
   (org-clock-persistence-insinuate)
   (setq org-clock-persist-file (concat user-cache-directory "org-clock-save.el")
@@ -134,11 +136,13 @@
 	org-clock-idle-time 10))
 
 (use-package org-bullets
-  :ensure t
   :after (org)
   :commands (org-bullets-mode)
   :init
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
-(provide 'config-org)
-;;; config-org.el ends here
+(provide-me "config-")
+
+;; Local Variables:
+;; flycheck-disabled-checkers: (emacs-lisp-checkdoc)
+;; End:

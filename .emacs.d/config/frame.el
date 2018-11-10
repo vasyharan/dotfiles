@@ -1,6 +1,4 @@
-;; config-frame.el -- Frame configuration.
-;;; Commentary:
-;;; Code:
+(require 'load-relative)
 
 (setq frame-resize-pixelwise t
       initial-frame-alist '((horizontal-scroll-bars . nil)
@@ -48,5 +46,4 @@ PIN-Y to one of 'top or 'bottom"
  (kbd "s-C-l") (lambda () (interactive) (frame-magnet 0.66 1 'right))
  (kbd "s-<return>") 'toggle-frame-maximized)
 
-(provide 'config-frame)
-;;; config-frame.el ends here
+(provide-me "config-")

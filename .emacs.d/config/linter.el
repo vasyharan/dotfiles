@@ -1,9 +1,7 @@
-;;; config-syntax-checking.el -- Emacs config for syntax checking.
-;;; Commentary:
-;;; Code:
+(require 'use-package)
+(require 'load-relative)
 
 (use-package flycheck
-  :ensure t
   :commands (flycheck-mode)
   :delight
   :hook (prog-mode . flycheck-mode)
@@ -23,6 +21,7 @@
 				  'mode-line-modified
 				  " "
 				  'mode-line-modes) ""))))))
+
   (defun flycheck-list-errors-toggle ()
     "Toggle flycheck error list window."
     (interactive)
@@ -32,9 +31,8 @@
 	  (delete-window flycheck-window) (flycheck-list-errors))))
   (after 'evil-leader (evil-leader/set-key "e" 'flycheck-list-errors-toggle)))
 
-;; (use-package flymake
-;;   :commands (flymake-mode)
-;;   :hook (prog-mode . flymake-mode))
+(provide-me "config-")
 
-(provide 'config-syntax-checking)
-;;; config-syntax-checking.el ends here
+;; Local Variables:
+;; flycheck-disabled-checkers: (emacs-lisp-checkdoc)
+;; End:

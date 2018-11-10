@@ -1,12 +1,11 @@
-;;; config-pay-mode.el -- My Emacs pay-mode settings.
-;;; Commentary:
-;;; Code:
+(require 'use-package)
+(require 'load-relative)
 
 (use-package pay-server
-  :load-path "lisp/pay-server"
+  :load-path "elisp"
+  :after (dap-mode flycheck inf-ruby yasnippet)
   :init
   (add-hook 'ruby-mode-hook 'pay-enable-appropriate-mode)
-  ;; :delight pay-mode pay-test-mode
   :config
   (after 'evil-leader
     (evil-leader/set-key-for-mode 'ruby-mode
@@ -24,5 +23,8 @@
       "cm"	'pay-test-verify-marked
       "cM"      'pay-test-clear-marks)))
 
-(provide 'config-pay-mode)
-;;; config-pay-mode.el ends here
+(provide-me "config-")
+
+;; Local Variables:
+;; flycheck-disabled-checkers: (emacs-lisp-checkdoc)
+;; End:

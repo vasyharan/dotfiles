@@ -1,36 +1,41 @@
-;;; config-lang.el -- My Emacs js config.
-;;; Commentary:
-;;; Code:
+(require 'use-package)
+(require 'load-relative)
 
 ;; (use-package js2-mode
 ;;   :ensure t
 ;;   :mode "\\.js\\'")
+
 (use-package rjsx-mode
-  :ensure t
   :mode "\\.js\\'")
 
 (use-package json-mode
-  :ensure t
   :mode "\\.json\\'")
 
 (use-package company-flow
-  :commands (company-flow)
-  :ensure t)
+  :commands (company-flow))
 
 (use-package flycheck-flow
-  :ensure t)
+  :defer t)
 
 (use-package add-node-modules-path
-  :commands (add-node-modules-path)
-  :ensure t)
+  :commands (add-node-modules-path))
 
 (use-package prettier-js
-  :commands (prettier-js prettier-js-mode)
-  :ensure t)
+  :commands (prettier-js prettier-js-mode))
 
 (use-package nodenv
-  :ensure t
   :commands (nodenv-mode))
+
+(use-package lsp-javascript-flow
+  :commands (lsp-javascript-flow-enable)
+  :config
+  (setq lsp-javascript-flow-server-args '("--no-auto-download"
+					  "--try-flow-bin")))
+(use-package lsp-javascript-typescript
+  :commands (lsp-javascript-typescript-enable))
+
+(use-package lsp-typescript
+  :commands (lsp-typescript-enable))
 
 (defun config-js-mode()
   "Configure Javascript mode."
@@ -44,14 +49,12 @@
   (setq-default flycheck-disabled-checkers
 		(append flycheck-disabled-checkers '(javascript-jshint)))
 
-  ;; (add-node-modules-path)
   (prettier-js-mode)
 
   (flycheck-add-mode 'javascript-eslint 'rjsx-mode)
   (flycheck-add-mode 'javascript-flow 'rjsx-mode)
   (flycheck-add-next-checker 'javascript-flow 'javascript-eslint)
   (flycheck-add-next-checker 'lsp-ui 'javascript-eslint)
-  ;; (eglot-ensure)
   (lsp-javascript-flow-enable))
 
 (defun config-json-mode()
@@ -61,5 +64,8 @@
 (add-hook 'json-mode-hook 'config-json-mode)
 (add-hook 'rjsx-mode-hook 'config-js-mode)
 
-(provide 'config-lang-js)
-;;; config-lang-js.el ends here
+(provide-me "config-")
+
+;; Local Variables:
+;; flycheck-disabled-checkers: (emacs-lisp-checkdoc)
+;; End:

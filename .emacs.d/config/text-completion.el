@@ -1,9 +1,7 @@
-;;; config-code-completion.el -- Emacs config for code completion.
-;;; Commentary:
-;;; Code:
+(require 'use-package)
+(require 'load-relative)
 
 (use-package company
-  :ensure t
   :delight
   :commands (company-mode)
   :hook (prog-mode . company-mode)
@@ -15,31 +13,29 @@
   (define-key company-active-map (kbd "C-n") 'company-select-next)
   (define-key company-active-map (kbd "C-p") 'company-select-previous)
   (define-key company-active-map (kbd "C-f") 'company-complete)
-  (define-key company-active-map (kbd "C-r") 'company-filter-candidates)
-
-  ;; (defun on-off-fci-before-company(command)
-  ;;   (when (string= "show" command)
-  ;;     (turn-off-fci-mode))
-  ;;   (when (string= "hide" command)
-  ;;     (turn-on-fci-mode)))
-  ;; (advice-add 'company-call-frontends :before #'on-off-fci-before-company)
-  )
+  (define-key company-active-map (kbd "C-r") 'company-filter-candidates))
 
 (use-package yasnippet
-  :ensure t
   :delight (yas-minor-mode "" "yasnippet")
   :commands (yas-minor-mode)
   :hook (prog-mode . yas-minor-mode)
+  :after (evil)
   :config
-  (use-package yasnippet-snippets
-    :ensure t)
-  (yas-reload-all)
   (evil-define-key 'insert 'global (kbd "C-f") 'yas-expand))
+
+(use-package yasnippet-snippets
+  :after (yasnippet)
+  :defer t
+  :config
+  (yas-reload-all))
 
 (use-package etags
   :config
   (setq tags-revert-without-query t
 	large-file-warning-threshold nil))
 
-(provide 'config-code-completion)
-;; config-code-completion.el ends here
+(provide-me "config-")
+
+;; Local Variables:
+;; flycheck-disabled-checkers: (emacs-lisp-checkdoc)
+;; End:
