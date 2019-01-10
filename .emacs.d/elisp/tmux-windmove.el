@@ -6,7 +6,7 @@
     (error
      (evil-force-normal-state)
      (shell-command-to-string
-      (concat "tmux select-pane " tmux-direction)))))
+      (concat "tmux if-shell -F \"#{window_zoomed_flag}\" '' 'select-pane " tmux-direction "'")))))
 
 (defun tmux-windmove-left ()
   (interactive)
@@ -25,5 +25,4 @@
 
 ;; Local Variables:
 ;; flycheck-disabled-checkers: (emacs-lisp-checkdoc)
-;; eval: (add-hook 'after-save-hook #'emacs-lisp-byte-compile nil t)
 ;; End:

@@ -13,7 +13,8 @@
 ;; avoid flickering
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
-(unless (display-graphic-p) (if (fboundp 'menu-bar-mode) (menu-bar-mode -1)))
+(if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+;; (unless (display-graphic-p) (if (fboundp 'menu-bar-mode) (menu-bar-mode -1)))
 
 (eval-and-compile
   (setq package-enable-at-startup nil
@@ -107,6 +108,7 @@
 		  "~/.pyenv/shims/"
 		  "~/.nodenv/shims/"
 		  "~/.cargo/bin"
+		  "~/.bin"
 		  "/usr/local/bin"
 		  "/usr/bin"
 		  "/bin"
@@ -182,10 +184,13 @@
    "config/text-completion"
    "config/language-server"
    "config/pay-server"
-   "config/mode/org"
    "config/mode/javascript"
+   "config/mode/org"
+   "config/mode/python"
    "config/mode/ruby"
-   "config/mode/python") "config-")
+   "config/mode/scala"
+   "config/mode/thrift"
+   ) "config-")
 
 (if (daemonp)
     (require 'magit))

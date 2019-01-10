@@ -6,6 +6,7 @@
   (setq evil-toggle-key "C-`"
 	evil-search-module 'evil-search
 	evil-default-cursor t)
+
   (use-package evil-leader
     :commands (global-evil-leader-mode evil-leader/set-leader evil-leader/set-key)
     :init (global-evil-leader-mode)
@@ -17,13 +18,15 @@
       ":"	'eval-expression
       "="	'align-regexp
       ";"	'comment-or-uncomment-line-or-region))
+
   (evil-mode)
+
   :config
   ;; center after search
-  (advice-add 'evil-search-next :after
-	      (lambda (&rest _) (evil-scroll-line-to-center nil)))
-  (advice-add 'evil-search-previous :after
-	      (lambda (&rest _) (evil-scroll-line-to-center nil))))
+  (advice-add 'evil-ex-search-next :after
+	      (lambda (&rest _) (evil-scroll-line-to-center (line-number-at-pos))))
+  (advice-add 'evil-ex-search-previous :after
+	      (lambda (&rest _) (evil-scroll-line-to-center (line-number-at-pos)))))
 
 (use-package evil-terminal-cursor-changer
   :after (evil)

@@ -19,21 +19,26 @@ alias vim=nvim
 alias g=git
 alias ll='ls -l'
 
-alias emacs='TERM=xterm-24bits emacs'
-alias emacsclient='TERM=xterm-24bits emacsclient'
+alias emacs='env TERM=xterm-24bits emacs'
+alias emacsclient='env TERM=xterm-24bits emacsclient'
+alias sbt='env TERM=xterm sbt'
 
-function ec() {
+function e() {
   if [[ $PWD == "/Users/haran/stripe/pay-server" ]]; then
-    emacsclient -s pay-server $*
+    emacsclient -t -s pay-server $*
   else
-    emacsclient $*
+    emacsclient -t $*
   fi
 }
-function e() {
-    ec -nw $*
+function ec() {
+  if [[ $PWD == "/Users/haran/stripe/pay-server" ]]; then
+    emacsclient -nc -s pay-server $*
+  else
+    emacsclient -nc $*
+  fi
 }
 
-export EDITOR='TERM=xterm-24bits emacsclient -nw'
+export EDITOR='env TERM=xterm-24bits emacsclient -nw'
 
 bindkey -e
 bindkey '^[H' run-help

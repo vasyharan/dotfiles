@@ -318,16 +318,22 @@ This checks if the current line is a pry or ruby-debug prompt.")
   (interactive)
   (let ((current-test (pay-test--current-test)))
     (when current-test
-	(let* ((test-pos (nth 0 current-test))
-	       (test-filename (nth 1 current-test))
-	       (test-name (nth 2 current-test))
-	       (test-line (nth 3 current-test))
-	       (marker (make-marker))
-	       (overlay (pay-test--make-overlay test-pos)))
-	  (set-marker marker test-pos)
-	  (add-to-list 'pay-test--test-markers
-		       (list test-filename test-line marker overlay))
-	  (message (format "Marked `%d: %s'" test-line test-name))))))
+      (seq-let [test-pos test-filename test-name test-line] current-test
+	(if (seq-find
+		 (lambda (marker)
+		   (pay-test--marker-find-pred marker test-filename test-line test-pos))
+		 pay-test--test-markers)
+	    (error (format "Already marked `%d: %s'" test-line test-name))
+	  (let* ((test-pos (nth 0 current-test))
+		 (test-filename (nth 1 current-test))
+		 (test-name (nth 2 current-test))
+		 (test-line (nth 3 current-test))
+		 (marker (make-marker))
+		 (overlay (pay-test--make-overlay test-pos)))
+	    (set-marker marker test-pos)
+	    (add-to-list 'pay-test--test-markers
+			 (list test-filename test-line marker overlay))
+	    (message (format "Marked `%d: %s'" test-line test-name))))))))
 
 (defun pay-test-unmark-current-test ()
   "Remove the current test from the list of marked tests."
@@ -363,7 +369,8 @@ This checks if the current line is a pry or ruby-debug prompt.")
 			  (cons 'lines
 				(mapcar (lambda (m) (nth 1 m)) test-markers)))))
 	   markers-per-test-filename)))
-    (pay-test--run tests)))
+    (pay-test--run tests)
+    (setq pay-test--last-command nil)))
 
 (defun pay-kill-break-current-line ()
   "Copy command to break at current line."
@@ -397,7 +404,7 @@ This checks if the current line is a pry or ruby-debug prompt.")
 
 (define-minor-mode pay-test-mode
   "Minor mode for pay test files"
-  :lighter ""
+  :lighter " test"
   :group 'pay-server
   (pay-mode)
   (when pay-test-mode

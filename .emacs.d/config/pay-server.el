@@ -3,9 +3,8 @@
 
 (use-package pay-server
   :load-path "elisp"
-  :after (dap-mode flycheck inf-ruby yasnippet)
-  :init
-  (add-hook 'ruby-mode-hook 'pay-enable-appropriate-mode)
+  :after (flycheck inf-ruby yasnippet)
+  :commands (pay-enable-appropriate-mode)
   :config
   (after 'evil-leader
     (evil-leader/set-key-for-mode 'ruby-mode

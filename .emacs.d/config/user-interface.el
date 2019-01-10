@@ -46,7 +46,7 @@
 
 (use-package gruvbox-theme
   :config
-  (load-theme 'gruvbox-dark-hard)
+  (load-theme 'gruvbox-dark-medium)
   (set-face-attribute 'mode-line-directory nil :foreground "#a89984")
   (set-face-attribute 'mode-line-flycheck-separator nil :foreground "#d5c4a1")
   (set-face-attribute 'mode-line-flycheck-error nil :foreground "#fb4933")
@@ -78,28 +78,22 @@
   (setq display-time-24hr-format t))
 
 (set-face-attribute 'default nil
-		    :family "Source Code Pro"
+		    :family "InconsolataGo"
 		    :weight 'normal
 		    :width 'normal)
-
-(defvar face-height-factor 22
-  "Factor for calculating face height.")
-(setq face-height-factor 22)
 
 (defun adjust-face-height (&optional frame)
   "Guess a font height for FRAME, which defaults to selected FRAME."
   (interactive)
   (or frame (setq frame (selected-frame)))
-  (let* ((monitor-attributes (frame-monitor-attributes (selected-frame)))
-	 (pixel-height (nth 4 (assq 'geometry monitor-attributes)))
-	 (mm-height (nth 2 (assq 'mm-size monitor-attributes)))
-	 (face-height (* face-height-factor (ceiling (/ (float pixel-height) mm-height)))))
+  (let* ((monitor-attributes (frame-monitor-attributes frame))
+	 (pixel-width (nth 3 (assq 'geometry monitor-attributes)))
+	 (face-height (cond ((= pixel-width 1440) 120)
+			    (t 120))))
     (set-face-attribute 'default frame :height face-height)))
 
 ;; no menu bar for tty or linux
-(if (and (display-graphic-p) (eq system-type "darwin"))
-    (add-to-list 'initial-frame-alist '(menu-bar-lines . 1))
-  (add-to-list 'initial-frame-alist '(menu-bar-lines . 0)))
+(add-to-list 'initial-frame-alist '(menu-bar-lines . 0))
 (setq default-frame-alist (copy-alist initial-frame-alist))
 
 (defun tty-ui-config()
@@ -107,11 +101,18 @@
   (set-frame-parameter (selected-frame) 'menu-bar-lines 0)
   (etcc-on))
 
-(defun gui-ui-config ()
+(defun gui-ui-config (&optional frame)
   "UI adjustments hook for GUI frame."
+  (or frame (setq frame (selected-frame)))
   (if (eq system-type "darwin")
-      (set-frame-parameter (selected-frame) 'menu-bar-lines 1))
-  (adjust-face-height))
+      (set-frame-parameter frame 'menu-bar-lines 1))
+  (adjust-face-height frame))
+
+(when (display-graphic-p) (gui-ui-config))
+(add-hook 'after-make-frame-functions
+	  #'(lambda (frame)
+	      (when (display-graphic-p frame)
+		(gui-ui-config frame))) t)
 
 (add-hook 'tty-setup-hook #'tty-ui-config)
 

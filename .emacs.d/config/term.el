@@ -23,8 +23,9 @@
 
   (evil-define-key 'insert comint-mode-map
     (kbd "C-p") 'comint-previous-input
-    (kbd "<Up>") 'comint-previous-input
-    (kbd "<Down>") 'comint-next-input))
+    (kbd "C-n") 'comint-next-input
+    (kbd "<up>") 'comint-previous-input
+    (kbd "<down>") 'comint-next-input))
 
 (provide-me "config-")
 

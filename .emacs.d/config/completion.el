@@ -89,6 +89,13 @@
     "w" 'save-buffer
     "W" 'save-some-buffers))
 
+(use-package flyspell-correct-ivy
+  :commands (flyspell-correct-wrapper)
+  :init
+  (evil-leader/set-key
+    "s" 'flyspell-correct-wrapper)
+  (setq flyspell-correct-interface #'flyspell-correct-ivy))
+
 (provide-me "config-")
 
 ;; Local Variables:

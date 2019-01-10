@@ -1,36 +1,49 @@
 (require 'use-package)
 (require 'load-relative)
 
-;; (use-package eglot
-;;   :commands (eglot eglot-ensure)
-;;   :config
-;;   (add-to-list 'eglot-server-programs
-;; 	       `(ruby-mode . ("pay" "exec" "scripts/bin/typecheck" "--lsp")))
-;;   (add-to-list 'eglot-server-programs
-;; 	       `((js-mode js2-mode rjsx-mode) .
-;; 		 ("flow-language-server" "--stdio" "--no-auto-download" "--try-flow-bin"))))
-
 (use-package lsp-mode
-  :commands (lsp-ruby-enable)
+  :commands (lsp)
+  :init
+  (setq lsp-prefer-flymake nil)
   :config
-  (defconst lsp-ruby--get-root
-    (lsp-make-traverser
-     #'(lambda (dir)
-	 (directory-files dir nil "\\(Rakefile\\|Gemfile\\)"))))
-  (lsp-define-stdio-client
-   lsp-ruby "ruby"
-   lsp-ruby--get-root
-   '("pay" "exec" "scripts/bin/typecheck" "--lsp")))
+  (defun lsp-sorbet--ls-command ()
+    "Generate the language server startup command."
+    '("pay" "exec" "scripts/bin/typecheck" "--lsp" "-v"))
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection 'lsp-sorbet--ls-command)
+		    :major-modes '(ruby-mode)
+		    :priority -1
+		    :server-id 'sorbet-ls))
 
-;; (use-package cquery
-;;   :commands (lsp-cquery-enable))
+  (defun lsp-flow--ls-command ()
+    "Generate the language server startup command."
+    (let ((lsp-clients-flow-server "flow-language-server")
+	  (lsp-clients-flow-server-args '("--stdio")))
+	  `(,lsp-clients-flow-server
+	    ,@lsp-clients-flow-server-args)))
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection 'lsp-flow--ls-command)
+		    :major-modes '(typescript-mode js-mode js2-mode rjsx-mode)
+		    :priority -1
+		    :server-id 'flow-ls)))
 
 (use-package lsp-ui
-  :hook (lsp-mode . lsp-ui-mode)
+  :after (flycheck)
   :commands (lsp-ui-mode)
+  ;; :hook (lsp-mode . lsp-ui-mode)
+  :init
+  (setq lsp-ui-sideline-enable nil)
   :config
   (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
   (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references))
+
+(use-package company-lsp
+  :commands (company-lsp))
+
+;; (use-package sorbet-lsp
+;;   :load-path "elisp"
+;;   :after (lsp-mode)
+;;   :commands (sorbet-lsp-restart))
 
 (provide-me "config-")
 
