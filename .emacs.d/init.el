@@ -184,6 +184,7 @@
    "config/text-completion"
    "config/language-server"
    "config/pay-server"
+   "config/mode/go"
    "config/mode/javascript"
    "config/mode/org"
    "config/mode/python"

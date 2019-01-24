@@ -32,7 +32,8 @@
   :commands (lsp-ui-mode)
   ;; :hook (lsp-mode . lsp-ui-mode)
   :init
-  (setq lsp-ui-sideline-enable nil)
+  (setq lsp-ui-sideline-enable nil
+	lsp-ui-doc-enable nil)
   :config
   (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
   (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references))

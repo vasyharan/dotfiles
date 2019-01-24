@@ -39,6 +39,10 @@
   :config
   (setq hl-line-sticky-flag nil))
 
+(use-package xclip
+  :init
+  (xclip-mode 1))
+
 (setq prettify-symbols-unprettify-at-point 'right-edge)
 (add-hook 'prog-mode-hook #'prettify-symbols-mode)
 (add-hook 'prog-mode-hook #'show-paren-mode)

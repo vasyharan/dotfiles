@@ -11,8 +11,8 @@
 ;; (use-package company-jedi
 ;;   :ensure t
 ;;   :commands (company-jedi))
-(use-package lsp-python
-  :commands (lsp-python-enable))
+;; (use-package lsp-python
+;;   :commands (lsp-python-enable))
 
 (defun config-python-mode ()
   "Custom settings for Python."

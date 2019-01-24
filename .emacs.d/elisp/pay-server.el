@@ -111,7 +111,6 @@ This checks if the current line is a pry or ruby-debug prompt.")
 	    (test-lines (alist-get 'lines (cdr test)))
 	    (args (list
 		   (if fail-fast "-f")
-		   ;; "-f"
 		   (if verbose "--show-output")
 		   test-filename
 		   (cond (test-names (mapcar (lambda (name) (list "-n" name)) test-names))

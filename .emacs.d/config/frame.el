@@ -10,7 +10,7 @@ Optionally pin the frame to the display by setting:
 PIN-X to one of 'left or 'left, and
 PIN-Y to one of 'top or 'bottom"
   (let* ((frame-width (floor (* (display-pixel-width) width-ratio)))
-	 (frame-height (floor (* (display-pixel-height) height-ratio)))
+	 (frame-height (- (floor (* (display-pixel-height) height-ratio)) 27))
 	 (frame-x (cond
 		   ((eq pin-x 'left) 0)
 		   ((eq pin-x 'right) -1)
@@ -42,8 +42,8 @@ PIN-Y to one of 'top or 'bottom"
 (if (display-graphic-p) (gui-frame-init))
 
 (global-set-keys
- (kbd "s-C-h") (lambda () (interactive) (frame-magnet 0.66 1 'left))
- (kbd "s-C-l") (lambda () (interactive) (frame-magnet 0.66 1 'right))
+ (kbd "C-s-h") (lambda () (interactive) (frame-magnet 0.646 1 'left))
+ (kbd "C-s-l") (lambda () (interactive) (frame-magnet 0.646 1 'right))
  (kbd "s-<return>") 'toggle-frame-maximized)
 
 (provide-me "config-")
