@@ -78,7 +78,7 @@
   (setq display-time-24hr-format t))
 
 (set-face-attribute 'default nil
-		    :family "InconsolataGo"
+		    :family "Source Code Pro"
 		    :weight 'normal
 		    :width 'normal)
 
@@ -87,9 +87,9 @@
   (interactive)
   (or frame (setq frame (selected-frame)))
   (let* ((monitor-attributes (frame-monitor-attributes frame))
-	 (pixel-width (nth 3 (assq 'geometry monitor-attributes)))
-	 (face-height (cond ((= pixel-width 1440) 120)
-			    (t 120))))
+	 (face-height
+	  (cond ((string= "eDP-1" (cdr (assq 'name monitor-attributes))) 90) ;; lenny
+		(t 120))))
     (set-face-attribute 'default frame :height face-height)))
 
 ;; no menu bar for tty or linux

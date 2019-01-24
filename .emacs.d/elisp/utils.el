@@ -1,5 +1,5 @@
 (require 'load-relative)
-
+ 
 (defun comment-or-uncomment-line-or-region()
   "Toggle comment for region if selected, or line if not."
   (interactive)

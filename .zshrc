@@ -21,7 +21,8 @@ alias ll='ls -l'
 
 alias emacs='env TERM=xterm-24bits emacs'
 alias emacsclient='env TERM=xterm-24bits emacsclient'
-alias sbt='env TERM=xterm sbt'
+# alias sbt='env TERM=xterm sbt'
+alias sbt='env TERM=xterm-color sbt'
 
 function e() {
   if [[ $PWD == "/Users/haran/stripe/pay-server" ]]; then
@@ -36,6 +37,10 @@ function ec() {
   else
     emacsclient -nc $*
   fi
+}
+
+function mkcd() {
+    mkdir -p $1 && cd $1
 }
 
 export EDITOR='env TERM=xterm-24bits emacsclient -nw'
