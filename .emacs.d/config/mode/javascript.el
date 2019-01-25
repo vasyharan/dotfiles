@@ -5,7 +5,6 @@
   :mode "\\.js\\'" "\\.tsx\\'")
 (use-package typescript-mode
   :mode "\\.ts\\'")
-
 (use-package json-mode
   :mode "\\.json\\'")
 
@@ -45,6 +44,7 @@
 
 (defun config-json-mode()
   "Configure JSON mode."
+  (add-node-modules-path)
   (prettier-js-mode))
 
 (add-hook 'json-mode-hook 'config-json-mode)
