@@ -20,7 +20,9 @@
       "ca"      'pay-test-mark-current-test
       "cA"      'pay-test-unmark-current-test
       "cm"	'pay-test-verify-marked
-      "cM"      'pay-test-clear-marks)))
+      "cM"      'pay-test-clear-marks)
+    (evil-leader/set-key-for-mode 'pay-compilation-mode
+      "cL"	'pay-find-test-log)))
 
 (provide-me "config-")
 

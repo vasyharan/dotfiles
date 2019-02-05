@@ -61,3 +61,6 @@
 	fsckobjects = true
 [credential]
 	helper = cache
+[hub]
+	host = git.corp.stripe.com
+	protocol = https

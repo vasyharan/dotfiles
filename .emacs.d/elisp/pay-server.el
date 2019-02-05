@@ -430,6 +430,27 @@ This checks if the current line is a pry or ruby-debug prompt.")
 	   (replace-regexp-in-string "test\\/[a-z]+\\/" "" relative-name))
 	  (t (replace-regexp-in-string "test\\/" "" relative-name)))))
 
+(defun pay-test--current-test-log (&optional pos)
+  "Find the closest log to POS or (current point)."
+  (let ((opoint (or pos (point))))
+    (save-excursion
+      (save-restriction
+	(widen)
+	(goto-char opoint)
+	(end-of-line)
+	(if (re-search-backward
+	     "See \\([^ ]*\\) for details," nil t)
+	    (let ((log-filename (match-string-no-properties 1)))
+	      log-filename)
+	  (error "No log file found"))))))
+
+(defun pay-find-test-log ()
+  (interactive)
+  (if-let (log-file (pay-test--current-test-log))
+      (find-file (format "/ssh:%s:/pay/src/pay-server/%s"
+			 (string-trim (shell-command-to-string "pay show-host"))
+			 log-file))))
+
 (defun pay-test-name (file)
   "FILE."
   (let ((relative-name (file-relative-name (buffer-file-name) (pay-project-root))))

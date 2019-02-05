@@ -41,6 +41,7 @@
 
 (use-package xclip
   :init
+  (setq select-enable-clipboard nil)
   (xclip-mode 1))
 
 (setq prettify-symbols-unprettify-at-point 'right-edge)

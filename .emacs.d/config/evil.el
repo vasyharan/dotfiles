@@ -22,6 +22,8 @@
   (evil-mode)
 
   :config
+  (evil-set-initial-state 'flycheck-error-list-mode 'emacs)
+
   ;; center after search
   (advice-add 'evil-ex-search-next :after
 	      (lambda (&rest _) (evil-scroll-line-to-center (line-number-at-pos))))
@@ -43,4 +45,4 @@
 
 ;; Local Variables:
 ;; flycheck-disabled-checkers: (emacs-lisp-checkdoc)
-;; End:
+;; End:(evil-set-initial-state 'org-mode 'emacs)

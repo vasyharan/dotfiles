@@ -28,8 +28,17 @@
     (let* ((flycheck-buffer (get-buffer flycheck-error-list-buffer))
 	   (flycheck-window (get-buffer-window flycheck-buffer)))
       (if (and flycheck-window flycheck-buffer)
-	  (delete-window flycheck-window) (flycheck-list-errors))))
-  (after 'evil-leader (evil-leader/set-key "e" 'flycheck-list-errors-toggle)))
+	  (delete-window flycheck-window)
+	(flycheck-list-errors-focus))))
+
+  (defun flycheck-list-errors-focus ()
+    "Open flycheck error list window and focus it."
+    (interactive)
+    (flycheck-list-errors)
+    (select-window (get-buffer-window (get-buffer flycheck-error-list-buffer))))
+
+  (after 'evil-leader
+    (evil-leader/set-key "ee" 'flycheck-list-errors-focus)))
 
 (provide-me "config-")
 

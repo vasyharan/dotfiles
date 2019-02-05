@@ -13,6 +13,10 @@ setopt hist_verify
 setopt inc_append_history
 setopt share_history
 
+DIRSTACKSIZE=8
+setopt autopushd pushdminus pushdsilent # pushdtohome
+alias cd=pushd
+
 # aliases
 alias dot="git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 alias vim=nvim
@@ -43,6 +47,8 @@ function mkcd() {
     mkdir -p $1 && cd $1
 }
 
+# export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=10"
+export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
 export EDITOR='env TERM=xterm-24bits emacsclient -nw'
 
 bindkey -e
@@ -53,40 +59,57 @@ select-word-style bash
 export FZF_CTRL_T_COMMAND="rg --files"
 export FZF_DEFAULT_COMMAND="rg --files"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
 [ -f ~/stripe/space-commander/bin/sc-aliases ] && \
     source ~/stripe/space-commander/bin/sc-aliases
 
 # envs
-which rbenv 2>&1 >/dev/null && eval "$(rbenv init -)"
-which nodenv 2>&1 >/dev/null && eval "$(nodenv init -)"
+command -v rbenv 2>&1 >/dev/null &&
+  function rbenv() {
+    eval "$(command rbenv init -)"
+    rbenv "$@"
+  }
 
-export PYENV_ROOT="/Users/haran/.pyenv"
+command -v nodenv 2>&1 >/dev/null &&
+  function nodenv() {
+    eval "$(command nodenv init -)"
+    nodenv "$@";
+  }
+
+export PYENV_ROOT="${HOME}/.pyenv"
 export PYENV_VIRTUALENV_DISABLE_PROMPT=1
-if command -v pyenv 2>&1 >/dev/null; then
-  eval "$(pyenv init -)"
-  eval "$(pyenv virtualenv-init -)"
-fi
+command -v pyenv 2>&1 >/dev/null &&
+  function pyenv() {
+    eval "$(command pyenv init -)"
+    eval "$(command pyenv virtualenv-init -)"
+    pyenv "$@"
+  }
 
-# zplug
-source ~/.zplug/init.zsh
-
-zplug "zplug/zplug", hook-build:'zplug --self-manage'
-
-# zplug "dracula/zsh", as:theme
-
+# pure prompt
 PURE_GIT_PULL=0
 VIRTUAL_ENV_DISABLE_PROMPT=1
-zplug "mafredri/zsh-async", from:github
-# zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
-zplug "dfurnes/purer", use:pure.zsh, from:github, as:theme
 
-zplug "rupa/z", use:z.sh
+# zgen
+ZGEN_RESET_ON_CHANGE=(${HOME}/.zshrc ${HOME}/.zshrc.local)
+source "${HOME}/.zgen/zgen.zsh"
 
-zplug "zsh-users/zsh-autosuggestions"
-zplug "zsh-users/zsh-history-substring-search"
+if ! zgen saved; then
+  zgen load "mafredri/zsh-async"
+  zgen load "dfurnes/purer" "pure.zsh"
+  zgen load "rupa/z" "z.sh"
+  zgen load "zsh-users/zsh-autosuggestions"
+  zgen load "zsh-users/zsh-history-substring-search"
+  zgen save
+fi
+# zgen
 
-zplug load # --verbose
+# zplug {{{
+# source ~/.zplug/init.zsh
+# zplug "zplug/zplug", hook-build:'zplug --self-manage'
 
-# export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=10"
-export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
+# zplug "mafredri/zsh-async", from:github
+# zplug "dfurnes/purer", use:pure.zsh, from:github, as:theme
+# zplug "rupa/z", use:z.sh
+# zplug "zsh-users/zsh-autosuggestions"
+# zplug "zsh-users/zsh-history-substring-search"
+# zplug load # --verbose
+# }}}
