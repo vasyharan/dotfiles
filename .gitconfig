@@ -1,11 +1,8 @@
 # Please indent options with one tab when editing defaults in
 # https://github.com/stripe-internal/marionette-puppet-config/blob/master/modules/git/templates/gitconfig.erb
 # That matches how "git config --global" edits the file.
-
-[user]
-	name = Thirukumaran Vaseeharan
-	email = haran@stripe.com
-
+[include]
+	path = ~/.gitconfig.local
 # "push.default = simple" is the default in git 2.0, but OS X still ships git
 # 1.9.3 ("push.default = matching") as of 10.10.2, so... we explicitly specify
 # the modern default to try and keep things sane if you accidentally use the
@@ -14,15 +11,13 @@
 # remove this.
 [push]
 	default = current
-
 # http://stackoverflow.com/questions/18257622/why-is-git-core-preloadindex-default-value-false
 [core]
 	preloadindex = true
-	excludesfile = /Users/haran/.gitignore.global
+	excludesfile = ~/.gitignore.global
 	autocrlf = input
 	editor = emacsclient -nw
 	pager = diff-so-fancy | less --tabs=4 -RFX
-
 [log]
 	decorate = true
 [alias]
