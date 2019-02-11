@@ -54,6 +54,8 @@
 	fsckobjects = true
 [receive]
 	fsckobjects = true
+[merge]
+	tool = nvim
 [mergetool "nvim"]
 	cmd = nvim -f -c \"Gdiff\" \"$MERGED\"
 [credential]

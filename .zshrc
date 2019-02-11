@@ -14,23 +14,21 @@ setopt hist_verify
 setopt inc_append_history
 setopt share_history
 
+# dir stacks
 DIRSTACKSIZE=8
 setopt autopushd pushdminus pushdsilent # pushdtohome
-alias cd=pushd
 
 # aliases
 alias dot="git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 alias vim=nvim
+alias vimdiff='nvim -d'
 alias g=git
 alias ll='ls -l'
-
+alias dh=dirs -v
 alias cd=pushd
-alias dh='dirs -v'
-
 alias emacs='env TERM=xterm-24bits emacs'
 alias emacsclient='env TERM=xterm-24bits emacsclient'
 alias sbt='env TERM=xterm-color sbt'
-
 alias e='emacsclient -t $@'
 alias ec='emacsclient -nc $@'
 function mkcd() {
@@ -92,15 +90,3 @@ if ! zgen saved; then
   zgen save
 fi
 # zgen
-
-# zplug {{{
-# source ~/.zplug/init.zsh
-# zplug "zplug/zplug", hook-build:'zplug --self-manage'
-
-# zplug "mafredri/zsh-async", from:github
-# zplug "dfurnes/purer", use:pure.zsh, from:github, as:theme
-# zplug "rupa/z", use:z.sh
-# zplug "zsh-users/zsh-autosuggestions"
-# zplug "zsh-users/zsh-history-substring-search"
-# zplug load # --verbose
-# }}}

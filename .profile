@@ -12,4 +12,3 @@ path=(~/go/bin
       $path)
 export PATH
 export GOPATH="$HOME/go"
-export XDG_CONFIG_HOME="$HOME/.config"

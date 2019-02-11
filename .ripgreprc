@@ -1,0 +1,2 @@
+--glob=!sorbet/shims/*
+--glob=!TAGS
