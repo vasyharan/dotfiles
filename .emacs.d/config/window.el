@@ -118,8 +118,8 @@
   (setq shackle-select-reused-windows nil) ; default nil
   (setq shackle-default-alignment 'below) ; default below
   (setq shackle-default-size 0.4) ; default 0.5
-  (setq shackle-rules '(("\\`\\*Flycheck.errors.*?\\*\\'" :regexp t :align 'bottom :size 0.25)
-			(t :align 'below :size 0.25)))
+  (setq shackle-rules '(("\\`\\*Flycheck.errors.*?\\*\\'" :regexp t :align 'bottom :size 0.3)
+			(t :align 'below :size 0.3)))
   ;; (setq shackle-rules
   ;; 	;; CONDITION(:regexp)            :select     :inhibit-window-quit   :size+:align|:other     :same|:popup
   ;; 	'((compilation-mode              :select nil                                               )

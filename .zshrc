@@ -1,4 +1,5 @@
 [ -f ~/.zshenv ] && source ~/.zshenv
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local
 
 # history
 HISTFILE=~/.history
@@ -23,26 +24,15 @@ alias vim=nvim
 alias g=git
 alias ll='ls -l'
 
+alias cd=pushd
+alias dh='dirs -v'
+
 alias emacs='env TERM=xterm-24bits emacs'
 alias emacsclient='env TERM=xterm-24bits emacsclient'
-# alias sbt='env TERM=xterm sbt'
 alias sbt='env TERM=xterm-color sbt'
 
-function e() {
-  if [[ $PWD == "/Users/haran/stripe/pay-server" ]]; then
-    emacsclient -t -s pay-server $*
-  else
-    emacsclient -t $*
-  fi
-}
-function ec() {
-  if [[ $PWD == "/Users/haran/stripe/pay-server" ]]; then
-    emacsclient -nc -s pay-server $*
-  else
-    emacsclient -nc $*
-  fi
-}
-
+alias e='emacsclient -t $@'
+alias ec='emacsclient -nc $@'
 function mkcd() {
     mkdir -p $1 && cd $1
 }

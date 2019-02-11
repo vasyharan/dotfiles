@@ -84,8 +84,8 @@
     "fr" 'counsel-recentf
     "fo" 'counsel-pay-find-other
     "fb" 'ivy-switch-buffer
-    "en" 'next-error
     "ep" 'previous-error
+    "en" 'next-error
     "b" 'ivy-switch-buffer
     "k" 'kill-this-buffer
     "w" 'save-buffer
