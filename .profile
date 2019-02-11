@@ -1,4 +1,5 @@
 [ -f /usr/share/defaults/etc/profile ] && source /usr/share/defaults/etc/profile
+[ -f ~/.profile.local ] && source ~/.profile.local
 
 # path
 path=(~/go/bin
@@ -11,11 +12,4 @@ path=(~/go/bin
       $path)
 export PATH
 export GOPATH="$HOME/go"
-export OPT_IN_TO_ZEBAL=1
-
-# BEGIN STRIPE NODE CONFIG
-#      To undo the following behavior, comment it out, dont delete it;
-#      'pay-server/scripts/frontend/install_node_modules' will just add it again.
-#      Ask in #dashboard-platform if you have questions.
-export PATH="./node_modules/.bin:$PATH"
-# END STRIPE NODE CONFIG
+export XDG_CONFIG_HOME="$HOME/.config"

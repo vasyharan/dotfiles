@@ -67,6 +67,7 @@ command -v nodenv 2>&1 >/dev/null &&
 
 export PYENV_ROOT="${HOME}/.pyenv"
 export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+export PYTHON_CONFIGURE_OPTS="--enable-shared"
 command -v pyenv 2>&1 >/dev/null &&
   function pyenv() {
     eval "$(command pyenv init -)"
