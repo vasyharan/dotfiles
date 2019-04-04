@@ -6,6 +6,7 @@ path=(~/go/bin
       ~/.fzf/bin
       ~/.cargo/bin
       ~/.pyenv/bin
+      ~/.emacs.d/bin
       /usr/local/bin
       /usr/local/sbin
       /usr/local/opt/bison/bin

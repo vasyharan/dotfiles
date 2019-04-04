@@ -24,7 +24,7 @@ alias vim=nvim
 alias vimdiff='nvim -d'
 alias g=git
 alias ll='ls -l'
-alias dh=dirs -v
+alias dh='dirs -v'
 alias cd=pushd
 alias emacs='env TERM=xterm-24bits emacs'
 alias emacsclient='env TERM=xterm-24bits emacsclient'
@@ -40,9 +40,21 @@ export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
 export EDITOR='env TERM=xterm-24bits emacsclient -nw'
 
 bindkey -e
-bindkey '^[H' run-help
+# bindkey '^E' run-help
 autoload -U select-word-style
 select-word-style bash
+
+fancy-ctrl-z () {
+  emulate -LR zsh
+  if [[ $#BUFFER -eq 0 ]]; then
+    bg
+    zle redisplay
+  else
+    zle push-input
+  fi
+}
+zle -N fancy-ctrl-z
+bindkey '^Z' fancy-ctrl-z
 
 export FZF_CTRL_T_COMMAND="rg --files"
 export FZF_DEFAULT_COMMAND="rg --files"
@@ -51,13 +63,13 @@ export FZF_DEFAULT_COMMAND="rg --files"
     source ~/stripe/space-commander/bin/sc-aliases
 
 # envs
-command -v rbenv 2>&1 >/dev/null &&
+command -v rbenv &>/dev/null &&
   function rbenv() {
     eval "$(command rbenv init -)"
     rbenv "$@"
   }
 
-command -v nodenv 2>&1 >/dev/null &&
+command -v nodenv &>/dev/null &&
   function nodenv() {
     eval "$(command nodenv init -)"
     nodenv "$@";
@@ -66,7 +78,7 @@ command -v nodenv 2>&1 >/dev/null &&
 export PYENV_ROOT="${HOME}/.pyenv"
 export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 export PYTHON_CONFIGURE_OPTS="--enable-shared"
-command -v pyenv 2>&1 >/dev/null &&
+command -v pyenv &>/dev/null &&
   function pyenv() {
     eval "$(command pyenv init -)"
     eval "$(command pyenv virtualenv-init -)"
@@ -83,10 +95,13 @@ source "${HOME}/.zgen/zgen.zsh"
 
 if ! zgen saved; then
   zgen load "mafredri/zsh-async"
-  zgen load "dfurnes/purer" "pure.zsh"
+  # zgen load "dfurnes/purer" "pure.zsh"
+  zgen load "sindresorhus/pure" "pure.zsh"
   zgen load "rupa/z" "z.sh"
   zgen load "zsh-users/zsh-autosuggestions"
   zgen load "zsh-users/zsh-history-substring-search"
   zgen save
 fi
 # zgen
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"

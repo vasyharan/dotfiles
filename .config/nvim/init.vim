@@ -1,10 +1,8 @@
 " let g:python_host_prog = '~/.pyenv/versions/neovim2/bin/python'
 let g:python3_host_prog = '~/.pyenv/versions/neovim3/bin/python'
 
+if &compatible | set nocompatible | endif
 let mapleader = ' '
-if &compatible
-  set nocompatible
-endif
 
 " vim-plug {{{
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
@@ -44,6 +42,7 @@ set showcmd
 set smartcase                                         " case-sensitive search if any caps
 set softtabstop=4                                     " insert mode tab and backspace use 2 spaces
 set tabstop=8                                         " actual tabs occupy 8 characters
+set smarttab
 set wildignore=log,node_modules,target,tmp,dist,*.rbc
 set wildmenu                                          " show a navigable menu for tab completion
 set wildmode=longest,list,full
@@ -51,8 +50,21 @@ set hidden                                            " hidden buffers are the s
 set modeline                                          " love me some modelines
 set modelines=5
 set updatetime=250
-set inccommand=split                                  " preview inc command results
+set inccommand=nosplit                                " preview inc command results
 syntax enable
+" }}}
+
+" prefer rg if available
+if executable("rg") | set grepprg=rg\ --color\ never | endif
+
+" colorscheme {{{
+if exists('+termguicolors')
+  " let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  " let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+endif
+set background=dark
+colorscheme gruvbox
 " }}}
 
 " movement: emacs {{{
@@ -90,22 +102,9 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 " }}}
 
-" {{{ mappings: quick
-nmap vv :vsplit<cr>
-" }}}
 " {{{ mappings: leader
 nmap <nowait> <leader>w :w<cr>
 nmap <nowait> <leader>W :wa<cr>
-" }}}
-
-" colorscheme {{{
-if exists('+termguicolors')
-  " let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  " let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-  set termguicolors
-endif
-set background=dark
-colorscheme gruvbox
 " }}}
 
 " augroup: * {{{
