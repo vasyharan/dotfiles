@@ -6,6 +6,7 @@
       :n "C-l" #'tmux/windmove-right
 
       :nv "C-M-a" #'evil-numbers/dec-at-pt
+      :i "C-w" evil-window-map
 
       (:map evil-window-map
         "C-s" #'ace-swap-window)
