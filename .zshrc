@@ -56,6 +56,11 @@ fancy-ctrl-z () {
 zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
 
+autoload -U edit-command-line
+zle -N edit-command-line
+bindkey '^xe' edit-command-line
+bindkey '^x^e' edit-command-line
+
 export FZF_CTRL_T_COMMAND="rg --files"
 export FZF_DEFAULT_COMMAND="rg --files"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

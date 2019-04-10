@@ -9,3 +9,14 @@
 (package! evil-snipe :disable t)
 (package! evil-escape :disable t)
 (package! magit-todos :disable t)
+
+(package! enh-ruby-mode :disable t)
+
+(package! doom-themes :recipe
+  (:fetcher git
+   :url "file://~/Workspace/emacs-doom-themes"
+   :branch "gruvbox-dark"
+   :files ("*.el" "themes/*.el")
+   ))
+
+(package! evil-terminal-cursor-changer)
