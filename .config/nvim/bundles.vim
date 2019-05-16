@@ -42,6 +42,7 @@ nmap <leader>vl :call VimuxRunCommand('pay test ' . bufname('%') . ' -l ' . line
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-commentary'
 " }}}
 " git plugins {{{
 Plug 'tpope/vim-fugitive'
@@ -70,13 +71,6 @@ Plug 'ncm2/ncm2-gtags'
 Plug 'junegunn/vim-easy-align'
 xmap <leader>= <Plug>(LiveEasyAlign)
 nmap <leader>= <Plug>(LiveEasyAlign)
-" }}}
-" nerd commenter {{{
-Plug 'scrooloose/nerdcommenter'
-let g:NERDSpaceDelims = 1
-let g:NERDDefaultMappings = 0
-nn <silent> <leader>; :call NERDComment('n', 'Toggle')<cr>
-xn <silent> <leader>; :call NERDComment('x', 'Toggle')<cr>
 " }}}
 " buffer bye {{{
 Plug 'moll/vim-bbye'
@@ -125,7 +119,9 @@ Plug 'sjl/gundo.vim'
 Plug 'wincent/ferret'
 " }}}
 
-Plug '~/Workspace/vim-commands'
+Plug 'bronson/vim-visual-star-search'
+
+" Plug '~/Workspace/vim-commands'
 
 " [java/type]script {{{
 Plug 'leafgarland/typescript-vim'

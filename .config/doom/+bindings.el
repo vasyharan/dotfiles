@@ -9,7 +9,8 @@
       :i "C-w" evil-window-map
 
       (:map evil-window-map
-        "C-s" #'ace-swap-window)
+        "C-s" #'ace-swap-window
+        "c"   #'evil-window-delete)
 
       (:when (featurep! :completion ivy)
         (:after ivy
@@ -25,12 +26,21 @@
         :i   "<down>" #'comint-next-input)
       (:map inf-ruby-mode-map
         :mn  "i" #'comint-goto-end-and-insert
-        :mn  "a" #'comint-goto-end-and-insert))
+        :mn  "a" #'comint-goto-end-and-insert)
+
+      (:after org
+        (:map org-agenda-mode-map
+          :mn "RET" #'org-agenda-switch-to)
+        (:map org-mode-map
+          :mn "TAB" #'org-cycle))
+      )
 
 ;; <leader>
 (map! :leader
-      :desc "Eval expression"       ":"    #'eval-expression
-      :desc "M-x"                   ";"    #'execute-extended-command)
+      :desc "Eval expression"          ":"    #'eval-expression
+      :desc "M-x"                      ";"    #'execute-extended-command
+      :desc "Switch to project buffer" "," #'counsel-projectile-switch-to-buffer
+      :desc "Switch buffer"            "<" #'+ivy/switch-buffer)
 
 (map! :localleader
       :map pay-test-mode-map

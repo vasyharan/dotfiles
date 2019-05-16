@@ -60,6 +60,3 @@
 	cmd = nvim -f -c \"Gdiff\" \"$MERGED\"
 [credential]
 	helper = cache
-[hub]
-	host = git.corp.stripe.com
-	protocol = https

@@ -94,19 +94,21 @@ command -v pyenv &>/dev/null &&
 PURE_GIT_PULL=0
 VIRTUAL_ENV_DISABLE_PROMPT=1
 
+# zsh autosuggestions
+ZSH_AUTOSUGGEST_USE_ASYNC=1
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=7'
+
 # zgen
 ZGEN_RESET_ON_CHANGE=(${HOME}/.zshrc ${HOME}/.zshrc.local)
 source "${HOME}/.zgen/zgen.zsh"
 
 if ! zgen saved; then
   zgen load "mafredri/zsh-async"
-  # zgen load "dfurnes/purer" "pure.zsh"
-  zgen load "sindresorhus/pure" "pure.zsh"
+  zgen load "dfurnes/purer" "pure.zsh"
+  # zgen load "sindresorhus/pure" "pure.zsh"
   zgen load "rupa/z" "z.sh"
   zgen load "zsh-users/zsh-autosuggestions"
   zgen load "zsh-users/zsh-history-substring-search"
   zgen save
 fi
 # zgen
-
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
