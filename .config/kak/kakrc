@@ -1,0 +1,84 @@
+source "%val{config}/plugins/plug.kak/rc/plug.kak"
+plug 'andreyorst/plug.kak' noload
+
+add-highlighter global/ number-lines
+add-highlighter global/ show-matching
+
+# space is my leader
+map global normal <space> , -docstring 'leader'
+map global normal <backspace> <space> -docstring 'remove all sels except main'
+map global normal <a-backspace> <a-space> -docstring 'remove main sel'
+
+hook global InsertChar k %{ try %{
+    exec -draft hH <a-k>jk<ret> d
+    exec <esc>
+}}
+
+def -params 1 extend-line-down %{
+    exec "<a-:>%arg{1}X"
+}
+def -params 1 extend-line-up %{
+    exec "<a-:><a-;>%arg{1}K<a-;>"
+    try %{
+        exec -draft ';<a-K>\n<ret>'
+        exec X
+    }
+    exec '<a-;><a-X>'
+}
+map global normal x ':extend-line-down %val{count}<ret>'
+map global normal X ':extend-line-up %val{count}<ret>'
+
+declare-user-mode comment
+map global comment c ':comment-line<ret>' -docstring 'toggle line comment'
+map global comment b ':comment-block<ret>' -docstring 'toggle block comment'
+map global user c ':enter-user-mode comment<ret>' -docstring 'comment…'
+
+colorscheme gruvbox
+plug 'andreyorst/powerline.kak' defer "powerline" %{
+    set-option global powerline_shorten_bufname short
+    set-option global powerline_separator ''
+    # powerline-separator none
+    powerline-theme solarized-dark
+} config %{
+    powerline-start
+}
+
+plug 'Delapouite/kakoune-registers'
+plug 'delapouite/kakoune-buffers' %{
+    # hook global WinDisplay .* info-buffers
+    map global user b ':enter-buffers-mode<ret>'              -docstring 'buffers…'
+    map global user B ':enter-user-mode -lock buffers<ret>'   -docstring 'buffers (lock)…'
+}
+
+plug "andreyorst/fzf.kak" %{
+    map global normal <c-p> ': fzf-mode<ret>'
+} defer "fzf" %{
+    set-option global fzf_file_command 'rg'
+    set-option global fzf_grep_command 'rg'
+}
+
+plug 'h-youhei/kakoune-surround' %{
+    declare-user-mode surround
+    map global surround s ':surround<ret>' -docstring 'surround'
+    map global surround c ':change-surround<ret>' -docstring 'change'
+    map global surround d ':delete-surround<ret>' -docstring 'delete'
+    map global surround t ':select-surrounding-tag<ret>' -docstring 'select tag'
+    map global user s ':enter-user-mode surround<ret>' -docstring 'surround…'
+}
+
+eval %sh{kak-lsp --kakoune -s $kak_session}
+# set global lsp_cmd "kak-lsp -s %val{session} -vvv --log /tmp/kak-lsp.log"
+# hook global WinSetOption filetype=(javascript|typescript) %{
+#     lsp-enable-window
+# }
+
+hook global WinSetOption filetype=(javascript|typescript) %{
+    # set-option window formatcmd 'npx prettier --stdin-filepath=${kak_buffile}'
+    set-option buffer formatcmd "npx prettier --stdin-filepath=${kak_buffile}"
+}
+
+hook global WinCreate .*pay-server/.*\.rb %{
+    set-option window lintcmd 'run() { cat "$1" | /Users/haran/stripe/pay-server/scripts/bin/rubocop.rb -s "$kak_buffile"; } && run '
+    set-option window formatcmd '/Users/haran/stripe/pay-server/scripts/bin/rubocop.rb -a "$kak_buffile"'
+    lint-enable
+}

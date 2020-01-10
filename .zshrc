@@ -1,5 +1,9 @@
-[ -f ~/.zshenv ] && source ~/.zshenv
+# [ -f ~/.zshenv ] && source ~/.zshenv
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local
+
+autoload -Uz compinit; compinit
+autoload -Uz bashcompinit; bashcompinit
+typeset -aU path
 
 # history
 HISTFILE=~/.history
@@ -23,6 +27,8 @@ alias dot="git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 alias vim=nvim
 alias vimdiff='nvim -d'
 alias g=git
+alias ls='ls -G'
+alias dircolors=gdircolors
 alias ll='ls -l'
 alias dh='dirs -v'
 alias cd=pushd
@@ -31,6 +37,8 @@ alias emacsclient='env TERM=xterm-24bits emacsclient'
 alias sbt='env TERM=xterm-color sbt'
 alias e='emacsclient -t $@'
 alias ec='emacsclient -nc $@'
+alias tmux='tmux -2'
+alias tig=lazygit
 function mkcd() {
     mkdir -p $1 && cd $1
 }
@@ -96,7 +104,7 @@ VIRTUAL_ENV_DISABLE_PROMPT=1
 
 # zsh autosuggestions
 ZSH_AUTOSUGGEST_USE_ASYNC=1
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=7'
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=10'
 
 # zgen
 ZGEN_RESET_ON_CHANGE=(${HOME}/.zshrc ${HOME}/.zshrc.local)
@@ -109,6 +117,8 @@ if ! zgen saved; then
   zgen load "rupa/z" "z.sh"
   zgen load "zsh-users/zsh-autosuggestions"
   zgen load "zsh-users/zsh-history-substring-search"
+  zgen load "joel-porquet/zsh-dircolors-solarized.git"
+  zgen load "jackwish/bazel"
   zgen save
 fi
 # zgen

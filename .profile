@@ -2,7 +2,8 @@
 [ -f ~/.profile.local ] && source ~/.profile.local
 
 # path
-path=(~/go/bin
+path=(~/.bin
+      ~/go/bin
       ~/.fzf/bin
       ~/.cargo/bin
       ~/.pyenv/bin

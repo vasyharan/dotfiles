@@ -23,7 +23,7 @@ Plug 'junegunn/fzf.vim'
 " map <c-p> :<c-u>Files<cr>
 " }}}
 " theme: gruvbox {{{
-Plug 'morhetz/gruvbox'
+" Plug 'morhetz/gruvbox'
 let g:gruvbox_underline = 1
 let g:gruvbox_undercurl = 1
 " let g:gruvbox_italic = 1
@@ -31,6 +31,12 @@ let g:gruvbox_bold = 1
 let g:gruvbox_contrast_dark = "hard"
 let g:gruvbox_improved_strings = 0
 let g:gruvbox_improved_warnings = 1
+" }}}
+" theme: iosvkem {{{
+Plug 'neutaaaaan/iosvkem'
+" }}}
+" theme: solarized {{{
+Plug 'altercation/vim-colors-solarized'
 " }}}
 " tmux {{{
 Plug 'christoomey/vim-tmux-navigator'
@@ -85,8 +91,8 @@ nmap vv <Plug>(SmartSplit)
 " lightline {{{
 Plug 'itchyny/lightline.vim'
 set noshowmode
+" \ 'colorscheme': 'gruvbox',
 let g:lightline = {
-      \ 'colorscheme': 'gruvbox',
       \ 'component_function': {
       \   'readonly': 'LightlineReadonly',
       \   'fugitive': 'LightlineFugitive'
@@ -118,8 +124,12 @@ Plug 'sjl/gundo.vim'
 " search {{{
 Plug 'wincent/ferret'
 " }}}
+" beancount {{{
+Plug 'nathangrigg/vim-beancount'
+" }}}
 
 Plug 'bronson/vim-visual-star-search'
+Plug 'ledger/vim-ledger'
 
 " Plug '~/Workspace/vim-commands'
 

@@ -37,10 +37,12 @@
 
 ;; <leader>
 (map! :leader
-      :desc "Eval expression"          ":"    #'eval-expression
-      :desc "M-x"                      ";"    #'execute-extended-command
-      :desc "Switch to project buffer" "," #'counsel-projectile-switch-to-buffer
-      :desc "Switch buffer"            "<" #'+ivy/switch-buffer)
+      :desc "Eval expression"              ":" #'eval-expression
+      :desc "M-x"                          ";" #'execute-extended-command
+      ;; :desc "Switch to project buffer"     "," #'counsel-projectile-switch-to-buffer
+      :desc "Switch buffer"                "<" #'+ivy/switch-buffer
+      :desc "Search for symbol in project" "*" #'+default/search-project-for-symbol-or-region
+      :desc "Align"                        "=" #'ialign)
 
 (map! :localleader
       :map pay-test-mode-map
