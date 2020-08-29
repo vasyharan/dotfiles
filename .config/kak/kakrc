@@ -1,8 +1,9 @@
 source "%val{config}/plugins/plug.kak/rc/plug.kak"
 plug 'andreyorst/plug.kak' noload
 
-add-highlighter global/ number-lines
+add-highlighter global/ number-lines -relative
 add-highlighter global/ show-matching
+add-highlighter global/ wrap
 
 # space is my leader
 map global normal <space> , -docstring 'leader'
@@ -14,20 +15,6 @@ hook global InsertChar k %{ try %{
     exec <esc>
 }}
 
-def -params 1 extend-line-down %{
-    exec "<a-:>%arg{1}X"
-}
-def -params 1 extend-line-up %{
-    exec "<a-:><a-;>%arg{1}K<a-;>"
-    try %{
-        exec -draft ';<a-K>\n<ret>'
-        exec X
-    }
-    exec '<a-;><a-X>'
-}
-map global normal x ':extend-line-down %val{count}<ret>'
-map global normal X ':extend-line-up %val{count}<ret>'
-
 declare-user-mode comment
 map global comment c ':comment-line<ret>' -docstring 'toggle line comment'
 map global comment b ':comment-block<ret>' -docstring 'toggle block comment'
@@ -37,10 +24,14 @@ colorscheme gruvbox
 plug 'andreyorst/powerline.kak' defer "powerline" %{
     set-option global powerline_shorten_bufname short
     set-option global powerline_separator ''
-    # powerline-separator none
-    powerline-theme solarized-dark
+    set-option global powerline_separator_thin ' '
+    powerline-theme gruvbox
 } config %{
     powerline-start
+}
+
+plug 'lePerdu/kakboard' %{
+    hook global WinCreate .* %{ kakboard-enable }
 }
 
 plug 'Delapouite/kakoune-registers'
@@ -53,6 +44,7 @@ plug 'delapouite/kakoune-buffers' %{
 plug "andreyorst/fzf.kak" %{
     map global normal <c-p> ': fzf-mode<ret>'
 } defer "fzf" %{
+	  set-option global fzf_preview_pos  'top'
     set-option global fzf_file_command 'rg'
     set-option global fzf_grep_command 'rg'
 }
@@ -68,17 +60,27 @@ plug 'h-youhei/kakoune-surround' %{
 
 eval %sh{kak-lsp --kakoune -s $kak_session}
 # set global lsp_cmd "kak-lsp -s %val{session} -vvv --log /tmp/kak-lsp.log"
-# hook global WinSetOption filetype=(javascript|typescript) %{
-#     lsp-enable-window
-# }
+define-command lsp-restart -docstring 'restart the language server' %{ lsp-stop; lsp-start }
+hook global WinSetOption filetype=(javascript|typescript) %{
+    lsp-enable-window
+}
+
+hook global WinCreate ^[^*]+$ %{ editorconfig-load } # no *buffers*
 
 hook global WinSetOption filetype=(javascript|typescript) %{
-    # set-option window formatcmd 'npx prettier --stdin-filepath=${kak_buffile}'
-    set-option buffer formatcmd "npx prettier --stdin-filepath=${kak_buffile}"
+    set-option buffer formatcmd "npx prettier --stdin-filepath='%val{buffile}'"
+    hook buffer BufWritePre .* %{format}
+}
+
+hook global WinCreate .*zoolander/.*\.scala %{
+    set-option buffer formatcmd "bazel run //src/bash/scalafmt:scalafmt -- path '%val{buffile}'"
+    # hook buffer BufWritePre .* %{format}
 }
 
 hook global WinCreate .*pay-server/.*\.rb %{
-    set-option window lintcmd 'run() { cat "$1" | /Users/haran/stripe/pay-server/scripts/bin/rubocop.rb -s "$kak_buffile"; } && run '
-    set-option window formatcmd '/Users/haran/stripe/pay-server/scripts/bin/rubocop.rb -a "$kak_buffile"'
+    set-option buffer lintcmd 'run() { cat "$1" | /Users/haran/stripe/pay-server/scripts/bin/rubocop.rb -s "$kak_buffile"; } && run '
+    # set-option buffer formatcmd "/Users/haran/stripe/pay-server/scripts/bin/rubocop.rb -a '%val{buffile}'"
+
     lint-enable
+    # hook buffer BufWritePre .* %{format}
 }

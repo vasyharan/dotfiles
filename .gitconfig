@@ -4,39 +4,48 @@
 	preloadindex = true
 	excludesfile = ~/.gitignore.global
 	autocrlf = input
-	; editor = emacsclient -nw
-	; pager = diff-so-fancy | less --tabs=4 -RFX
-	editor = kak
+	editor = nvim
 	pager = less --tabs=4 -RFX
 [log]
 	decorate = true
+[color]
+	ui = true
+[credential]
+	helper = cache
+[help]
+	autocorrect = 1
+[merge]
+	tool = "vim-mergetool"
+	conflictStyle = diff3
+[mergetool]
+	keepBackup = false
+[mergetool "vim-mergetool"]
+	cmd = nvim -f -c "MergetoolStart" "$MERGED" "$BASE" "$LOCAL" "$REMOTE"
+	trustExitCode = true
 [alias]
 	d = "!f() { git difftool --no-prompt --extcmd \"icdiff --no-bold\" $@ | more -R; }; f"
-	l = log --pretty=format:%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn] --decorate
+	l = log --decorate --pretty=format:%C(auto)%h%d\\ %C(reset)%s\\ %C(bold)%C(blue)[%cL]
 	s = status --short
+	c = commit -v
 	st = status --short
 	co = checkout
 	cb = checkout -b
 	lc = log ORIG_HEAD.. --stat --no-merges
 	ll = log --decorate
-	gr = log --graph --all --pretty=format:%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn] --decorate
+	gr = log --graph --all --decorate --pretty=format:%C(auto)%h%d\\ %C(reset)%s%C(bold)%C(blue)\\ [%cL]
 	graph = log --graph --all --decorate
 	la = !git config -l | grep alias | cut -c 7-
-	rc = "!f() { git reset $* && git co $*; }; f"
+	rc = "!f() { [ $DEBUG ] && set -x; git reset $* && git co $*; }; f"
+	fzc = "!f() { [ $DEBUG ] && set -x; git --no-pager l -n 50 --color $* | fzf --reverse --no-sort --ansi --tiebreak=index --preview='git --no-pager show --color --pretty=format:%b {1}' --bind 'ctrl-f:preview-page-down,ctrl-b:preview-page-up' | awk '{print $1}'; }; f $*;"
+	fzr = "!f() { [ $DEBUG ] && set -x; git --no-pager reflog --color | fzf --reverse --no-sort --ansi --tiebreak=index --preview='git --no-pager show --color --pretty=format:%b {1}' --bind 'ctrl-f:preview-page-down,ctrl-b:preview-page-up' | awk '{print $1}'; }; f $*;"
+	fzb = "!f() { [ $DEBUG ] && set -x; git --no-pager branch -vv | sort -r | fzf --reverse --no-sort --ansi --tiebreak=index --preview='git --no-pager diff --color --pretty=format:%b {1}' --preview-window down:80% --bind 'ctrl-f:preview-page-down,ctrl-b:preview-page-up' | cut -c 2- | awk '{print $1}'; }; f $*;"
+	fzs = "!f() { [ $DEBUG ] && set -x; git --no-pager stash list | fzf --reverse --no-sort --ansi --tiebreak=index -d: --preview='git --no-pager stash show -p --color {1}' --preview-window down:80% --bind 'ctrl-f:preview-page-down,ctrl-b:preview-page-up' | awk -F: '{print $1}'; }; f $*;"
+
+	fixup = "!f() { git commit $* --fixup $(git fzc); }; f"
+	cpick = "!f() { git cherry-pick $(git fzc $*); }; f"
+	autosquash = "!f() { git rebase --autosquash -i $* $(git fzc); }; f"
+	refco = "!f() { git checkout $(git fzr); }; f"
+
+	cc = "!f() { git checkout $(git fzb); }; f"
+	pushb = "!f() { git push origin $* $(git fzb); }; f"
 	ctags = !.git/hooks/ctags
-[color]
-	ui = true
-; [transfer]
-; 	fsckobjects = true
-; [fetch]
-; 	fsckobjects = true
-; [receive]
-; 	fsckobjects = true
-; [merge]
-; 	tool = nvim
-; [mergetool "nvim"]
-; 	cmd = nvim -f -c \"Gdiff\" \"$MERGED\"
-[credential]
-	helper = cache
-[github]
-	user = haran

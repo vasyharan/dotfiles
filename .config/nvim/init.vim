@@ -51,6 +51,15 @@ set modeline                                          " love me some modelines
 set modelines=5
 set updatetime=250
 set inccommand=nosplit                                " preview inc command results
+set tags=./.git/tags;,tags
+set shortmess-=F
+set shortmess+=c
+set signcolumn=yes
+set viewoptions-=options
+set viewoptions-=curdir
+set gdefault
+set cmdheight=2
+
 syntax enable
 " }}}
 
@@ -59,13 +68,20 @@ if executable("rg") | set grepprg=rg\ --color\ never | endif
 
 " colorscheme {{{
 if exists('+termguicolors')
-  " let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  " let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-  let &t_ut=''
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  " let &t_ut=''
   set termguicolors
 endif
-set background=dark
-colorscheme solarized
+if !has('gui_running')
+  " set t_Co=256
+endif
+if filereadable(expand("~/.config/nvim/background.vim"))
+  source ~/.config/nvim/background.vim
+else
+  set background=dark
+endif
+colorscheme gruvbox
 " }}}
 
 " movement: emacs {{{
@@ -93,48 +109,116 @@ cnoremap <C-h> <BS>
 " }}}
 " movement: window {{{
 tnoremap <C-w><C-w> <C-\><C-n><C-w>w
-tnoremap <C-h> <C-\><C-n><C-w>h
-tnoremap <C-j> <C-\><C-n><C-w>j
-tnoremap <C-k> <C-\><C-n><C-w>k
-tnoremap <C-l> <C-\><C-n><C-w>l
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
+tnoremap <C-j> <C-\><C-n><C-w>w
+tnoremap <C-k> <C-\><C-n><C-w>W
+" tnoremap <C-h> <C-\><C-n><C-w>h
+" tnoremap <C-j> <C-\><C-n><C-w>j
+" tnoremap <C-k> <C-\><C-n><C-w>k
+" tnoremap <C-l> <C-\><C-n><C-w>l
+" nnoremap <C-h> <C-w>h
+" nnoremap <C-j> <C-w>j
+" nnoremap <C-k> <C-w>k
+" nnoremap <C-l> <C-w>l
 " }}}
 
 " {{{ mappings: leader
 nmap <nowait> <leader>w :w<cr>
 nmap <nowait> <leader>W :wa<cr>
 " }}}
+" {{{ mappings: term
+tnoremap <C-g> <C-\><C-n>
+" }}}
 
 " augroup: * {{{
 augroup default
-    au BufReadPre * setlocal foldmethod=marker
+  au!
+  au BufReadPre * setlocal foldmethod=marker
+  " au BufWinLeave ?* if &buftype !~ 'nofile' | mkview | endif
+  let btToIgnore = ['terminal', 'nofile']
+  au BufWinLeave ?* if index(btToIgnore, &buftype) < 0 | mkview | endif
+  au BufWinEnter ?* if &buftype !~ 'nofile' | silent! loadview | endif
 augroup END
 " }}}
 " augroup: markdown {{{
 " augroup markdown
-    " au BufRead,BufNewFile *.md set filetype=markdown
-    " au FileType markdown setlocal spell
+"   au!
+"   au BufRead,BufNewFile *.md set filetype=markdown
+"   au FileType markdown setlocal spell
 " augroup END
 " }}}
 " augroup: ruby {{{
 " augroup ruby
-    " au FileType  ruby setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
-    " au FileType eruby setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
-    " au FileType  yaml setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
+"   au!
+"   au FileType  ruby setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
+"   au FileType eruby setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
+"   au FileType  yaml setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
 " augroup END
+" }}}
+" augroup: json {{{
+augroup json
+  autocmd FileType json syntax match Comment +\/\/.\+$+
+augroup END
+" }}}
+" augroup: javascript {{{
+augroup javascript
+  autocmd FileType javascript let b:coc_root_patterns = ['.flowconfig', 'package.json', '.git', '.hg']
+augroup END
+" }}}
+" augroup: term {{{
+augroup Term
+  au!
+  au TermOpen * setlocal nonumber norelativenumber
+  autocmd BufWinEnter,WinEnter term://*/bin/zsh startinsert
+  autocmd BufLeave term://* stopinsert
+augroup END
 " }}}
 
 " functions {{{
 " trim trailing whitespace {{{
-function! s:TrimWhiteSpace()
-    %s/\s\+$//e
+function! s:trim_white_space()
+  %s/\s\+$//e
 endfunction
+command! TrimWhiteSpace call s:trim_white_space()
 augroup whitespace
-    au BufWritePre *.rb call s:TrimWhiteSpace()
-    au BufWritePre *.beancount call s:TrimWhiteSpace()
+  au!
+  au BufWritePre *.rb call s:trim_white_space()
 augroup END
 " }}}
+" }}}
+
+" nvim-lsp {{{
+" lua << EOF
+" local nvim_lsp = require'nvim_lsp'
+" local configs = require'nvim_lsp/configs'
+" local util = require 'nvim_lsp/util'
+
+" -- if not nvim_lsp.sorbet then
+"   configs.sorbet = {
+"     default_config = {
+"       cmd = {'/Users/haran/.bin/sorbet-payserver'};
+"       filetypes = {'ruby'};
+"       root_dir = function(fname)
+"         return util.find_git_ancestor(fname)
+"       end;
+"       settings = {};
+"     };
+"   }
+" -- end
+
+" nvim_lsp.flow.setup{}
+" nvim_lsp.metals.setup{}
+" nvim_lsp.sorbet.setup{}
+" nvim_lsp.gopls.setup{}
+" nvim_lsp.pyls.setup{
+"   settings = {
+"     pyls = {
+"       plugins = {
+"         pycodestyle = {
+"           enabled = false;
+"         }
+"       }
+"     }
+"   }
+" }
+" EOF
 " }}}
