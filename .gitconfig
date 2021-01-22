@@ -5,7 +5,7 @@
 	excludesfile = ~/.gitignore.global
 	autocrlf = input
 	editor = nvim
-	pager = less --tabs=4 -RFX
+	; pager = less --tabs=4 -RFX
 [log]
 	decorate = true
 [color]
@@ -36,10 +36,10 @@
 	graph = log --graph --all --decorate
 	la = !git config -l | grep alias | cut -c 7-
 	rc = "!f() { [ $DEBUG ] && set -x; git reset $* && git co $*; }; f"
-	fzc = "!f() { [ $DEBUG ] && set -x; git --no-pager l -n 50 --color $* | fzf --reverse --no-sort --ansi --tiebreak=index --preview='git --no-pager show --color --pretty=format:%b {1}' --bind 'ctrl-f:preview-page-down,ctrl-b:preview-page-up' | awk '{print $1}'; }; f $*;"
-	fzr = "!f() { [ $DEBUG ] && set -x; git --no-pager reflog --color | fzf --reverse --no-sort --ansi --tiebreak=index --preview='git --no-pager show --color --pretty=format:%b {1}' --bind 'ctrl-f:preview-page-down,ctrl-b:preview-page-up' | awk '{print $1}'; }; f $*;"
-	fzb = "!f() { [ $DEBUG ] && set -x; git --no-pager branch -vv | sort -r | fzf --reverse --no-sort --ansi --tiebreak=index --preview='git --no-pager diff --color --pretty=format:%b {1}' --preview-window down:80% --bind 'ctrl-f:preview-page-down,ctrl-b:preview-page-up' | cut -c 2- | awk '{print $1}'; }; f $*;"
-	fzs = "!f() { [ $DEBUG ] && set -x; git --no-pager stash list | fzf --reverse --no-sort --ansi --tiebreak=index -d: --preview='git --no-pager stash show -p --color {1}' --preview-window down:80% --bind 'ctrl-f:preview-page-down,ctrl-b:preview-page-up' | awk -F: '{print $1}'; }; f $*;"
+	fzc = "!f() { [ $DEBUG ] && set -x; git --no-pager l -n 50 --color $* | fzf --reverse --no-sort --ansi --tiebreak=index --preview='git --no-pager show --color --pretty=format:%b {1}' | awk '{print $1}'; }; f $*;"
+	fzr = "!f() { [ $DEBUG ] && set -x; git --no-pager reflog --color | fzf --reverse --no-sort --ansi --tiebreak=index --preview='git --no-pager show --color --pretty=format:%b {1}' | awk '{print $1}'; }; f $*;"
+	fzb = "!f() { [ $DEBUG ] && set -x; git --no-pager branch -vv | sort -r | fzf --reverse --no-sort --ansi --tiebreak=index --preview='git --no-pager diff --color --pretty=format:%b {1}' --preview-window down:80% | cut -c 2- | awk '{print $1}'; }; f $*;"
+	fzs = "!f() { [ $DEBUG ] && set -x; git --no-pager stash list | fzf --reverse --no-sort --ansi --tiebreak=index -d: --preview='git --no-pager stash show -p --color {1}' --preview-window down:80% | awk -F: '{print $1}'; }; f $*;"
 
 	fixup = "!f() { git commit $* --fixup $(git fzc); }; f"
 	cpick = "!f() { git cherry-pick $(git fzc $*); }; f"
@@ -49,3 +49,6 @@
 	cc = "!f() { git checkout $(git fzb); }; f"
 	pushb = "!f() { git push origin $* $(git fzb); }; f"
 	ctags = !.git/hooks/ctags
+[user]
+	name = Thirukumaran Vaseeharan
+	email = tvaseeharan@vise.com

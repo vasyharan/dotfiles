@@ -1,43 +1,18 @@
 " fzf {{{
-" let g:fzf_layout = { 'window': 'call OpenFloatingWin()' }
-" function! OpenFloatingWin()
-"   let height = &lines - 3
-"   let width = float2nr(&columns - (&columns * 2 / 10))
-"   let col = float2nr((&columns - width) / 2)
-
-"   let opts = {
-"         \ 'relative': 'editor',
-"         \ 'row': height * 0.2,
-"         \ 'col': col + 30,
-"         \ 'width': width * 2 / 3,
-"         \ 'height': height / 2
-"         \ }
-
-"   let buf = nvim_create_buf(v:false, v:true)
-"   let win = nvim_open_win(buf, v:true, opts)
-
-"   call setwinvar(win, '&winhl', 'Normal:Pmenu')
-
-"   setlocal
-"         \ buftype=nofile
-"         \ nobuflisted
-"         \ bufhidden=hide
-"         \ nonumber
-"         \ norelativenumber
-"         \ signcolumn=no
-" endfunction
-
-let $FZF_DEFAULT_OPTS = '--layout=reverse'
+" let $FZF_DEFAULT_OPTS = '--layout=reverse'
 let g:fzf_action = { 'ctrl-s': 'split', }
 let g:fzf_buffers_jump = 1
 
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
+" command! -bang -nargs=? -complete=dir Files
+"     \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline']}, <bang>0)
 command! -bang -nargs=? -complete=dir DirFiles
-      \ call fzf#vim#files(fnamemodify(expand("%"), ':p:h'), <bang>0)
+      \ call fzf#vim#files(fnamemodify(expand("%"), ':p:h'),
+      \ fzf#vim#with_preview(), <bang>0)
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
+  \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
   \   fzf#vim#with_preview(), <bang>0)
 
 function! s:list_buffers()
@@ -57,13 +32,20 @@ command! BWipeout call fzf#run(fzf#wrap({
   \ 'options': '--multi --reverse --bind ctrl-a:select-all+accept'
 \ }))
 cabbrev Bwipeout BWipeout
+command! Todos :Rg todo[^:]*haran[^:]*
+
+
+" execute "set <M-p>=\ep"
+" nnoremap <M-p> :<c-u>Files<cr>
 
 map <c-p>f :<c-u>Files<cr>
 map <c-p>d :<c-u>DirFiles<cr>
 map <c-p>b :<c-u>Buffers<cr>
+map <c-p>t :<c-u>Todos<cr>
 " map <c-p>g :<c-u>Rg<cr>
-map <c-p>s :<c-u>BLines<cr>
-map <c-p><c-s> :<c-u>Lines<cr>
+map <c-p>l :<c-u>BLines<cr>
+map <c-p>m :<c-u>Marks<cr>
+map <c-p><c-l> :<c-u>Lines<cr>
 
 nnoremap <leader>* :Rg <C-R><C-W><CR>
 vnoremap <leader>* :<C-u>call VisualStarSearchSet('/')<CR>:Rg <C-R><C-/><CR>
@@ -83,21 +65,25 @@ let g:gruvbox_improved_warnings = 1
 Plug 'neutaaaaan/iosvkem'
 " }}}
 " theme: solarized {{{
-" let g:solarized_termcolors=256
+let g:solarized_termcolors=256
 Plug 'altercation/vim-colors-solarized'
+Plug 'lifepillar/vim-solarized8'
 " }}}
-" tmux {{{
-" Plug 'christoomey/vim-tmux-navigator'
-" }}}
+" " tmux {{{
+" " Plug 'christoomey/vim-tmux-navigator'
+" " }}}
 " tpope magic {{{
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-obsession'
+Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-vinegar'
 " }}}
 " git plugins {{{
 Plug 'tpope/vim-fugitive'
+Plug 'tommcdo/vim-fubitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'airblade/vim-gitgutter'
 Plug 'samoshkin/vim-mergetool'
@@ -127,18 +113,19 @@ let g:ale_disable_lsp = 1
 " let g:ale_set_quickfix = 1
 let g:ale_linters = {
       \ 'ruby': ['rubocop', 'sorbet'],
-      \ 'javascriptreact': ['eslint'],
-      \ 'typescript': ['eslint'],
-      \ 'python': ['flake8'],
+      \ 'javascriptreact': [],
+      \ 'typescript': [],
+      \ 'python': ['flake8', 'pylint'],
       \ }
 let g:ale_fix_on_save = 1
-let g:ale_fixers = { 
-      \ 'javascriptreact': ['prettier'],
+let g:ale_fixers = {
+      \ 'javascriptreact': [],
+      \ 'typescript': [],
       \ 'json': ['prettier'],
       \ 'scala': ['scalafmt'],
       \ 'reason': ['refmt'],
-      \ 'python': ['black'],
       \ }
+      " \ 'python': ['isort', 'black'],
 let g:ale_lint_on_text_changed = 'normal'
 let g:ale_lint_on_insert_leave = 1
 let g:ale_scala_scalafmt_executable = 'scalafmt-native'
@@ -159,9 +146,6 @@ let g:ale_pattern_options_enabled = 1
 
 nmap <silent> <leader>d <Plug>(ale_go_to_definition)
 endif
-" }}}
-" formatter {{{
-" Plug 'sbdchd/neoformat'
 " }}}
 " completion {{{
 if !exists('g:vscode')
@@ -185,6 +169,7 @@ let g:dwm_map_keys = 0
 let g:dwm_master_pane_width="66"
 nmap <C-w>v <Plug>DWMNew
 nmap <C-w>d <Plug>DWMClose
+nmap <C-w>c <Plug>DWMClose
 nmap <Leader><Leader> <Plug>DWMFocus
 nmap <C-j> <C-W>w
 nmap <C-k> <C-W>W
@@ -200,10 +185,6 @@ Plug 'moll/vim-bbye'
 nmap <Leader>Q :bufdo :Bdelete<CR>
 nmap <Leader>q :Bdelete<CR>
 cabbrev bd Bdelete
-" }}}
-" {{{ smartsplit
-" Plug '~/Workspace/vim-smart-split'
-" nmap vv <Plug>(SmartSplit)
 " }}}
 " lightline {{{
 if !exists('g:vscode')
@@ -233,7 +214,7 @@ let g:lightline = {
       \ "\<C-s>": 'Sb',
       \ 't': 'T',
       \ },
-      \ 'colorscheme': 'gruvbox',
+      \ 'colorscheme': 'solarized',
       \ 'component_function': {
       \   'readonly': 'LightlineReadonly',
       \   'fugitive': 'LightlineFugitive',
@@ -296,10 +277,9 @@ Plug 'Yggdroot/indentLine'
 endif
 " }}}
 " undotree {{{
-Plug 'sjl/gundo.vim'
-nmap <Leader>uu :GundoToggle<CR>
+Plug 'mbbill/undotree'
+nmap <Leader>uu :UndotreeToggle<CR>
 " }}}
-
 " vim exchange {{{
 Plug 'tommcdo/vim-exchange'
 Plug 'machakann/vim-swap'
@@ -307,48 +287,6 @@ Plug 'machakann/vim-swap'
 " vim text blocks {{{
 Plug 'wellle/targets.vim'
 Plug 'bronson/vim-visual-star-search'
-" }}}
-
-" nvim-lsp {{{
-" Plug 'neovim/nvim-lsp'
-
-" nnoremap <silent> gd     <cmd>lua vim.lsp.buf.definition()<CR>
-" nnoremap <silent> gD     <cmd>lua vim.lsp.buf.declaration()<CR>
-" nnoremap <silent> gr     <cmd>lua vim.lsp.buf.references()<CR>
-" nnoremap <silent> K      <cmd>lua vim.lsp.buf.hover()<CR>
-" nnoremap <silent> <c-h>  <cmd>lua vim.lsp.buf.signature_help()<CR>
-" nnoremap <silent> gT     <cmd>lua vim.lsp.buf.type_definition()<CR>
-" nnoremap <silent> g<c-d> <cmd>lua vim.lsp.buf.implementation()<CR>
-" }}}
-" vim-lsc {{{
-" Plug 'natebosch/vim-lsc'
-" let g:lsc_server_commands = {
-"  \  'ruby': {
-"  \    'name': 'sorbet-payserver',
-"  \    'command': '/Users/haran/.bin/sorbet-payserver',
-"  \    'log_level': -1,
-"  \    'suppress_stderr': v:true,
-"  \  },
-"  \ 'python': 'pyls',
-"  \ 'javascript': 'npx flow lsp',
-"  \ 'javascriptreact': 'npx flow lsp',
-"  \}
-" let g:lsc_trace_level = 'verbose'
-" let g:lsc_auto_map = {
-"     \ 'GoToDefinition': 'gd',
-"     \ 'GoToDefinitionSplit': '<C-W>gd',
-"     \ 'FindReferences': 'gr',
-"     \ 'NextReference': '<C-n>',
-"     \ 'PreviousReference': '<C-p>',
-"     \ 'FindImplementations': 'gI',
-"     \ 'FindCodeActions': 'ga',
-"     \ 'Rename': 'gR',
-"     \ 'ShowHover': v:true,
-"     \ 'DocumentSymbol': 'go',
-"     \ 'WorkspaceSymbol': 'gS',
-"     \ 'SignatureHelp': 'gm',
-"     \ 'Completion': 'completefunc',
-"     \}
 " }}}
 " coc.vim {{{
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -361,92 +299,136 @@ function! s:show_documentation()
   endif
 endfunction
 
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+" Use <c-space> to trigger completion.
+if has('nvim')
+  inoremap <silent><expr> <C-space> coc#refresh()
+else
+  inoremap <silent><expr> <C-@> coc#refresh()
+endif
+
+" Make <CR> auto-select the first completion item and notify coc.nvim to
+" format on enter, <cr> could be remapped by other vim plugin
+imap <silent><expr> <C-f> pumvisible() ? coc#_select_confirm() : "<Right>"
+" inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+"                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+
+let g:coc_enable_locationlist = 0
+autocmd User CocLocationsChange CocList --normal location
+
+nmap <silent> g[ <Plug>(coc-diagnostic-prev)
+nmap <silent> g] <Plug>(coc-diagnostic-next)
 nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> <C-w>gd :call CocAction('jumpDefinition', 'vsplit')<cr>
 nmap <silent> gT <Plug>(coc-type-definition)
-nmap <silent> g<c-d> <Plug>(coc-implementation)
+nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
-
-inoremap <silent><expr> <c-space> coc#refresh()
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+nnoremap <silent> gh :call <sid>show_documentation()<cr>
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
-" " Remap for rename current word
-" nmap <leader>rn <Plug>(coc-rename)
+" Symbol renaming.
+nmap <leader>gR <Plug>(coc-rename)
 
-" " Remap for format selected region
-" xmap <leader>f  <Plug>(coc-format-selected)
-" nmap <leader>f  <Plug>(coc-format-selected)
+" Remap for format selected region
+xmap gf  <Plug>(coc-format-selected)
+nmap gf  <Plug>(coc-format-selected)
 
-" augroup mygroup
-"   autocmd!
-"   " Setup formatexpr specified filetype(s).
-"   autocmd FileType scala setl formatexpr=CocAction('formatSelected')
-"   " Update signature help on jump placeholder
-"   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-" augroup end
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType scala setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
 
-" " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-" xmap <leader>a  <Plug>(coc-codeaction-selected)
-" nmap <leader>a  <Plug>(coc-codeaction-selected)
-" " Remap for do codeAction of current line
-" nmap <leader>ac  <Plug>(coc-codeaction)
-" " Fix autofix problem of current line
-" nmap <leader>qf  <Plug>(coc-fix-current)
+" Applying codeAction to the selected region.
+" Example: `<leader>,ap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
 
-" " Use `:Format` to format current buffer
-" command! -nargs=0 Format :call CocAction('format')
+" Remap keys for applying codeAction to the current buffer.
+nmap <leader>,  <Plug>(coc-codeaction)
+" Apply AutoFix to problem on the current line.
+nmap <leader>.   <Plug>(coc-fix-current)
 
-" " Use `:Fold` to fold current buffer
-" command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+" Map function and class text objects
+" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+xmap if <Plug>(coc-funcobj-i)
+omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap af <Plug>(coc-funcobj-a)
+xmap ic <Plug>(coc-classobj-i)
+omap ic <Plug>(coc-classobj-i)
+xmap ac <Plug>(coc-classobj-a)
+omap ac <Plug>(coc-classobj-a)
 
-" " Trigger for code actions
-" " Make sure `"codeLens.enable": true` is set in your coc config
-" nnoremap <leader>cl :<C-u>call CocActionAsync('codeLensAction')<CR>
+" Use CTRL-S for selections ranges.
+" Requires 'textDocument/selectionRange' support of language server.
+nmap <silent> <C-s> <Plug>(coc-range-select)
+xmap <silent> <C-s> <Plug>(coc-range-select)
 
-" " Show all diagnostics
-" nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
-" " Manage extensions
-" nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
-" " Show commands
-" nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
-" " Find symbol of current document
-" nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
-" " Search workspace symbols
-" nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
-" " Do default action for next item.
-" nnoremap <silent> <space>j  :<C-u>CocNext<CR>
-" " Do default action for previous item.
-" nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
-" " Resume latest coc list
-" nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+" Add `:Format` command to format current buffer.
+command! -nargs=0 Format :call CocAction('format')
 
-" " Notify coc.nvim that <enter> has been pressed.
-" " Currently used for the formatOnType feature.
-" inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-"       \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+" Add `:Fold` command to fold current buffer.
+command! -nargs=? Fold   :call CocAction('fold', <f-args>)
 
-" " Toggle panel with Tree Views
-" nnoremap <silent> <space>t :<C-u>CocCommand metals.tvp<CR>
-" " Toggle Tree View 'metalsPackages'
-" nnoremap <silent> <space>tp :<C-u>CocCommand metals.tvp metalsPackages<CR>
-" " Toggle Tree View 'metalsCompile'
-" nnoremap <silent> <space>tc :<C-u>CocCommand metals.tvp metalsCompile<CR>
-" " Toggle Tree View 'metalsBuild'
-" nnoremap <silent> <space>tb :<C-u>CocCommand metals.tvp metalsBuild<CR>
-" " Reveal current current class (trait or object) in Tree View 'metalsPackages'
-" nnoremap <silent> <space>tf :<C-u>CocCommand metals.revealInTreeView metalsPackages<CR>
+" Add `:OR` command for organize imports of the current buffer.
+command! -nargs=0 OrganizeImports :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+" Add (Neo)Vim's native statusline support.
+" NOTE: Please see `:h coc-status` for integrations with external plugins that
+" provide custom statusline: lightline.vim, vim-airline.
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+" Remap for do codeAction of selected region
+function! s:cocActionsOpenFromSelected(type) abort
+  execute 'CocCommand actions.open ' . a:type
+endfunction
+xmap <silent> <leader>a :<C-u>execute 'CocCommand actions.open ' . visualmode()<CR>
+nmap <silent> <leader>a :<C-u>set operatorfunc=<SID>cocActionsOpenFromSelected<CR>g@
+
+" Mappings for CoCList
+" Show all diagnostics.
+nnoremap <silent><nowait> <C-p>a  :<C-u>CocList diagnostics<cr>
+" Manage extensions.
+nnoremap <silent><nowait> <C-p>e  :<C-u>CocList extensions<cr>
+" Show commands.
+nnoremap <silent><nowait> <C-p>c  :<C-u>CocList commands<cr>
+" Find symbol of current document.
+nnoremap <silent><nowait> <C-p>o  :<C-u>CocList outline<cr>
+" Search workspace symbols.
+nnoremap <silent><nowait> <C-p>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nnoremap <silent><nowait> <C-p>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent><nowait> <C-p>k  :<C-u>CocPrev<CR>
+" Resume latest coc list.
+nnoremap <silent><nowait> <C-p>r  :<C-u>CocListResume<CR>
 
 " }}}
-
-Plug 'liuchengxu/vista.vim'
-nmap <Leader>vv :Vista!!<CR>
-
+" visual tools {{{
+Plug 'junegunn/goyo.vim'
+Plug 'luochen1990/rainbow'
+" }}}
 
 " [java/type]script {{{
 Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
 " }}}
 " puppet {{{
 Plug 'rodjek/vim-puppet'
@@ -462,12 +444,25 @@ Plug 'reasonml-editor/vim-reason-plus'
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 " }}}
-
+" yaml {{{
+Plug 'pedrohdz/vim-yaml-folds'
+" }}}
 " org-mode {{{
 Plug 'tpope/vim-speeddating'
 Plug 'vim-scripts/utl.vim'
 Plug 'jceb/vim-orgmode'
 " }}}
+" jsonnet {{{
+Plug 'google/vim-jsonnet'
+" }}}
 
-Plug 'junegunn/goyo.vim'
-Plug 'luochen1990/rainbow'
+" {{{ Vista
+let g:vista_default_executive = 'coc'
+let g:vista_icon_indent = ["▸ ", ""]
+" let g:vista#renderer#enable_icon = 1
+" let g:vista#renderer#icons = {
+" \   "function": "\uf794",
+" \   "variable": "\uf71b",
+" \  }
+Plug 'liuchengxu/vista.vim'
+" }}}

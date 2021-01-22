@@ -1,4 +1,4 @@
-" let g:python_host_prog = '~/.pyenv/versions/neovim2/bin/python'
+let g:python_host_prog = '~/.pyenv/versions/neovim2/bin/python'
 let g:python3_host_prog = '~/.pyenv/versions/neovim3/bin/python'
 
 if &compatible | set nocompatible | endif
@@ -16,7 +16,9 @@ if filereadable(expand("~/.config/nvim/bundles.vim"))
 endif
 call plug#end()
 " }}}
-
+if filereadable(expand("~/.config/nvim/init.local.vim"))
+  source ~/.config/nvim/init.local.vim
+endif
 " sane defaults {{{
 filetype plugin indent on
 set autoindent
@@ -45,7 +47,7 @@ set tabstop=8                                         " actual tabs occupy 8 cha
 set smarttab
 set wildignore=log,node_modules,target,tmp,dist,*.rbc
 set wildmenu                                          " show a navigable menu for tab completion
-set wildmode=longest,list,full
+set wildmode=longest:full,full
 set hidden                                            " hidden buffers are the shit!
 set modeline                                          " love me some modelines
 set modelines=5
@@ -59,6 +61,11 @@ set viewoptions-=options
 set viewoptions-=curdir
 set gdefault
 set cmdheight=2
+if has("patch-8.1.1564")
+  set signcolumn=number
+else
+  set signcolumn=yes
+endif
 
 syntax enable
 " }}}
@@ -68,25 +75,20 @@ if executable("rg") | set grepprg=rg\ --color\ never | endif
 
 " colorscheme {{{
 if exists('+termguicolors')
-  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-  " let &t_ut=''
   set termguicolors
-endif
-if !has('gui_running')
-  " set t_Co=256
 endif
 if filereadable(expand("~/.config/nvim/background.vim"))
   source ~/.config/nvim/background.vim
 else
   set background=dark
 endif
-colorscheme gruvbox
+colorscheme solarized8
 " }}}
 
 " movement: emacs {{{
 imap <C-b> <Left>
-imap <C-f> <Right>
+" mapped to complete when pumvisible in bundles
+" inoremap <C-f> <Right>
 imap <A-b> <S-Left>
 imap <A-f> <S-Right>
 " imap <C-a> <C-o>:call <SID>Home()<CR>
@@ -94,18 +96,16 @@ imap <A-f> <S-Right>
 imap <C-d> <Del>
 imap <C-h> <BS>
 
-cmap <C-p> <Up>
-cmap <C-n> <Down>
-cmap <C-b> <Left>
-cmap <C-f> <Right>
-cmap <M-b> <S-Left>
-cmap <M-f> <S-Right>
+cmap <C-k> <Up>
+cmap <C-j> <Down>
+cnoremap <C-h> <Left>
+cmap <C-l> <Right>
+cmap <M-h> <S-Left>
+cmap <M-l> <S-Right>
 cmap <C-a> <Home>
 cmap <C-e> <End>
-cmap <C-p> <Up>
-cmap <C-n> <Down>
 cnoremap <C-d> <Del>
-cnoremap <C-h> <BS>
+" cnoremap <C-h> <BS>
 " }}}
 " movement: window {{{
 tnoremap <C-w><C-w> <C-\><C-n><C-w>w
@@ -121,7 +121,13 @@ tnoremap <C-k> <C-\><C-n><C-w>W
 " nnoremap <C-l> <C-w>l
 " }}}
 
+" {{{ netrw
+let g:netrw_liststyle = 3
+let g:netrw_banner = 0
+" }}}
+
 " {{{ mappings: leader
+map <leader><bs> <c-^>
 nmap <nowait> <leader>w :w<cr>
 nmap <nowait> <leader>W :wa<cr>
 " }}}
@@ -132,7 +138,7 @@ tnoremap <C-g> <C-\><C-n>
 " augroup: * {{{
 augroup default
   au!
-  au BufReadPre * setlocal foldmethod=marker
+  " au BufReadPre * setlocal foldmethod=marker
   " au BufWinLeave ?* if &buftype !~ 'nofile' | mkview | endif
   let btToIgnore = ['terminal', 'nofile']
   au BufWinLeave ?* if index(btToIgnore, &buftype) < 0 | mkview | endif
@@ -147,12 +153,12 @@ augroup END
 " augroup END
 " }}}
 " augroup: ruby {{{
-" augroup ruby
-"   au!
-"   au FileType  ruby setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
-"   au FileType eruby setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
-"   au FileType  yaml setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
-" augroup END
+augroup ruby
+  au!
+  au FileType  ruby setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
+  au FileType eruby setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
+  au FileType  yaml setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
+augroup END
 " }}}
 " augroup: json {{{
 augroup json
@@ -162,6 +168,12 @@ augroup END
 " augroup: javascript {{{
 augroup javascript
   autocmd FileType javascript let b:coc_root_patterns = ['.flowconfig', 'package.json', '.git', '.hg']
+  autocmd FileType typescript let b:coc_root_patterns = ['.flowconfig', 'package.json', '.git', '.hg']
+augroup END
+" }}}
+" augroup: typescript {{{
+augroup typescript
+  autocmd FileType typescript let b:coc_root_patterns = ['.flowconfig', 'package.json', '.git', '.hg']
 augroup END
 " }}}
 " augroup: term {{{
@@ -184,41 +196,4 @@ augroup whitespace
   au BufWritePre *.rb call s:trim_white_space()
 augroup END
 " }}}
-" }}}
-
-" nvim-lsp {{{
-" lua << EOF
-" local nvim_lsp = require'nvim_lsp'
-" local configs = require'nvim_lsp/configs'
-" local util = require 'nvim_lsp/util'
-
-" -- if not nvim_lsp.sorbet then
-"   configs.sorbet = {
-"     default_config = {
-"       cmd = {'/Users/haran/.bin/sorbet-payserver'};
-"       filetypes = {'ruby'};
-"       root_dir = function(fname)
-"         return util.find_git_ancestor(fname)
-"       end;
-"       settings = {};
-"     };
-"   }
-" -- end
-
-" nvim_lsp.flow.setup{}
-" nvim_lsp.metals.setup{}
-" nvim_lsp.sorbet.setup{}
-" nvim_lsp.gopls.setup{}
-" nvim_lsp.pyls.setup{
-"   settings = {
-"     pyls = {
-"       plugins = {
-"         pycodestyle = {
-"           enabled = false;
-"         }
-"       }
-"     }
-"   }
-" }
-" EOF
 " }}}

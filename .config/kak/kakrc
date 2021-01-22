@@ -20,7 +20,7 @@ map global comment c ':comment-line<ret>' -docstring 'toggle line comment'
 map global comment b ':comment-block<ret>' -docstring 'toggle block comment'
 map global user c ':enter-user-mode comment<ret>' -docstring 'comment…'
 
-colorscheme gruvbox
+colorscheme solarized
 plug 'andreyorst/powerline.kak' defer "powerline" %{
     set-option global powerline_shorten_bufname short
     set-option global powerline_separator ''
