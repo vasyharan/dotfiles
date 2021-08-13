@@ -1,11 +1,11 @@
 [include]
 	path = ~/.gitconfig.local
+
 [core]
 	preloadindex = true
 	excludesfile = ~/.gitignore.global
 	autocrlf = input
 	editor = nvim
-	; pager = less --tabs=4 -RFX
 [log]
 	decorate = true
 [color]
@@ -14,6 +14,16 @@
 	helper = cache
 [help]
 	autocorrect = 1
+[pager]
+    diff = delta --diff-so-fancy
+    log = delta
+    reflog = delta
+    show = delta
+[delta]
+    colorMoved = default
+    navigate = true
+[interactive]
+    diffFilter = delta --color-only
 [merge]
 	tool = "vim-mergetool"
 	conflictStyle = diff3

@@ -82,7 +82,7 @@ if filereadable(expand("~/.config/nvim/background.vim"))
 else
   set background=dark
 endif
-colorscheme solarized8
+colorscheme gruvbox
 " }}}
 
 " movement: emacs {{{
@@ -158,6 +158,12 @@ augroup ruby
   au FileType  ruby setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
   au FileType eruby setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
   au FileType  yaml setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
+augroup END
+" }}}
+" augroup: golang {{{
+augroup ruby
+  au!
+  au FileType  go setlocal shiftwidth=2 softtabstop=2 tabstop=2 noexpandtab
 augroup END
 " }}}
 " augroup: json {{{

@@ -38,14 +38,13 @@ command! Todos :Rg todo[^:]*haran[^:]*
 " execute "set <M-p>=\ep"
 " nnoremap <M-p> :<c-u>Files<cr>
 
-map <c-p>f :<c-u>Files<cr>
-map <c-p>d :<c-u>DirFiles<cr>
-map <c-p>b :<c-u>Buffers<cr>
-map <c-p>t :<c-u>Todos<cr>
+map <leader>f :<c-u>Files<cr>
+map <leader>b :<c-u>Buffers<cr>
+map <leader>t :<c-u>Todos<cr>
 " map <c-p>g :<c-u>Rg<cr>
-map <c-p>l :<c-u>BLines<cr>
-map <c-p>m :<c-u>Marks<cr>
-map <c-p><c-l> :<c-u>Lines<cr>
+map <leader>l :<c-u>BLines<cr>
+map <leader>L :<c-u>Lines<cr>
+map <leader>m :<c-u>Marks<cr>
 
 nnoremap <leader>* :Rg <C-R><C-W><CR>
 vnoremap <leader>* :<C-u>call VisualStarSearchSet('/')<CR>:Rg <C-R><C-/><CR>
@@ -56,7 +55,7 @@ let g:gruvbox_underline = 1
 let g:gruvbox_undercurl = 1
 " let g:gruvbox_italic = 1
 let g:gruvbox_bold = 1
-let g:gruvbox_contrast_dark = "medium"
+let g:gruvbox_contrast_dark = "hard"
 let g:gruvbox_contrast_light = "medium"
 let g:gruvbox_improved_strings = 0
 let g:gruvbox_improved_warnings = 1
@@ -141,6 +140,9 @@ let g:ale_pattern_options = {
 \   'ale_ruby_rubocop_executable': 'scripts/bin/rubocop-daemon/rubocop',
 \   'ale_set_quickfix': 1,
 \ },
+\ 'Workspace/vise/python/.*': {
+\   'ale_enabled': 0
+\ },
 \}
 let g:ale_pattern_options_enabled = 1
 
@@ -164,22 +166,22 @@ xmap <leader>= <Plug>(LiveEasyAlign)
 nmap <leader>= <Plug>(LiveEasyAlign)
 " }}}
 " buffer/window management {{{
-Plug 'spolu/dwm.vim'
-let g:dwm_map_keys = 0
-let g:dwm_master_pane_width="66"
-nmap <C-w>v <Plug>DWMNew
-nmap <C-w>d <Plug>DWMClose
-nmap <C-w>c <Plug>DWMClose
-nmap <Leader><Leader> <Plug>DWMFocus
-nmap <C-j> <C-W>w
-nmap <C-k> <C-W>W
-nmap <Leader><C-j> <Plug>DWMRotateCounterclockwise
-nmap <Leader><C-k> <Plug>DWMRotateClockwise
+" Plug 'spolu/dwm.vim'
+" let g:dwm_map_keys = 0
+" let g:dwm_master_pane_width="66"
+" nmap <C-w>v <Plug>DWMNew
+" nmap <C-w>d <Plug>DWMClose
+" nmap <C-w>c <Plug>DWMClose
+" nmap <Leader><Leader> <Plug>DWMFocus
+" nmap <C-j> <C-W>w
+" nmap <C-k> <C-W>W
+" nmap <Leader><C-j> <Plug>DWMRotateCounterclockwise
+" nmap <Leader><C-k> <Plug>DWMRotateClockwise
 
-augroup DWM
-  au!
-  autocmd VimResized * call DWM_ResizeMasterPaneWidth()
-augroup END
+" augroup DWM
+"   au!
+"   autocmd VimResized * call DWM_ResizeMasterPaneWidth()
+" augroup END
 
 Plug 'moll/vim-bbye'
 nmap <Leader>Q :bufdo :Bdelete<CR>
@@ -200,6 +202,14 @@ function! LightlineObsession()
     return '%{ObsessionStatus()}'
 endfunction
 
+command! LightlineReload call LightlineReload()
+
+function! LightlineReload()
+  call lightline#init()
+  call lightline#colorscheme()
+  call lightline#update()
+endfunction
+
 let g:lightline = {
       \ 'mode_map': {
       \ 'n' : 'No',
@@ -214,7 +224,7 @@ let g:lightline = {
       \ "\<C-s>": 'Sb',
       \ 't': 'T',
       \ },
-      \ 'colorscheme': 'solarized',
+      \ 'colorscheme': 'gruvbox',
       \ 'component_function': {
       \   'readonly': 'LightlineReadonly',
       \   'fugitive': 'LightlineFugitive',
@@ -283,6 +293,10 @@ nmap <Leader>uu :UndotreeToggle<CR>
 " vim exchange {{{
 Plug 'tommcdo/vim-exchange'
 Plug 'machakann/vim-swap'
+omap i, <Plug>(swap-textobject-i)
+xmap i, <Plug>(swap-textobject-i)
+omap a, <Plug>(swap-textobject-a)
+xmap a, <Plug>(swap-textobject-a)
 " }}}
 " vim text blocks {{{
 Plug 'wellle/targets.vim'
@@ -404,21 +418,21 @@ nmap <silent> <leader>a :<C-u>set operatorfunc=<SID>cocActionsOpenFromSelected<C
 
 " Mappings for CoCList
 " Show all diagnostics.
-nnoremap <silent><nowait> <C-p>a  :<C-u>CocList diagnostics<cr>
+nnoremap <silent><nowait> <Leader>ca  :<C-u>CocList diagnostics<cr>
 " Manage extensions.
-nnoremap <silent><nowait> <C-p>e  :<C-u>CocList extensions<cr>
+nnoremap <silent><nowait> <Leader>ce  :<C-u>CocList extensions<cr>
 " Show commands.
-nnoremap <silent><nowait> <C-p>c  :<C-u>CocList commands<cr>
+nnoremap <silent><nowait> <Leader>cc  :<C-u>CocList commands<cr>
 " Find symbol of current document.
-nnoremap <silent><nowait> <C-p>o  :<C-u>CocList outline<cr>
+nnoremap <silent><nowait> <Leader>co  :<C-u>CocList outline<cr>
 " Search workspace symbols.
-nnoremap <silent><nowait> <C-p>s  :<C-u>CocList -I symbols<cr>
+nnoremap <silent><nowait> <Leader>cs  :<C-u>CocList -I symbols<cr>
 " Do default action for next item.
-nnoremap <silent><nowait> <C-p>j  :<C-u>CocNext<CR>
+nnoremap <silent><nowait> <Leader>cj  :<C-u>CocNext<CR>
 " Do default action for previous item.
-nnoremap <silent><nowait> <C-p>k  :<C-u>CocPrev<CR>
+nnoremap <silent><nowait> <Leader>ck  :<C-u>CocPrev<CR>
 " Resume latest coc list.
-nnoremap <silent><nowait> <C-p>r  :<C-u>CocListResume<CR>
+nnoremap <silent><nowait> <Leader>cr  :<C-u>CocListResume<CR>
 
 " }}}
 " visual tools {{{
@@ -429,20 +443,21 @@ Plug 'luochen1990/rainbow'
 " [java/type]script {{{
 Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
+Plug 'evanleck/vim-svelte'
 " }}}
 " puppet {{{
 Plug 'rodjek/vim-puppet'
 " }}}
 " ledger {{{
 " Plug 'nathangrigg/vim-beancount'
-" Plug 'ledger/vim-ledger'
+Plug 'ledger/vim-ledger'
 " }}}
 " reasonML {{{
 Plug 'reasonml-editor/vim-reason-plus'
 " }}}
 " markdown {{{
-Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
 " }}}
 " yaml {{{
 Plug 'pedrohdz/vim-yaml-folds'
@@ -450,10 +465,24 @@ Plug 'pedrohdz/vim-yaml-folds'
 " org-mode {{{
 Plug 'tpope/vim-speeddating'
 Plug 'vim-scripts/utl.vim'
-Plug 'jceb/vim-orgmode'
+Plug 'axvr/org.vim'
 " }}}
 " jsonnet {{{
 Plug 'google/vim-jsonnet'
+" }}}
+" terraform {{{
+Plug 'hashivim/vim-terraform'
+" }}}
+" csv {{{
+Plug 'chrisbra/csv.vim'
+" }}}
+" bazel {{{
+Plug 'google/vim-maktaba'
+Plug 'bazelbuild/vim-bazel'
+Plug 'cappyzawa/starlark.vim'
+" }}}
+" toml {{{
+Plug 'cespare/vim-toml'
 " }}}
 
 " {{{ Vista
@@ -465,4 +494,37 @@ let g:vista_icon_indent = ["▸ ", ""]
 " \   "variable": "\uf71b",
 " \  }
 Plug 'liuchengxu/vista.vim'
+" }}}
+" nerdtree {{{
+Plug 'preservim/nerdtree'
+let g:NERDTreeQuitOnOpen=1
+let g:NERDTreeHijackNetrw=1
+let g:NERDTreeMinimalMenu=1
+let g:NERDTreeMinimalMenu=1
+nnoremap <silent> <expr> <Leader>- g:NERDTree.IsOpen() ? "\:NERDTreeClose<CR>" : bufexists(expand('%')) ? "\:NERDTreeFind<CR>" : "\:NERDTree<CR>"
+
+" If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
+autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
+    \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
+" Exit Vim if NERDTree is the only window left.
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
+    \ quit | endif
+" }}}
+Plug 'godlygeek/tabular'
+Plug 'szymonmaszke/vimpyter'
+
+" debugger {{{
+Plug 'puremourning/vimspector'
+nmap <F5>         <Plug>VimspectorContinue
+nmap <leader><F5> <Plug>VimspectorLaunch
+nmap <F3>         <Plug>VimspectorStop
+nmap <F4>         <Plug>VimspectorRestart
+nmap <F6>         <Plug>VimspectorPause
+nmap <F9>         <Plug>VimspectorToggleBreakpoint
+nmap <leader><F9> <Plug>VimspectorToggleConditionalBreakpoint
+nmap <F8>         <Plug>VimspectorAddFunctionBreakpoint
+nmap <leader><F8> <Plug>VimspectorRunToCursor
+nmap <F10>        <Plug>VimspectorStepOver
+nmap <F11>        <Plug>VimspectorStepInto
+nmap <F12>        <Plug>VimspectorStepOut
 " }}}

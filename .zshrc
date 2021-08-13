@@ -1,10 +1,3 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 [ -f ~/.zshenv ] && source ~/.zshenv
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local
 typeset -aU path
@@ -20,6 +13,7 @@ setopt hist_ignore_dups
 setopt hist_ignore_space
 setopt hist_verify
 setopt inc_append_history
+setopt histignorespace
 setopt share_history
 # }}}
 # {{{ dir stacks
@@ -51,7 +45,7 @@ alias lg=lazygit
 alias colours='curl -s https://gist.githubusercontent.com/HaleTom/89ffe32783f89f403bba96bd7bcd1263/raw/ | bash'
 alias k='kubectl'
 # }}}
-# {{{ func
+# {{{ funcs
 function mkcd() { mkdir -p $1 && cd $1 }
 # }}}
 # {{{ prompt
@@ -88,8 +82,15 @@ else
   alias nvim=vim
 fi
 # }}}
+# {{{ less
+export LESS=-j2g
+# }}
 # {{{ ripgrep
 export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
+# }}}
+
+# {{{ golang
+export GO111MODULE=on
 # }}}
 
 # {{{ fzf
@@ -99,92 +100,69 @@ export FZF_DEFAULT_OPTS="--bind 'change:top,ctrl-s:toggle' --bind 'ctrl-f:previe
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # }}}
 # {{{ fzf-tab
-# zstyle ':completion:*:descriptions' format '[%d]'
-# FZF_TAB_SHOW_GROUP=brief
-# FZF_TAB_COMMAND=(
-#     fzf
-#     --ansi   # Enable ANSI color support, necessary for showing groups
-#     --expect='$continuous_trigger,$print_query,ctrl-e' # For continuous completion and print query
-#     '--color=hl:$(( $#headers == 0 ? 108 : 255 ))'
-#     --nth=2,3 --delimiter='\x00'  # Don't search prefix
-#     --layout=reverse --height='${FZF_TMUX_HEIGHT:=40%}'
-#     --tiebreak=begin -m --bind=change:top,tab:jump --cycle
-#     '--query=$query'   # $query will be expanded to query string at runtime.
-#     '--header-lines=$#headers' # $#headers will be expanded to lines of headers at runtime
-#     --print-query
-# )
-# zstyle ':fzf-tab:*' no-group-color $'\033[93m'
-# zstyle ':fzf-tab:*' command $FZF_TAB_COMMAND
-# }}}
-# {{{ fzf colors
-_gen_fzf_colors() {
-  if [ "$1" = "dark" ]; then
-    # Solarized Dark color scheme for fzf
-    export FZF_DEFAULT_OPTS="
-      $FZF_DEFAULT_OPTS
-      --color fg:#839496,bg:-1,fg+:#eee8d5,bg+:-1,hl:#6c71c4,hl+:#6c71c4
-      --color info:#b58900,spinner:#b58900,prompt:#839496,pointer:#268bd2,marker:#268bd2
-    "
-  else
-    # Solarized Light color scheme for fzf
-    export FZF_DEFAULT_OPTS="
-      $FZF_DEFAULT_OPTS
-      --color fg:#839496,bg:-1,fg+:#586e75,bg+:-1,hl:#6c71c4,hl+:#6c71c4
-      --color info:#b58900,spinner:#b58900,prompt:#839496,pointer:#268bd2,marker:#268bd2
-    "
-  fi
-}
-
-_gen_fzf_colors "$(cat ~/.theme.conf)"
+zstyle ':fzf-tab:*' fzf-bindings 'ctrl-e:accept'
+# zstyle ":completion:*:git-checkout:*" sort false
+zstyle ':completion:*:descriptions' format '[%d]'
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':fzf-tab:complete:(cd|pushd):*' fzf-preview \
+  'exa -1 --color=always $realpath'
 # }}}
 # {{{ git❤️fzf
+# https://gist.github.com/junegunn/8b572b8d4b5eddd8b85e5f4d40f17236
 is_in_git_repo() {
   git rev-parse HEAD > /dev/null 2>&1
 }
 
 fzf-down() {
-  fzf "$@" --border
+  fzf --min-height 20 --border --bind ctrl-/:toggle-preview "$@"
+  # fzf "$@" --border
 }
 
-gf() {
+_gf() {
   is_in_git_repo || return
   git -c color.status=always status --short |
   fzf-down -m --ansi --nth 2..,.. \
-    --preview '(git --no-pager diff --color=always --pretty=format:%b -- {-1} | sed 1,4d; cat {-1}) ' |
+    --preview '(git diff --color=always -- {-1} | sed 1,4d; cat {-1})' |
   cut -c4- | sed 's/.* -> //'
 }
 
-gb() {
+_gb() {
   is_in_git_repo || return
-  git branch -a --color=always -vv | grep -v '/HEAD\s' | sort |
-  fzf-down --ansi --multi --tac --reverse --preview-window down:80% \
+  git branch -a --color=always | grep -v '/HEAD\s' | sort |
+  fzf-down --ansi --multi --tac --preview-window right:70% \
     --preview 'git log --oneline --graph --date=short --color=always --pretty="format:%C(auto)%cd %h%d %s" $(sed s/^..// <<< {} | cut -d" " -f1)' |
   sed 's/^..//' | cut -d' ' -f1 |
   sed 's#^remotes/##'
 }
 
-gt() {
+_gt() {
   is_in_git_repo || return
   git tag --sort -version:refname |
   fzf-down --multi --preview-window right:70% \
-    --preview 'git show --color=always {} | head -'$LINES
+    --preview 'git show --color=always {}'
 }
 
-gh() {
+_gh() {
   is_in_git_repo || return
   git log --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --graph --color=always |
   fzf-down --ansi --no-sort --reverse --multi --bind 'ctrl-s:toggle-sort' \
     --header 'Press CTRL-S to toggle sort' \
-    --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | xargs git show --color=always | head -'$LINES |
+    --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | xargs git show --color=always' |
   grep -o "[a-f0-9]\{7,\}"
 }
 
-gr() {
+_gr() {
   is_in_git_repo || return
   git remote -v | awk '{print $1 "\t" $2}' | uniq |
   fzf-down --tac \
-    --preview 'git log --oneline --graph --date=short --pretty="format:%C(auto)%cd %h%d %s" {1} | head -200' |
+    --preview 'git log --oneline --graph --date=short --pretty="format:%C(auto)%cd %h%d %s" {1}' |
   cut -d$'\t' -f1
+}
+
+_gs() {
+  is_in_git_repo || return
+  git stash list | fzf-down --reverse -d: --preview 'git show --color=always {1}' |
+  cut -d: -f1
 }
 
 join-lines() {
@@ -197,23 +175,33 @@ join-lines() {
 bind-git-helper() {
   local c
   for c in $@; do
-    eval "fzf-g$c-widget() { local result=\$(g$c | join-lines); zle reset-prompt; LBUFFER+=\$result }"
+    eval "fzf-g$c-widget() { local result=\$(_g$c | join-lines); zle reset-prompt; LBUFFER+=\$result }"
     eval "zle -N fzf-g$c-widget"
     eval "bindkey '^g^$c' fzf-g$c-widget"
   done
 }
-bind-git-helper f b t r h
+bind-git-helper f b t r h s
 unset -f bind-git-helper
 # }}}
 
+# {{{ zsh-autosuggestions
+export ZSH_AUTOSUGGEST_MANUAL_REBIND=1
+export ZSH_AUTOSUGGEST_USE_ASYNC=1
+export ZSH_AUTOSUGGEST_ACCEPT_WIDGETS=(
+  end-of-line
+  vi-forward-char
+  vi-end-of-line
+  vi-add-eol
+)
+# }}}
 # {{{ minikube & docker
-command -v minikube &>/dev/null && 
-  command -v docker &>/dev/null &&
-  function docker() {
-    eval $(minikube -p minikube docker-env)
-    unset -f docker
-    command docker "$@"
-  }
+# command -v minikube &>/dev/null && 
+#   command -v docker &>/dev/null &&
+#   function docker() {
+#     minikube status >/dev/null && eval $(minikube -p minikube docker-env)
+#     unset -f docker
+#     command docker "$@"
+#   }
 # }}}
 # {{{ rbenv
 command -v rbenv &>/dev/null &&
@@ -221,141 +209,54 @@ command -v rbenv &>/dev/null &&
     eval "$(command rbenv init -)"
     rbenv "$@"
   }
-
-command -v ruby &>/dev/null &&
-  function ruby() {
-    eval "$(command rbenv init -)"
-    unset -f ruby
-    command ruby "$@"
-  }
-
-command -v bundle &>/dev/null &&
-  function bundle() {
-    eval "$(command rbenv init -)"
-    unset -f bundle
-    command bundle "$@"
-  }
+# }}}
+# {{{ jenv
+if command -v jenv 1>/dev/null 2>&1; then
+    eval "$(jenv init -)"
+fi
 # }}}
 # {{{ nodenv
-if command -v nodenv 1>/dev/null 2>&1; then
-    eval "$(nodenv init -)"
-fi
+command -v nodenv &>/dev/null &&
+  function nodenv() {
+    eval "$(command nodenv init -)"
+    nodenv "$@";
+  }
 
-# command -v nodenv &>/dev/null &&
-#   function nodenv() {
-#     eval "$(command nodenv init -)"
-#     nodenv "$@";
-#   }
+function lazyload() {
+  command -v $1 &>/dev/null &&
+    function $1() {
+      eval "$(command nodenv init -)"
+      unset -f nvim
+      command nvim "$@"
+    }
+}
 
-# command -v nodenv &>/dev/null &&
-#   function yarn() {
-#     eval "$(command nodenv init -)"
-#     unset -f yarn
-#     command yarn "$@";
-#   }
-
-# command -v nodenv &>/dev/null &&
-#   function esy() {
-#     eval "$(command nodenv init -)"
-#     unset -f esy
-#     command esy "$@";
-#   }
-
-# command -v nodenv &>/dev/null &&
-#   function npm() {
-#     eval "$(command nodenv init -)"
-#     unset -f npm
-#     command npm "$@";
-#   }
-
-# command -v nodenv &>/dev/null &&
-#   function npx() {
-#     eval "$(command nodenv init -)"
-#     unset -f npx
-#     command npx "$@";
-#   }
-
-# # for coc.vim
-# command -v nodenv &>/dev/null &&
-#   function nvim() {
-#     eval "$(command nodenv init -)"
-#     unset -f nvim
-#     command nvim "$@";
-#   }
+command -v nvim &>/dev/null &&
+  function nvim() {
+    eval "$(command nodenv init -)"
+    unset -f nvim
+    command nvim "$@"
+  }
 # }}}
 # {{{ pyenv
 export PYENV_ROOT="${HOME}/.pyenv"
 export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 export PIPENV_VENV_IN_PROJECT=1
 export PYTHON_CONFIGURE_OPTS="--enable-shared"
-if command -v pyenv 1>/dev/null 2>&1; then
-  eval "$(pyenv init -)"
-  # eval "$(pyenv virtualenv-init -)"
-fi
 
-autoload -Uz add-zsh-hook
-function autovenv() {
-  local venvdir
-  if [[ -z "$VIRTUAL_ENV" ]]; then
-    if [[ -d ./.venv ]]; then
-      source ./.venv/bin/activate
-    fi
-  else
-    venvdir=$(dirname $VIRTUAL_ENV)
-    if [[ "${PWD##$venvdir}" == "$PWD" ]]; then
-      command -v deactivate &>/dev/null && deactivate
-    fi
-  fi
-}
-
-add-zsh-hook -D chpwd autovenv
-add-zsh-hook chpwd autovenv
-autovenv
-
-# command -v pyenv &>/dev/null &&
-#   function pyenv() {
-#     eval "$(command pyenv init -)"
-#     eval "$(command pyenv virtualenv-init -)"
-#     pyenv "$@"
-#   }
-
-# command -v python &>/dev/null &&
-#   function python() {
-#     eval "$(command pyenv init -)"
-#     eval "$(command pyenv virtualenv-init -)"
-#     unset -f python
-#     command python "$@"
-#   }
-
-# command -v pip &>/dev/null &&
-#   function pip() {
-#     eval "$(command pyenv init -)"
-#     eval "$(command pyenv virtualenv-init -)"
-#     unset -f pip
-#     command pip "$@"
-#   }
-
-# command -v pip3 &>/dev/null &&
-#   function pip3() {
-#     eval "$(command pyenv init -)"
-#     eval "$(command pyenv virtualenv-init -)"
-#     unset -f pip3
-#     command pip3 "$@"
-#   }
-
-# # command -v pipenv &>/dev/null &&
-#   function pipenv() {
-#     eval "$(command pyenv init -)"
-#     eval "$(command pyenv virtualenv-init -)"
-#     unset -f pipenv
-#     command pipenv "$@"
-#   }
+command -v pyenv &>/dev/null &&
+  function pyenv() {
+    eval "$(command pyenv init -)"
+    eval "$(command pyenv virtualenv-init -)"
+    pyenv "$@"
+  }
 # }}}
 # sdkman {{{
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/Users/haran/.sdkman"
 [[ -s "/Users/haran/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/haran/.sdkman/bin/sdkman-init.sh"
 # }}}
+
 # {{{ Intellij
 if [[ "$TERMINAL_EMULATOR" == "JetBrains-JediTerm" ]]; then
   bindkey "∫" backward-word # Option-b
@@ -387,7 +288,7 @@ function set-theme() {
   tmux source-file $HOME/.tmux.conf
 
   echo "$1" > $HOME/.theme.conf
-  _gen_fzf_colors "$1"
+  # _gen_fzf_colors "$1"
   echo -e "\033]50;SetProfile=$1\a"
 }
 
@@ -396,22 +297,24 @@ function set-theme() {
 ZSH_AUTOSUGGEST_USE_ASYNC=1
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=14'
 # }}}
-
+# {{{ autoenv
+export AUTOENV_FILE_LEAVE=".autoenv.zsh"
+export AUTOENV_HANDLE_LEAVE=1
+# }}}
 # {{{ zgen
 ZGEN_RESET_ON_CHANGE=(${HOME}/.zshrc ${HOME}/.zshrc.local)
 source "${HOME}/.zgen/zgen.zsh"
 
 if ! zgen saved; then
   zgen load "mafredri/zsh-async"
-  # zgen load "dfurnes/purer" "pure.zsh"
-  # zgen load "sindresorhus/pure" "pure.zsh"
-  # zgen load "reobin/typewritten" "typewritten" "main"
   zgen load "romkatv/powerlevel10k" "powerlevel10k"
   zgen load "agkozak/zsh-z"
   zgen load "zsh-users/zsh-autosuggestions"
   zgen load "zsh-users/zsh-history-substring-search"
   zgen load "joel-porquet/zsh-dircolors-solarized.git"
-  # zgen load "Aloxaf/fzf-tab"
+  zgen load "zdharma/fast-syntax-highlighting"
+  zgen load "Aloxaf/fzf-tab"
+  zgen load "Tarrasch/zsh-autoenv"
   # zgen load "matthieusb/zsh-sdkman"
   # zgen load "jackwish/bazel"
   # zgen load 'aperezdc/zsh-fzy'
@@ -423,16 +326,16 @@ fi
 typeset -aU fpath
 fpath=(~/.zsh/completion $fpath)
 autoload -Uz compinit
-autoload -Uz bashcompinit
+# autoload -Uz bashcompinit
 # for dump in ~/.zcompdump(N.mh+24); do
-  compinit
-  bashcompinit
+compinit
+# bashcompinit
 # done
-compinit -C
-bashcompinit -C
+# compinit -C
+# bashcompinit -C
 
-zstyle ':completion:*' use-cache on
-zstyle ':completion:*' cache-path ~/.zsh/cache
+# zstyle ':completion:*' use-cache on
+# zstyle ':completion:*' cache-path ~/.zsh/cache
 # complete -F __start_kubectl k
 # }}}
 
