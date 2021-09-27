@@ -15,6 +15,7 @@ setopt hist_verify
 setopt inc_append_history
 setopt histignorespace
 setopt share_history
+setopt interactivecomments
 # }}}
 # {{{ dir stacks
 DIRSTACKSIZE=8
@@ -221,15 +222,6 @@ command -v nodenv &>/dev/null &&
     eval "$(command nodenv init -)"
     nodenv "$@";
   }
-
-function lazyload() {
-  command -v $1 &>/dev/null &&
-    function $1() {
-      eval "$(command nodenv init -)"
-      unset -f nvim
-      command nvim "$@"
-    }
-}
 
 command -v nvim &>/dev/null &&
   function nvim() {

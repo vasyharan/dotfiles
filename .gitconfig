@@ -1,11 +1,19 @@
 [include]
 	path = ~/.gitconfig.local
-
+[user]
+	name = Thirukumaran Vaseeharan
+	email = tvaseeharan@vise.com
 [core]
 	preloadindex = true
 	excludesfile = ~/.gitignore.global
 	autocrlf = input
 	editor = nvim
+[pager]
+	branch = false
+	diff = delta --diff-so-fancy
+	log = delta
+	reflog = delta
+	show = delta
 [log]
 	decorate = true
 [color]
@@ -14,26 +22,22 @@
 	helper = cache
 [help]
 	autocorrect = 1
-[pager]
-    diff = delta --diff-so-fancy
-    log = delta
-    reflog = delta
-    show = delta
 [delta]
     colorMoved = default
     navigate = true
 [interactive]
     diffFilter = delta --color-only
-[merge]
-	tool = "vim-mergetool"
-	conflictStyle = diff3
-[mergetool]
-	keepBackup = false
-[mergetool "vim-mergetool"]
-	cmd = nvim -f -c "MergetoolStart" "$MERGED" "$BASE" "$LOCAL" "$REMOTE"
-	trustExitCode = true
+[diff "nodiff"]
+	command = /usr/bin/true
+; [merge]
+; 	tool = "vim-mergetool"
+; 	conflictStyle = diff3
+; [mergetool]
+; 	keepBackup = false
+; [mergetool "vim-mergetool"]
+; 	cmd = nvim -f -c "MergetoolStart" "$MERGED" "$BASE" "$LOCAL" "$REMOTE"
+; 	trustExitCode = true
 [alias]
-	d = "!f() { git difftool --no-prompt --extcmd \"icdiff --no-bold\" $@ | more -R; }; f"
 	l = log --decorate --pretty=format:%C(auto)%h%d\\ %C(reset)%s\\ %C(bold)%C(blue)[%cL]
 	s = status --short
 	c = commit -v
@@ -59,6 +63,3 @@
 	cc = "!f() { git checkout $(git fzb); }; f"
 	pushb = "!f() { git push origin $* $(git fzb); }; f"
 	ctags = !.git/hooks/ctags
-[user]
-	name = Thirukumaran Vaseeharan
-	email = tvaseeharan@vise.com
