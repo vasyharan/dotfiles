@@ -28,7 +28,7 @@
 [interactive]
     diffFilter = delta --color-only
 [diff "nodiff"]
-	command = /usr/bin/true
+	; command = /usr/bin/true
 ; [merge]
 ; 	tool = "vim-mergetool"
 ; 	conflictStyle = diff3

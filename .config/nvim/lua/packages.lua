@@ -173,6 +173,14 @@ return require('packer').startup(function()
     end
   }
   -- }}}
+  use { "folke/trouble.nvim", -- {{{
+    requires = "kyazdani42/nvim-web-devicons",
+    config = function()
+      require("trouble").setup {}
+    end
+  } -- }}}
+  use { "cappyzawa/starlark.vim", }
+  use { "tpope/vim-repeat", }
 
   use { 'b3nj5m1n/kommentary', -- {{{
     require('kommentary.config').configure_language("default", {
@@ -184,6 +192,12 @@ return require('packer').startup(function()
   use { 'tpope/vim-abolish', }
   use { 'tpope/vim-fugitive', }
   use { 'tpope/vim-rhubarb', }
+  use { 'lewis6991/gitsigns.nvim', -- {{{
+    requires = { 'nvim-lua/plenary.nvim' },
+    config = function()
+      require('gitsigns').setup()
+    end
+  } -- }}}
   use { 'wellle/targets.vim', }
   use { 'bronson/vim-visual-star-search', }
   use { 'machakann/vim-swap', -- {{{
@@ -203,7 +217,7 @@ return require('packer').startup(function()
       lualine.setup {
         options = {
           icons_enabled = true,
-          theme = 'gruvbox',
+          theme = 'solarized',
           section_separators = {'', ''},
           component_separators = {'', ''},
           disabled_filetypes = {}
@@ -385,7 +399,8 @@ return require('packer').startup(function()
       lspconfig.efm.setup {
         -- cmd = {"efm-langserver", "-loglevel", "5", "-logfile", "/Users/haran/efm.log"},
         init_options = {documentFormatting = true},
-        filetypes = { 'python', 'typescript', 'javascript', 'typescriptreact', 'javascriptreact', 'yaml', 'json', 'html', 'scss', 'css', 'markdown' },
+        -- filetypes = { 'python', 'typescript', 'javascript', 'typescriptreact', 'javascriptreact', 'yaml', 'json', 'html', 'scss', 'css', 'markdown' },
+        filetypes = { 'python', 'yaml', 'json', 'html', 'scss', 'css', 'markdown' },
         root_dir = function(fname)
           local util = require('lspconfig.util')
           return util.root_pattern(".git", "pyproject.toml")(fname)
@@ -417,10 +432,12 @@ return require('packer').startup(function()
     end,
   } -- }}}
   use { 'scalameta/nvim-metals', -- {{{
+    requires = { "nvim-lua/plenary.nvim" },
     after = 'lsp-status.nvim',
     config = function()
       local lsp_status = require('lsp-status')
-      metals_config = require("metals").bare_config
+      metals_config = require("metals").bare_config()
+      metals_config.init_options.statusBarProvider = "on"
       metals_config.capabilities = vim.tbl_extend('keep', {}, lsp_status.capabilities)
       metals_config.on_attach = on_attach
 

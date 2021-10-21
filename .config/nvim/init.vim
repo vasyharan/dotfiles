@@ -6,7 +6,7 @@ syntax on
 
 set encoding=utf-8
 set clipboard=unnamed                                 " yank and paste with the system clipboard
-set number                                            " show line numbers
+set number relativenumber                             " show line numbers
 set linebreak                                         " break lines at word (requires Wrap lines)
 set showbreak=+++                                     " wrap-broken line prefix
 " set textwidth=100                                   " line wrap (number of cols)
@@ -40,7 +40,7 @@ set autowrite                                         " auto write on make
 set wildmode=longest:full
 set hidden                                            " hidden buffers are the shit!
 set inccommand=nosplit                                " preview inc command results
-set signcolumn=number
+set signcolumn=auto
 set viewoptions-=options
 " set tags=./.git/tags;,tags
 " set shortmess-=F
@@ -82,7 +82,7 @@ else
   set background=dark
 endif
 
-colorscheme gruvbox
+colorscheme NeoSolarized
 " }}}
 
 augroup View
@@ -102,3 +102,9 @@ augroup NERDTree
   autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
         \ quit | endif
 augroup END
+
+" augroup NumberToggle
+"   autocmd!
+"   autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu   | endif
+"   autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nornu | endif
+" augroup END
