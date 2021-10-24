@@ -10,7 +10,7 @@
 	editor = nvim
 [pager]
 	branch = false
-	diff = delta --diff-so-fancy
+  diff = delta
 	log = delta
 	reflog = delta
 	show = delta
@@ -25,8 +25,10 @@
 [delta]
     colorMoved = default
     navigate = true
+    side-by-side = true
+    syntax-theme = "Solarized (light)"
 [interactive]
-    diffFilter = delta --color-only
+    diffFilter = delta --color-only --features=interactive
 [diff "nodiff"]
 	; command = /usr/bin/true
 ; [merge]
