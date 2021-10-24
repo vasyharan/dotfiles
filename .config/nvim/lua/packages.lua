@@ -447,6 +447,16 @@ return require('packer').startup(function()
       vim.cmd [[augroup end]]
     end
   } -- }}}
+  use { 'mfussenegger/nvim-dap', -- {{{
+    config = function()
+    end
+  } -- }}}
+  use { 'leoluz/nvim-dap-go', -- {{{
+    requires = { {"mfussenegger/nvim-dap"} },
+    config = function()
+      require('dap-go').setup()
+    end
+  } -- }}}
   use { 'nvim-treesitter/nvim-treesitter', -- {{{
     run = ':TSUpdate',
     config = function()
