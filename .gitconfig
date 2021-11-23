@@ -1,5 +1,6 @@
 [include]
 	path = ~/.gitconfig.local
+	path = ~/.gitconfig.theme
 [user]
 	name = Thirukumaran Vaseeharan
 	email = tvaseeharan@vise.com
@@ -25,8 +26,8 @@
 [delta]
     colorMoved = default
     navigate = true
-    side-by-side = true
-    syntax-theme = "Solarized (light)"
+    ; side-by-side = true
+    ; syntax-theme = "Solarized (light)"
 [interactive]
     diffFilter = delta --color-only --features=interactive
 [diff "nodiff"]

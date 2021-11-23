@@ -85,7 +85,7 @@ fi
 # }}}
 # {{{ less
 export LESS=-j2g
-# }}
+# }}}
 # {{{ ripgrep
 export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
 # }}}
@@ -101,12 +101,11 @@ export FZF_DEFAULT_OPTS="--bind 'change:top,ctrl-s:toggle' --bind 'ctrl-f:previe
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # }}}
 # {{{ fzf-tab
-zstyle ':fzf-tab:*' fzf-bindings 'ctrl-e:accept'
-# zstyle ":completion:*:git-checkout:*" sort false
 zstyle ':completion:*:descriptions' format '[%d]'
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-zstyle ':fzf-tab:complete:(cd|pushd):*' fzf-preview \
-  'exa -1 --color=always $realpath'
+zstyle ':fzf-tab:*' show-group brief
+zstyle ':fzf-tab:*' fzf-bindings 'ctrl-e:accept'
+# zstyle ':fzf-tab:*' default-color $'\033[92m'
+zstyle ':fzf-tab:complete:(cd|pushd):*' fzf-preview 'exa -1 --color=always $realpath'
 # }}}
 # {{{ git❤️fzf
 # https://gist.github.com/junegunn/8b572b8d4b5eddd8b85e5f4d40f17236
@@ -273,6 +272,9 @@ PASSWORD_STORE_GENERATED_LENGTH=32
 function set-theme() {
   unlink $HOME/.config/nvim/background.vim 2>/dev/null
   ln -s $HOME/.config/nvim/background-$1.vim $HOME/.config/nvim/background.vim
+
+  unlink $HOME/.gitconfig.theme 2>/dev/null
+  ln -s $HOME/.gitconfig.theme-$1 $HOME/.gitconfig.theme
 
   unlink $HOME/.tmux/theme.conf 2>/dev/null
   ln -s $HOME/.tmux/theme-$1.conf $HOME/.tmux/theme.conf

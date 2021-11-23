@@ -83,6 +83,7 @@ else
 endif
 
 colorscheme NeoSolarized
+" colorscheme gruvbox
 " }}}
 
 augroup View

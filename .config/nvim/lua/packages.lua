@@ -26,19 +26,18 @@ function on_attach(client, bufnr) -- {{{
   -- See `:help vim.lsp.*` for documentation on any of the below functions
   -- map { 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', silent=true }
   map { 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', silent=true }
-  -- map { 'n', 'K', '<cmd> lua vim.lsp.buf.hover()<cr>', silent = true }
-  -- buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  -- buf_set_keymap('i', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  map { 'n', 'K', "<cmd>lua vim.lsp.buf.hover()<cr>", silent = true }
+  map { 'i', '<C-k>', "<cmd>lua vim.lsp.buf.signature_help()<cr>", silent = true }
   -- buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
   -- buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
   -- buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
   -- buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  -- buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  -- buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  map { 'n', 'gR', "<cmd>lua vim.lsp.buf.rename()<cr>", silent = true }
+  map { 'n', 'g.', "<cmd>lua vim.lsp.buf.code_action()<cr>", silent = true }
   -- buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  -- buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-  --buf_set_keymap('n', '<C-j>', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-  -- buf_set_keymap('n', '<S-C-j>', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  map { 'n', 'gH', "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<cr>", silent = true }
+  map { 'n', '[e', "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", silent = true }
+  map { 'n', ']e', "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", silent = true }
   -- buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
   map { 'n', '<space>F', "<cmd>lua vim.lsp.buf.formatting()<CR>", silent = true }
 
@@ -258,28 +257,6 @@ return require('packer').startup(function()
         lsp_status.register_progress()
       end
   } -- }}}
-  use { 'glepnir/lspsaga.nvim', -- {{{
-    config = function()
-      local map = require('keymap')
-      require'lspsaga'.init_lsp_saga {
-      }
-      map { 'n', 'gf', "<cmd>lua require('lspsaga.provider').lsp_finder()<cr>", silent = true }
-      map { 'n', 'gR', "<cmd>lua require'lspsaga.rename'.rename()<cr>", silent = true }
-      map { 'n', 'K', "<cmd>lua require'lspsaga.hover'.render_hover_doc()<cr>", silent = true }
-      map { 'i', '<C-k>', "<cmd>lua require'lspsaga.signaturehelp'.signature_help()<cr>", silent = true }
-      map { 'n', 'gp', "<cmd>lua require'lspsaga.provider'.preview_definition()<cr>" }
-      map { 'n', '<C-f>', "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<cr>", silent = true }
-      map { 'n', '<C-b>', "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(-1)<cr>", silent = true }
-
-      map { 'n', 'g.', "<cmd>lua require('lspsaga.codeaction').code_action()<cr>", silent = true }
-      map { 'v', 'g.', "<cmd>lua require('lspsaga.codeaction').range_code_action()<cr>", silent = true }
-
-      map { 'n', 'gh', "<cmd>lua require'lspsaga.diagnostic'.show_cursor_diagnostics()<cr>", silent = true }
-      map { 'n', 'gH', "<cmd>lua require'lspsaga.diagnostic'.show_line_diagnostics()<cr>", silent = true }
-      map { 'n', '[e', "<cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_prev()<cr>", silent = true }
-      map { 'n', ']e', "<cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_next()<cr>", silent = true }
-    end
-  } -- }}}
   use { 'nvim-lua/completion-nvim',  -- {{{
     setup = function()
       vim.g.completion_enable_auto_popup = 0
@@ -320,6 +297,7 @@ return require('packer').startup(function()
       })
       -- }}}
       lspconfig.gopls.setup { -- {{{
+        cmd = { "gopls", "serve" },
         on_attach = on_attach,
         capabilities = vim.tbl_extend('keep', {}, lsp_status.capabilities)
       } -- }}}
@@ -467,6 +445,7 @@ return require('packer').startup(function()
           "go",
           "java",
           "javascript",
+          "graphql",
           "lua",
           "python",
           "scala",
@@ -478,19 +457,19 @@ return require('packer').startup(function()
     end
   } -- }}}
 
-  use { 'preservim/nerdtree', -- {{{
-    -- ▸▾
-    -- TODO: replace with lua tree
-    setup = function()
-      -- vim.g.NERDTreeQuitOnOpen = 1
-      vim.g.NERDTreeHijackNetrw = 1
-      vim.g.NERDTreeMinimalMenu = 1
-    end,
-    config = function()
-      vim.cmd [[
-      ]]
-    end
-  } -- }}}
+  -- use { 'preservim/nerdtree', -- {{{
+  --   -- ▸▾
+  --   -- TODO: replace with lua tree
+  --   setup = function()
+  --     -- vim.g.NERDTreeQuitOnOpen = 1
+  --     vim.g.NERDTreeHijackNetrw = 1
+  --     vim.g.NERDTreeMinimalMenu = 1
+  --   end,
+  --   config = function()
+  --     vim.cmd [[
+  --     ]]
+  --   end
+  -- } -- }}}
 
   use { 'hashivim/vim-terraform', }
   use { 'chrisbra/csv.vim', }
