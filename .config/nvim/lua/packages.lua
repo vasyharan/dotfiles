@@ -470,6 +470,21 @@ return require('packer').startup(function()
   --     ]]
   --   end
   -- } -- }}}
+  use {
+    'kyazdani42/nvim-tree.lua',
+    requires = 'kyazdani42/nvim-web-devicons',
+    config = function()
+      local map = require('keymap')
+      require'nvim-tree'.setup {
+        update_focused_file = {
+          enable = true,
+        },
+      }
+
+      map { 'n', ',t', "<cmd>NvimTreeToggle<cr>" }
+      map { 'n', ',T', "<cmd>NvimTreeFindFile<cr>" }
+    end
+  }
 
   use { 'hashivim/vim-terraform', }
   use { 'chrisbra/csv.vim', }
